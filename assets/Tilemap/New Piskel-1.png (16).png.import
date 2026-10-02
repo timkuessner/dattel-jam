@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://buqu2t4yeaojv"
-path="res://.godot/imported/beach_tilemap_new.png-e17fe60e4bb9157c489d4ddb5937a770.ctex"
+uid="uid://qnrd3tfmmxba"
+path="res://.godot/imported/New Piskel-1.png (16).png-e1d7cfe45116761f5c0bc4367502aee8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Tilemap/beach_tilemap_new.png"
-dest_files=["res://.godot/imported/beach_tilemap_new.png-e17fe60e4bb9157c489d4ddb5937a770.ctex"]
+source_file="res://assets/Tilemap/New Piskel-1.png (16).png"
+dest_files=["res://.godot/imported/New Piskel-1.png (16).png-e1d7cfe45116761f5c0bc4367502aee8.ctex"]
 
 [params]
 
