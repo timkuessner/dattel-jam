@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="DattelJam"
+run/main_scene="uid://n7s8u8bj0wdj"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://icon.svg"
 
@@ -26,3 +27,4 @@ window/stretch/aspect="expand"
 [rendering]
 
 rendering_device/driver.windows="d3d12"
+environment/defaults/default_clear_color=Color(0.7372549, 0.9254902, 0.9882353, 1)
