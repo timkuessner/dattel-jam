@@ -1,10 +1,15 @@
 [gd_scene format=3 uid="uid://n7s8u8bj0wdj"]
 
+[ext_resource type="PackedScene" uid="uid://bxpmjq5edm7af" path="res://scenes/player.tscn" id="1_0wfyh"]
 [ext_resource type="PackedScene" uid="uid://bhrc5shrd2wi3" path="res://scenes/map.tscn" id="1_o5qli"]
 
 [node name="Main" type="Node2D" unique_id=968523059]
+y_sort_enabled = true
 texture_filter = 1
 
 [node name="Map" parent="." unique_id=1059486782 instance=ExtResource("1_o5qli")]
 
+[node name="Player" parent="." unique_id=1690923371 instance=ExtResource("1_0wfyh")]
+
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1633204486]
+zoom = Vector2(5, 5)

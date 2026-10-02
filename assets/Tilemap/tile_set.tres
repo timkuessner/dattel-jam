@@ -26,6 +26,7 @@ separation = Vector2i(1, 1)
 5:1/0 = 0
 4:1/0 = 0
 3:1/0 = 0
+3:1/0/y_sort_origin = 6
 2:1/0 = 0
 1:1/0 = 0
 11:0/0 = 0
@@ -276,5 +277,6 @@ separation = Vector2i(1, 1)
 8:9/0 = 0
 
 [resource]
+physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_0wfyh")
 sources/1 = SubResource("TileSetAtlasSource_sugp2")
