@@ -9,10 +9,8 @@ texture_filter = 1
 position = Vector2(-4, 120)
 
 [node name="Player" parent="." unique_id=1690923371 instance=ExtResource("1_0wfyh")]
-position = Vector2(-5, -134)
 
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=1633204486]
 zoom = Vector2(4, 4)
 
 [node name="Map" parent="." unique_id=1059486782 instance=ExtResource("1_o5qli")]
-position = Vector2(-1, 1)
