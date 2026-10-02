@@ -1,6 +1,6 @@
 [gd_scene format=4 uid="uid://n7s8u8bj0wdj"]
 
-[ext_resource type="Texture2D" uid="uid://o6kd20dqubg" path="res://assets/sprites/tiles_sheet.png" id="1_o5qli"]
+[ext_resource type="Texture2D" path="res://assets/sprites/tiles_sheet.png" id="1_o5qli"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0wfyh"]
 texture = ExtResource("1_o5qli")
@@ -110,7 +110,7 @@ sources/0 = SubResource("TileSetAtlasSource_0wfyh")
 texture_filter = 1
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=975201235]
-tile_map_data = PackedByteArray("AAAAAAAAAAAFAAAAAAABAAAAAAAGAAAAAAACAAAAAAAHAAAAAAACAAEAAAAHAAEAAAACAAIAAAAHAAIAAAABAAIAAAAGAAIAAAAAAAIAAAAFAAIAAAAAAAEAAAAFAAEAAAABAAEAAAAGAAEAAAADAAAAAAAIAAAAAAADAAEAAAAIAAEAAAADAAIAAAAIAAIAAAADAAMAAAAIAAMAAAACAAMAAAAHAAMAAAABAAMAAAAGAAMAAAAAAAMAAAAFAAMAAAA=")
+tile_map_data = PackedByteArray("AAAAAAAAAAAFAAAAAAABAAAAAAAGAAAAAAACAAAAAAAHAAAAAAACAAEAAAAHAAEAAAACAAIAAAAHAAIAAAABAAIAAAAGAAIAAAAAAAIAAAAFAAIAAAAAAAEAAAAFAAEAAAABAAEAAAAGAAEAAAADAAAAAAAIAAAAAAADAAEAAAAIAAEAAAADAAIAAAAIAAIAAAABAAMAAAAGAAMAAAAAAAMAAAAFAAMAAAA=")
 tile_set = SubResource("TileSet_n1f8d")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1633204486]
