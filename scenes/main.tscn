@@ -2,7 +2,6 @@
 
 [ext_resource type="PackedScene" uid="uid://bxpmjq5edm7af" path="res://scenes/player.tscn" id="1_0wfyh"]
 [ext_resource type="PackedScene" uid="uid://bhrc5shrd2wi3" path="res://scenes/map.tscn" id="1_o5qli"]
-[ext_resource type="PackedScene" uid="uid://biqxtnpr5iilq" path="res://scenes/gallows.tscn" id="3_sugp2"]
 
 [node name="Main" type="Node2D" unique_id=968523059]
 y_sort_enabled = true
@@ -10,16 +9,10 @@ texture_filter = 1
 position = Vector2(-35, -43)
 
 [node name="Player" parent="." unique_id=1690923371 instance=ExtResource("1_0wfyh")]
-position = Vector2(148, 107)
+position = Vector2(183, 108)
 
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=1633204486]
 zoom = Vector2(4, 4)
 
 [node name="Map" parent="." unique_id=1059486782 instance=ExtResource("1_o5qli")]
-<<<<<<< Updated upstream
-
-[node name="Gallows" parent="." unique_id=1027896803 instance=ExtResource("3_sugp2")]
-position = Vector2(239, 141)
-=======
-position = Vector2(179, 102)
->>>>>>> Stashed changes
+position = Vector2(217, 96)
