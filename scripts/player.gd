@@ -2,6 +2,12 @@ extends CharacterBody2D
 
 const SPEED = 100.0
 
+var energy = 5;
+var psyche = 5;
+var hunger = 5;
+
+var n = 0;
+
 func _physics_process(delta: float) -> void:
 	var direction := Input.get_vector(
 		"ui_left",
@@ -9,6 +15,10 @@ func _physics_process(delta: float) -> void:
 		"ui_up",
 		"ui_down"
 	)
+	
+	if Input.is_action_just_pressed("ui_accept"):
+		n += 1;
+		$"../Gallows".updateGallows(n)
 
 	if direction:
 		if direction.x > 0:
