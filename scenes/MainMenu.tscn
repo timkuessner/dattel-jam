@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://dvrvarggot07d"]
 
-[ext_resource type="Script" uid="uid://cmqgoshkjsu7k" path="res://scenes/gui.gd" id="1_jbthi"]
-[ext_resource type="PackedScene" uid="uid://dyw7n5l2cssd3" path="res://fade_transition.tscn" id="2_5j4t3"]
-[ext_resource type="Script" uid="uid://b7hsdkufo4wl6" path="res://scenes/button_manager.gd" id="2_womn8"]
+[ext_resource type="Script" uid="uid://cmqgoshkjsu7k" path="res://scenes/gui.gd" id="1_2wh52"]
+[ext_resource type="Script" uid="uid://b7hsdkufo4wl6" path="res://scenes/button_manager.gd" id="2_ow34m"]
+[ext_resource type="PackedScene" uid="uid://dyw7n5l2cssd3" path="res://fade_transition.tscn" id="3_l72w3"]
 
 [node name="Main_Menu" type="Control" unique_id=522822813]
 layout_mode = 3
@@ -11,7 +11,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_jbthi")
+script = ExtResource("1_2wh52")
 
 [node name="Startmenu_Background" type="TextureRect" parent="." unique_id=969983526]
 layout_mode = 1
@@ -46,7 +46,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("2_womn8")
+script = ExtResource("2_ow34m")
 
 [node name="Start" type="Button" parent="Button_Manager" unique_id=281431366]
 layout_mode = 1
@@ -87,7 +87,7 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "Quit"
 
-[node name="Fadetransition" parent="." unique_id=397057972 instance=ExtResource("2_5j4t3")]
+[node name="Fadetransition" parent="." unique_id=397057972 instance=ExtResource("3_l72w3")]
 layout_mode = 1
 mouse_filter = 2
 
