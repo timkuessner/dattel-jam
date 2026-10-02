@@ -137,6 +137,7 @@ separation = Vector2i(1, 1)
 5:4/0 = 0
 5:2/0 = 0
 5:5/0 = 0
+1:9/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_sugp2"]
 texture = ExtResource("2_2stym")
