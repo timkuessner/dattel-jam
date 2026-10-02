@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dvrvarggot07d"]
 
-[ext_resource type="Script" uid="uid://cmqgoshkjsu7k" path="res://scenes/gui.gd" id="1_2wh52"]
-[ext_resource type="Script" uid="uid://b7hsdkufo4wl6" path="res://scenes/button_manager.gd" id="2_ow34m"]
+[ext_resource type="Script" uid="uid://cmqgoshkjsu7k" path="res://scripts/gui.gd" id="1_2wh52"]
+[ext_resource type="Script" uid="uid://b7hsdkufo4wl6" path="res://scripts/button_manager.gd" id="2_ow34m"]
 [ext_resource type="PackedScene" uid="uid://dyw7n5l2cssd3" path="res://fade_transition.tscn" id="3_l72w3"]
 
 [node name="Main_Menu" type="Control" unique_id=522822813]
