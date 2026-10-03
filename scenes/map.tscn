@@ -28,5 +28,5 @@ tile_set = ExtResource("1_4xfga")
 
 [node name="Items" type="Node2D" parent="." unique_id=333174913]
 
-[node name="Mushroom" parent="." unique_id=768521017 instance=ExtResource("2_paxxb")]
-position = Vector2(150, 265)
+[node name="Item" parent="." unique_id=768521017 instance=ExtResource("2_paxxb")]
+position = Vector2(149, 265)
