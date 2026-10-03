@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://dhnbk0cef70d"]
+
+[ext_resource type="Script" uid="uid://bp7dyhw3q20rj" path="res://scripts/inventory_slot.gd" id="1_ftvev"]
+
+[node name="Slot" type="PanelContainer" unique_id=1967903635]
+custom_minimum_size = Vector2(64, 64)
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_ftvev")
+
+[node name="ItemIcon" type="TextureRect" parent="." unique_id=1541113724]
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
