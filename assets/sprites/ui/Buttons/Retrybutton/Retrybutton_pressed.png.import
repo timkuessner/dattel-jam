@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://8rnqy37wonfv"
-path="res://.godot/imported/Bad_Sleep.png-14e0260d4dd827ebfdbb6c1842077e81.ctex"
+uid="uid://dq86acvnfa1hy"
+path="res://.godot/imported/Retrybutton_pressed.png-0e37e45f24550d428be9654f7f6ed72b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/ui/Bad_Sleep.png"
-dest_files=["res://.godot/imported/Bad_Sleep.png-14e0260d4dd827ebfdbb6c1842077e81.ctex"]
+source_file="res://assets/sprites/ui/Buttons/Retrybutton/Retrybutton_pressed.png"
+dest_files=["res://.godot/imported/Retrybutton_pressed.png-0e37e45f24550d428be9654f7f6ed72b.ctex"]
 
 [params]
 

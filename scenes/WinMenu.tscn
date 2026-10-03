@@ -1,29 +1,29 @@
-[gd_scene format=3 uid="uid://cgxcy3x8dcoh7"]
+[gd_scene format=3 uid="uid://bbmye4sna5n1m"]
 
-[ext_resource type="Script" uid="uid://bqurb25ryppp5" path="res://scripts/finalscreen.gd" id="1_air5f"]
-[ext_resource type="Script" uid="uid://b7hsdkufo4wl6" path="res://scripts/button_manager.gd" id="2_air5f"]
-[ext_resource type="Texture2D" uid="uid://wgp2x5uv0mm1" path="res://assets/sprites/ui/Deathscreen.png" id="2_wyw0a"]
-[ext_resource type="Texture2D" uid="uid://c66ir8ft72d2g" path="res://assets/sprites/ui/Buttons/Retrybutton/Retrybutton.png" id="4_wyw0a"]
-[ext_resource type="Texture2D" uid="uid://dq86acvnfa1hy" path="res://assets/sprites/ui/Buttons/Retrybutton/Retrybutton_pressed.png" id="5_ltsmr"]
-[ext_resource type="Texture2D" uid="uid://k4t1nh2aviu3" path="res://assets/sprites/ui/Buttons/Retrybutton/Retrybutton_hovered.png" id="6_q8pqp"]
-[ext_resource type="Texture2D" uid="uid://c52b8wkeqisr6" path="res://assets/sprites/ui/Buttons/MainMenubutton/MainMenubutton.png" id="7_wyw0a"]
-[ext_resource type="Texture2D" uid="uid://b5md8mhy1pmf1" path="res://assets/sprites/ui/Buttons/MainMenubutton/MainMenubutton_pressed.png" id="8_ltsmr"]
-[ext_resource type="Texture2D" uid="uid://d4awvr1bp6dxl" path="res://assets/sprites/ui/Buttons/Quitbutton/Quitbutton.png" id="9_pcvtk"]
-[ext_resource type="Texture2D" uid="uid://bb4mukbetbln4" path="res://assets/sprites/ui/Buttons/MainMenubutton/MainMenubutton_hovered.png" id="9_q8pqp"]
-[ext_resource type="Texture2D" uid="uid://b8nd2ffke21ef" path="res://assets/sprites/ui/Buttons/Quitbutton/Quitbutton_pressed.png" id="10_fcwft"]
-[ext_resource type="Texture2D" uid="uid://ckjpygqrb644i" path="res://assets/sprites/ui/Buttons/Quitbutton/Quitbutton_hovered.png" id="11_0axci"]
-[ext_resource type="Texture2D" uid="uid://b0yp2er18bgrw" path="res://assets/sprites/ui/DuBistGestorben.png" id="13_wyw0a"]
-[ext_resource type="PackedScene" uid="uid://dyw7n5l2cssd3" path="res://scenes/fade_transition.tscn" id="13_xt3o3"]
-[ext_resource type="AudioStream" uid="uid://bi0amd6ufg53n" path="res://assets/Music/death_v1.wav" id="15_wyw0a"]
+[ext_resource type="Script" uid="uid://bqurb25ryppp5" path="res://scripts/finalscreen.gd" id="1_ea0kj"]
+[ext_resource type="Texture2D" uid="uid://c72n6epfofdoe" path="res://assets/sprites/ui/Gerettet_screen.jpg" id="2_ea0kj"]
+[ext_resource type="Script" uid="uid://b7hsdkufo4wl6" path="res://scripts/button_manager.gd" id="3_ae304"]
+[ext_resource type="Texture2D" uid="uid://c66ir8ft72d2g" path="res://assets/sprites/ui/Buttons/Retrybutton/Retrybutton.png" id="4_0vqfp"]
+[ext_resource type="Texture2D" uid="uid://dq86acvnfa1hy" path="res://assets/sprites/ui/Buttons/Retrybutton/Retrybutton_pressed.png" id="5_eodcm"]
+[ext_resource type="Texture2D" uid="uid://k4t1nh2aviu3" path="res://assets/sprites/ui/Buttons/Retrybutton/Retrybutton_hovered.png" id="6_lu5hd"]
+[ext_resource type="Texture2D" uid="uid://c52b8wkeqisr6" path="res://assets/sprites/ui/Buttons/MainMenubutton/MainMenubutton.png" id="7_lpse6"]
+[ext_resource type="Texture2D" uid="uid://b5md8mhy1pmf1" path="res://assets/sprites/ui/Buttons/MainMenubutton/MainMenubutton_pressed.png" id="8_to3bj"]
+[ext_resource type="Texture2D" uid="uid://bb4mukbetbln4" path="res://assets/sprites/ui/Buttons/MainMenubutton/MainMenubutton_hovered.png" id="9_e34p5"]
+[ext_resource type="Texture2D" uid="uid://d4awvr1bp6dxl" path="res://assets/sprites/ui/Buttons/Quitbutton/Quitbutton.png" id="10_wu44j"]
+[ext_resource type="Texture2D" uid="uid://b8nd2ffke21ef" path="res://assets/sprites/ui/Buttons/Quitbutton/Quitbutton_pressed.png" id="11_tji88"]
+[ext_resource type="Texture2D" uid="uid://ckjpygqrb644i" path="res://assets/sprites/ui/Buttons/Quitbutton/Quitbutton_hovered.png" id="12_jnhjp"]
+[ext_resource type="Texture2D" uid="uid://bdgqfbdjc8c56" path="res://assets/sprites/ui/Gerettet.png" id="12_okuvq"]
+[ext_resource type="PackedScene" uid="uid://dyw7n5l2cssd3" path="res://scenes/fade_transition.tscn" id="14_ry17e"]
+[ext_resource type="AudioStream" uid="uid://bi0amd6ufg53n" path="res://assets/Music/death_v1.wav" id="15_h8kjy"]
 
-[node name="Final_Menu" type="Control" unique_id=522822813]
+[node name="Win_Menu" type="Control" unique_id=522822813]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_air5f")
+script = ExtResource("1_ea0kj")
 
 [node name="Startmenu_Background" type="TextureRect" parent="." unique_id=969983526]
 layout_mode = 1
@@ -32,7 +32,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_wyw0a")
+texture = ExtResource("2_ea0kj")
 
 [node name="Button_Manager" type="Control" parent="." unique_id=1874472119]
 layout_mode = 1
@@ -41,9 +41,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("2_air5f")
+script = ExtResource("3_ae304")
 
 [node name="Start" type="TextureButton" parent="Button_Manager" unique_id=1659747127]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -54,9 +55,9 @@ offset_right = -449.0
 offset_bottom = -294.0
 grow_horizontal = 2
 grow_vertical = 2
-texture_normal = ExtResource("4_wyw0a")
-texture_pressed = ExtResource("5_ltsmr")
-texture_hover = ExtResource("6_q8pqp")
+texture_normal = ExtResource("4_0vqfp")
+texture_pressed = ExtResource("5_eodcm")
+texture_hover = ExtResource("6_lu5hd")
 stretch_mode = 5
 
 [node name="Options" type="TextureButton" parent="Button_Manager" unique_id=1407564322]
@@ -70,9 +71,9 @@ offset_right = -449.0
 offset_bottom = -181.0
 grow_horizontal = 2
 grow_vertical = 2
-texture_normal = ExtResource("7_wyw0a")
-texture_pressed = ExtResource("8_ltsmr")
-texture_hover = ExtResource("9_q8pqp")
+texture_normal = ExtResource("7_lpse6")
+texture_pressed = ExtResource("8_to3bj")
+texture_hover = ExtResource("9_e34p5")
 stretch_mode = 5
 
 [node name="Quit" type="TextureButton" parent="Button_Manager" unique_id=1572185687]
@@ -86,9 +87,9 @@ offset_right = -449.0
 offset_bottom = -70.0
 grow_horizontal = 2
 grow_vertical = 2
-texture_normal = ExtResource("9_pcvtk")
-texture_pressed = ExtResource("10_fcwft")
-texture_hover = ExtResource("11_0axci")
+texture_normal = ExtResource("10_wu44j")
+texture_pressed = ExtResource("11_tji88")
+texture_hover = ExtResource("12_jnhjp")
 stretch_mode = 5
 
 [node name="Label" type="Label" parent="." unique_id=703293355]
@@ -109,17 +110,17 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("13_wyw0a")
+texture = ExtResource("12_okuvq")
 stretch_mode = 5
 
-[node name="Fadetransition" parent="." unique_id=397057972 instance=ExtResource("13_xt3o3")]
+[node name="Fadetransition" parent="." unique_id=397057972 instance=ExtResource("14_ry17e")]
 layout_mode = 1
 mouse_filter = 2
 
 [node name="fade_timer" type="Timer" parent="Fadetransition" unique_id=1361220803]
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1654592671]
-stream = ExtResource("15_wyw0a")
+stream = ExtResource("15_h8kjy")
 autoplay = true
 
 [connection signal="mouse_entered" from="Button_Manager/Start" to="Button_Manager" method="_on_start_mouse_entered"]
