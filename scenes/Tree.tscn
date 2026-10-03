@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://l0vkofqryicm"]
 
-[ext_resource type="Script" uid="uid://bln4h4mj1yq2t" path="res://scenes/tree.gd" id="1_874r4"]
+[ext_resource type="Script" uid="uid://bln4h4mj1yq2t" path="res://scripts/tree.gd" id="1_874r4"]
 [ext_resource type="Texture2D" uid="uid://dcee6e82lbqeo" path="res://assets/sprites/tree/tree_falling_16x16_orange.png" id="1_dn7q5"]
 [ext_resource type="Texture2D" uid="uid://dwlx8oijv6mg7" path="res://assets/sprites/tree/Tree_falling_16x16.png" id="2_72j6q"]
 

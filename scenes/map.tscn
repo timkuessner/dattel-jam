@@ -2,6 +2,7 @@
 
 [ext_resource type="TileSet" uid="uid://b5fn7v32kwolu" path="res://assets/Tilemap/tile_set.tres" id="1_4xfga"]
 [ext_resource type="PackedScene" uid="uid://dugp6tuc8bqb4" path="res://scenes/item.tscn" id="2_paxxb"]
+[ext_resource type="PackedScene" uid="uid://l0vkofqryicm" path="res://scenes/Tree.tscn" id="3_gldc4"]
 
 [node name="Map" type="Node2D" unique_id=1059486782 groups=["nav_source"]]
 y_sort_enabled = true
@@ -33,4 +34,19 @@ position = Vector2(149, 265)
 item = 1
 
 [node name="Item2" parent="." unique_id=220673546 instance=ExtResource("2_paxxb")]
-position = Vector2(216, 186)
+position = Vector2(254, 180)
+
+[node name="Tree" parent="." unique_id=65959604 instance=ExtResource("3_gldc4")]
+position = Vector2(-150, 68)
+
+[node name="Tree2" parent="." unique_id=725249841 instance=ExtResource("3_gldc4")]
+position = Vector2(-106, 66)
+
+[node name="Tree3" parent="." unique_id=428045285 instance=ExtResource("3_gldc4")]
+position = Vector2(-113, 111)
+
+[node name="Tree4" parent="." unique_id=575175748 instance=ExtResource("3_gldc4")]
+position = Vector2(-158, 105)
+
+[node name="Tree5" parent="." unique_id=1894979036 instance=ExtResource("3_gldc4")]
+position = Vector2(-132, 89)

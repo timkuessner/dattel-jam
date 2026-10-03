@@ -2,12 +2,20 @@
 
 [ext_resource type="Script" uid="uid://b4akg01jybdei" path="res://scripts/playerhud.gd" id="1_c4rma"]
 [ext_resource type="Shader" uid="uid://c5cx8ipwfeuug" path="res://shader/canvas_layer.gdshader" id="2_ghj5q"]
+[ext_resource type="Texture2D" uid="uid://50ul3w23s72a" path="res://assets/sprites/ui/panel_brown_corners_b.png" id="3_fjqji"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_k5pq1"]
 shader = ExtResource("2_ghj5q")
 shader_parameter/wave_strength = 1.0
 shader_parameter/wave_speed = 20.0
 shader_parameter/wave_size = 10.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_k5pq1"]
+texture = ExtResource("3_fjqji")
+texture_margin_left = 40.0
+texture_margin_top = 40.0
+texture_margin_right = 40.0
+texture_margin_bottom = 40.0
 
 [node name="PlayerHUD" type="CanvasLayer" unique_id=2054024999]
 script = ExtResource("1_c4rma")
@@ -22,10 +30,23 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
+[node name="Panel" type="Panel" parent="." unique_id=155830605]
+texture_filter = 1
+custom_minimum_size = Vector2(380, 244)
+offset_left = 7.0
+offset_top = 7.0
+offset_right = 403.0
+offset_bottom = 267.0
+scale = Vector2(0.5, 0.5)
+theme_override_styles/panel = SubResource("StyleBoxTexture_k5pq1")
+
 [node name="Attributes" type="VBoxContainer" parent="." unique_id=424103494]
+texture_filter = 1
 anchors_preset = -1
-anchor_right = 0.15190972
-anchor_bottom = 0.16512345
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 195.0
+offset_bottom = 126.99999
 metadata/_edit_use_anchors_ = true
 
 [node name="Psyche" type="HBoxContainer" parent="Attributes" unique_id=423046174]
