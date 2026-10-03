@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-const SPEED = 100.0
+const SPEED = 80.0
 const BED_POSITION := Vector2(50, 50)
 const GALLOW_POSITION := Vector2(144, 66)
 
@@ -13,36 +13,28 @@ var hunger = 5
 var n = 0
 
 var isDay = true
-var going_to_bed = false
 var night_phase = 0
 
 
 func _ready() -> void:
 	nav_agent.path_desired_distance = 4.0
 	nav_agent.target_desired_distance = 4.0
-
-
-func _process(delta: float) -> void:
-	if energy <= 0 and isDay:
-		start_night()
-
+	
+	$"../Gallows".updateGallows(n)
 
 func start_night() -> void:
 	isDay = false
-	going_to_bed = true
 	night_phase = 0
-	
-	$"../CanvasLayer".night(true)
 	
 	nav_agent.target_position = BED_POSITION
 
 
 func _physics_process(delta: float) -> void:
-	if going_to_bed:
-		_walk_at_night(delta)
-		return
+	if energy <= 0 and isDay:
+		start_night()
 	
 	if !isDay:
+		_walk_at_night(delta)
 		return
 	
 	var direction := Input.get_vector(
@@ -78,6 +70,7 @@ func _walk_at_night(delta: float) -> void:
 			$AnimatedSprite2D.play("sleep")
 			
 			nav_agent.target_position = GALLOW_POSITION
+			$"../CanvasLayer".night(true)
 			return
 		elif night_phase == 1:
 			night_phase = 2
@@ -89,9 +82,7 @@ func _walk_at_night(delta: float) -> void:
 			return
 		
 		elif night_phase == 2:
-			going_to_bed = false
 			isDay = true
-			$"../CanvasLayer".night(false)
 			night_phase = 0
 			
 			velocity = Vector2.ZERO
@@ -99,6 +90,7 @@ func _walk_at_night(delta: float) -> void:
 			$"../CanvasLayer".updateEnergy(energy)
 			
 			$AnimatedSprite2D.play("idle")
+			$"../CanvasLayer".night(false)
 			return
 	
 	var next_pos := nav_agent.get_next_path_position()
