@@ -23,9 +23,12 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="Attributes" type="VBoxContainer" parent="." unique_id=424103494]
+texture_filter = 1
 anchors_preset = -1
-anchor_right = 0.15190972
-anchor_bottom = 0.16512345
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 195.0
+offset_bottom = 126.99999
 metadata/_edit_use_anchors_ = true
 
 [node name="Psyche" type="HBoxContainer" parent="Attributes" unique_id=423046174]

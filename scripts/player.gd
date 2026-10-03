@@ -44,18 +44,35 @@ func _ready() -> void:
 	
 	$"../Gallows".updateGallows(n)
 
-func enterArea(a):
+func showE():
 	$Interact.show()
+	$Interact/Label.text = "E"
+	$Interact/Label.show()
+	$Interact/Items.hide()
+
+func showInteractItem(item):
+	$Interact.show()
+	$Interact/Label.hide()
+	$Interact/Items.play(str(Item.items.keys()[item]))
+	$Interact/Items.show()
+
+func hideInteract():
+	$Interact.hide()
+
+func enterArea(a):
+	showE()
 	area = a
 
 func exitArea(a):
-	$Interact.hide()
+	hideInteract()
 	if area == a:
 		area = null
 
 func enterFire():
 	if Item.items.WOOD in inventory:
-		$Interact.show()
+		showE()
+	else:
+		showInteractItem(Item.items.WOOD)
 	area = $"../Fire"
 
 func exitFire():
