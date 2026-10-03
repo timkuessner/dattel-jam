@@ -160,7 +160,8 @@ func _walk_at_night(delta: float) -> void:
 			
 			velocity = Vector2.ZERO
 			energy = 5
-			$"../PlayerHUD".updateEnergy(energy)
+			$"../PlayerHUD".increase_energy(4)
+			$"../PlayerHUD".update()
 			
 			_play_direction_animation("idle")
 			$"../PlayerHUD".night(false)

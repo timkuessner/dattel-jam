@@ -12,22 +12,6 @@ shader_parameter/wave_size = 10.0
 [node name="PlayerHUD" type="CanvasLayer" unique_id=2054024999]
 script = ExtResource("1_c4rma")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1956546617]
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="Label" type="Label" parent="VBoxContainer" unique_id=1468188792]
-layout_mode = 2
-text = "psyche"
-
-[node name="Label2" type="Label" parent="VBoxContainer" unique_id=2075473877]
-layout_mode = 2
-text = "hunger"
-
-[node name="Label3" type="Label" parent="VBoxContainer" unique_id=196901057]
-layout_mode = 2
-text = "energy"
-
 [node name="NightOverlay" type="ColorRect" parent="." unique_id=1281856628]
 visible = false
 material = SubResource("ShaderMaterial_k5pq1")
@@ -37,3 +21,69 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+
+[node name="Attributes" type="VBoxContainer" parent="." unique_id=424103494]
+anchors_preset = -1
+anchor_right = 0.15190972
+anchor_bottom = 0.16512345
+metadata/_edit_use_anchors_ = true
+
+[node name="Psyche" type="HBoxContainer" parent="Attributes" unique_id=423046174]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TextureRect" type="TextureRect" parent="Attributes/Psyche" unique_id=203874208]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect2" type="TextureRect" parent="Attributes/Psyche" unique_id=154378429]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect3" type="TextureRect" parent="Attributes/Psyche" unique_id=665946838]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect4" type="TextureRect" parent="Attributes/Psyche" unique_id=1383294396]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Health" type="HBoxContainer" parent="Attributes" unique_id=129454721]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TextureRect" type="TextureRect" parent="Attributes/Health" unique_id=1843107005]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect2" type="TextureRect" parent="Attributes/Health" unique_id=1974259122]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect3" type="TextureRect" parent="Attributes/Health" unique_id=419902458]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect4" type="TextureRect" parent="Attributes/Health" unique_id=1074022842]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Energy" type="HBoxContainer" parent="Attributes" unique_id=1853101066]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TextureRect" type="TextureRect" parent="Attributes/Energy" unique_id=1754906631]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect2" type="TextureRect" parent="Attributes/Energy" unique_id=1499556649]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect3" type="TextureRect" parent="Attributes/Energy" unique_id=1240948283]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect4" type="TextureRect" parent="Attributes/Energy" unique_id=463097194]
+layout_mode = 2
+size_flags_horizontal = 3
