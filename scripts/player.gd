@@ -34,16 +34,13 @@ func start_night() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	# Night: walk to bed with pathfinding
 	if going_to_bed:
-		_walk_to_bed()
+		_walk_to_bed(delta)
 		return
 
-	# Night, already in bed: do nothing
 	if !isDay:
 		return
 
-	# Day: normal player control
 	var direction := Input.get_vector(
 		"ui_left",
 		"ui_right",
@@ -73,19 +70,19 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 
-func _walk_to_bed() -> void:
+func _walk_to_bed(delta: float) -> void:
 	if nav_agent.is_navigation_finished():
 		going_to_bed = false
 		velocity = Vector2.ZERO
+		global_position = BED_POSITION
 		$AnimatedSprite2D.play("sleep")
 		return
-
+ 
 	var next_pos := nav_agent.get_next_path_position()
 	var dir := global_position.direction_to(next_pos)
-
+ 
 	if dir.x != 0:
 		$AnimatedSprite2D.flip_h = dir.x < 0
-
-	velocity = dir * SPEED
+ 
+	global_position = global_position.move_toward(next_pos, SPEED * delta)
 	$AnimatedSprite2D.play("run")
-	move_and_slide()
