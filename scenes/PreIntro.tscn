@@ -2,6 +2,7 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 [ext_resource type="Script" uid="uid://c48elb1dah611" path="res://scripts/pre_intro.gd" id="1_h7dj3"]
 [ext_resource type="Texture2D" uid="uid://dv7hqb6saw0n6" path="res://assets/sprites/ui/Triggerwarnung_Deutsch.png" id="2_h7dj3"]
 [ext_resource type="Texture2D" uid="uid://bvji74hhqvwg" path="res://assets/sprites/ui/Triggerwarnung_Englisch.png" id="3_vgvlo"]
@@ -10,11 +11,16 @@
 =======
 =======
 >>>>>>> parent of e6a6a1f (psuh)
+=======
+>>>>>>> parent of e6a6a1f (psuh)
 [ext_resource type="Script" uid="uid://c48elb1dah611" path="res://scenes/pre_intro.gd" id="1_h7dj3"]
 [ext_resource type="Texture2D" uid="uid://dngblvqxx31t4" path="res://assets/sprites/ui/schlechter_schlaf.png" id="13_284bx"]
 [ext_resource type="PackedScene" uid="uid://dyw7n5l2cssd3" path="res://scenes/fade_transition.tscn" id="14_mj6a5"]
 [ext_resource type="AudioStream" uid="uid://b8dyn1nqmgxqm" path="res://assets/Music/start_v1.wav" id="15_f6ur1"]
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> parent of e6a6a1f (psuh)
+=======
 >>>>>>> parent of e6a6a1f (psuh)
 =======
 >>>>>>> parent of e6a6a1f (psuh)
@@ -45,7 +51,11 @@ grow_horizontal = 2
 grow_vertical = 2
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 color = Color(0.00589374, 0.0059079295, 0.1719478, 1)
+=======
+color = Color(0.015686275, 0.015686275, 0.28627452, 1)
+>>>>>>> parent of e6a6a1f (psuh)
 =======
 color = Color(0.015686275, 0.015686275, 0.28627452, 1)
 >>>>>>> parent of e6a6a1f (psuh)
@@ -77,7 +87,11 @@ grow_horizontal = 2
 grow_vertical = 2
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 texture = ExtResource("2_h7dj3")
+=======
+texture = ExtResource("13_284bx")
+>>>>>>> parent of e6a6a1f (psuh)
 =======
 texture = ExtResource("13_284bx")
 >>>>>>> parent of e6a6a1f (psuh)
@@ -101,7 +115,11 @@ grow_horizontal = 2
 grow_vertical = 2
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 texture = ExtResource("3_vgvlo")
+=======
+texture = ExtResource("13_284bx")
+>>>>>>> parent of e6a6a1f (psuh)
 =======
 texture = ExtResource("13_284bx")
 >>>>>>> parent of e6a6a1f (psuh)
@@ -118,6 +136,7 @@ mouse_filter = 2
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 [node name="delay_timer" type="Timer" parent="Fadetransition" unique_id=1367232754]
 wait_time = 10.0
 
@@ -130,12 +149,17 @@ autoplay = true
 =======
 =======
 >>>>>>> parent of e6a6a1f (psuh)
+=======
+>>>>>>> parent of e6a6a1f (psuh)
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1082651867]
 stream = ExtResource("15_f6ur1")
 autoplay = true
 
 [connection signal="timeout" from="Fadetransition/fade_timer" to="." method="_on_fade_timer_timeout"]
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> parent of e6a6a1f (psuh)
+=======
 >>>>>>> parent of e6a6a1f (psuh)
 =======
 >>>>>>> parent of e6a6a1f (psuh)

@@ -115,6 +115,7 @@ func update():
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 	update_audiotracks(false)
@@ -130,6 +131,8 @@ func update_audiotracks(override: bool):
 =======
 =======
 >>>>>>> parent of e6a6a1f (psuh)
+=======
+>>>>>>> parent of e6a6a1f (psuh)
 	update_audiotracks()
 	
 func update_audiotracks():
@@ -137,6 +140,9 @@ func update_audiotracks():
 		if hunger <3 :
 			if (track_number != 3):
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> parent of e6a6a1f (psuh)
+=======
 >>>>>>> parent of e6a6a1f (psuh)
 =======
 >>>>>>> parent of e6a6a1f (psuh)
@@ -147,7 +153,11 @@ func update_audiotracks():
 		else :
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 			if (track_number != 2)||override:
+=======
+			if (track_number != 2):
+>>>>>>> parent of e6a6a1f (psuh)
 =======
 			if (track_number != 2):
 >>>>>>> parent of e6a6a1f (psuh)
@@ -161,7 +171,11 @@ func update_audiotracks():
 	elif hunger <3 :
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		if (track_number != 1)||override:
+=======
+		if (track_number != 1):
+>>>>>>> parent of e6a6a1f (psuh)
 =======
 		if (track_number != 1):
 >>>>>>> parent of e6a6a1f (psuh)
@@ -175,7 +189,11 @@ func update_audiotracks():
 	else :
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		if (track_number != 0)||override:
+=======
+		if (track_number != 0):
+>>>>>>> parent of e6a6a1f (psuh)
 =======
 		if (track_number != 0):
 >>>>>>> parent of e6a6a1f (psuh)
@@ -189,7 +207,10 @@ func update_audiotracks():
 	
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> HUDbranch
+=======
+>>>>>>> parent of e6a6a1f (psuh)
 =======
 >>>>>>> parent of e6a6a1f (psuh)
 =======
