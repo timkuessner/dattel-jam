@@ -1,6 +1,14 @@
 class_name Player
 extends CharacterBody2D
 
+const RECORD_INTERVAL := 0.1
+const GHOST_SCENE := preload("res://scenes/ghost.tscn")
+const FINALE_DAY := 5
+
+var recording: Array = []
+var record_timer := 0.0
+var finale := false
+
 const SPEED = 80.0
 const BED_POSITION := Vector2(50, 50)
 const GALLOW_POSITION := Vector2(96, 200)
@@ -15,6 +23,8 @@ var isDay = true
 var night_phase = 0
 
 var inventory: Dictionary = {}
+
+var pos_array: Array[Array] = []
 
 func add_item(item):
 	inventory[item] = inventory.get(item, 0) + 1
@@ -41,12 +51,16 @@ func _ready() -> void:
 	$"../Gallows".updateGallows(n)
 
 func showLabel(text):
+	if !isDay:
+		return
 	$Interact.show()
 	$Interact/Label.text = text
 	$Interact/Label.show()
 	$Interact/Items.hide()
 
 func showInteractItem(item):
+	if !isDay:
+		return
 	$Interact.show()
 	$Interact/Label.hide()
 	$Interact/Items.play(str(Item.items.keys()[item]))
@@ -77,11 +91,19 @@ func exitFire():
 func start_night() -> void:
 	isDay = false
 	night_phase = 0
-	
+
+	if recording.size() >= 2:
+		pos_array.append(recording.duplicate())
+	recording = []
+	record_timer = 0.0
+
 	nav_agent.target_position = BED_POSITION
 
 
 func _physics_process(delta: float) -> void:
+	if finale:
+		return
+		
 	if $"../PlayerHUD".get_energy() <= 0 and isDay:
 		start_night()
 	
@@ -134,6 +156,13 @@ func _physics_process(delta: float) -> void:
 	var farm_system := get_tree().get_first_node_in_group("farm_system")
 	if farm_system:
 		farm_system.update_player_target(self, facing_direction)
+	
+	
+	
+	record_timer += delta
+	if record_timer >= RECORD_INTERVAL:
+		record_timer = 0.0
+		recording.append(global_position)
 
 
 func _update_facing_direction(direction: Vector2) -> void:
@@ -197,6 +226,10 @@ func _walk_at_night(delta: float) -> void:
 			n += 1
 			$"../Gallows".updateGallows(n)
 			
+			if n >= FINALE_DAY:
+				start_finale()
+				return
+			
 			nav_agent.target_position = BED_POSITION
 			return
 		
@@ -223,3 +256,14 @@ func _walk_at_night(delta: float) -> void:
 	)
 
 	_play_direction_animation("run")
+
+func start_finale() -> void:
+	print("test")
+	finale = true
+	velocity = Vector2.ZERO
+	$AnimatedSprite2D.hide()
+
+	for rec in pos_array:
+		var g = GHOST_SCENE.instantiate()
+		get_parent().add_child(g)
+		g.start(rec, 10.0, 5.0, GALLOW_POSITION)
