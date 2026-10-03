@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://bhrc5shrd2wi3" path="res://scenes/map.tscn" id="1_o5qli"]
 [ext_resource type="PackedScene" uid="uid://biqxtnpr5iilq" path="res://scenes/gallows.tscn" id="3_sugp2"]
 [ext_resource type="Script" uid="uid://bwxkeso3yk6ts" path="res://scripts/camera_2d.gd" id="4_jyhfs"]
-[ext_resource type="PackedScene" uid="uid://c5exmsolf3ckc" path="res://scenes/canvas_layer.tscn" id="5_tbgi4"]
+[ext_resource type="PackedScene" uid="uid://c5exmsolf3ckc" path="res://scenes/playerhut.tscn" id="5_tbgi4"]
 [ext_resource type="Script" uid="uid://8cowln6dfc7k" path="res://scripts/farm_manager.gd" id="6_farm"]
 [ext_resource type="PackedScene" path="res://scenes/farm_pickup.tscn" id="7_pickup"]
 [ext_resource type="PackedScene" uid="uid://c20gsa5d88yfr" path="res://scenes/well.tscn" id="8_well"]
@@ -128,7 +128,7 @@ animation = &"5"
 zoom = Vector2(3, 3)
 script = ExtResource("4_jyhfs")
 
-[node name="CanvasLayer" parent="." unique_id=2054024999 instance=ExtResource("5_tbgi4")]
+[node name="PlayerHUT" parent="." unique_id=2054024999 instance=ExtResource("5_tbgi4")]
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="." unique_id=355803038]
 navigation_polygon = SubResource("NavigationPolygon_k5pq1")

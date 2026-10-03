@@ -65,7 +65,7 @@ func _physics_process(delta: float) -> void:
 
 	if Input.is_action_just_pressed("ui_accept"):
 		energy -= 1
-		$"../CanvasLayer".updateEnergy(energy)
+		$"../PlayerHUT".updateEnergy(energy)
 	
 	if direction:
 		_update_facing_direction(direction)
@@ -132,7 +132,7 @@ func _walk_at_night(delta: float) -> void:
 			$AnimatedSprite2D.play("sleep")
 			
 			nav_agent.target_position = GALLOW_POSITION
-			$"../CanvasLayer".night(true)
+			$"../PlayerHUT".night(true)
 			return
 		elif night_phase == 1:
 			night_phase = 2
@@ -149,10 +149,10 @@ func _walk_at_night(delta: float) -> void:
 			
 			velocity = Vector2.ZERO
 			energy = 5
-			$"../CanvasLayer".updateEnergy(energy)
+			$"../PlayerHUT".updateEnergy(energy)
 			
 			$AnimatedSprite2D.play("idle")
-			$"../CanvasLayer".night(false)
+			$"../PlayerHUT".night(false)
 			return
 	
 	var next_pos := nav_agent.get_next_path_position()
