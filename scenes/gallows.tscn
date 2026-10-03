@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://bdy4y7ccn2ffo" path="res://assets/sprites/gallows/gallows3.png" id="4_ypb71"]
 [ext_resource type="Texture2D" uid="uid://5ch15y2yjtir" path="res://assets/sprites/gallows/gallows4.png" id="5_3xexc"]
 [ext_resource type="Script" uid="uid://bof3gxe20s87f" path="res://scripts/gallows.gd" id="6_ymgdw"]
+[ext_resource type="Texture2D" uid="uid://d4fmt0asngvd8" path="res://assets/sprites/player/player_sprites_centered.png" id="7_dpg1m"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_k5pq1"]
 animations = [{
@@ -64,10 +65,63 @@ size = Vector2(32, 1.5)
 [sub_resource type="CircleShape2D" id="CircleShape2D_k5pq1"]
 radius = 25.0
 
+[sub_resource type="Animation" id="Animation_ypb71"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.50265485]
+}
+
+[sub_resource type="Animation" id="Animation_3xexc"]
+resource_name = "animation"
+length = 4.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1, 1.5, 2, 2.5, 3),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.50265485, -0.4886922, 0.34906584, -0.34906584, 0.17453292, -0.12217305, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_45vxd"]
+_data = {
+&"RESET": SubResource("Animation_ypb71"),
+&"animation": SubResource("Animation_3xexc")
+}
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_myssn"]
+atlas = ExtResource("7_dpg1m")
+region = Rect2(51, 0, 20, 20)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_gfxkb"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_myssn")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}]
+
 [node name="Gallows" type="AnimatedSprite2D" unique_id=1027896803 groups=["nav_source"]]
 y_sort_enabled = true
+texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_k5pq1")
-animation = &"2"
+animation = &"5"
 offset = Vector2(0, -17)
 script = ExtResource("6_ymgdw")
 
@@ -83,5 +137,19 @@ shape = SubResource("RectangleShape2D_gfxkb")
 position = Vector2(0, -11)
 shape = SubResource("CircleShape2D_k5pq1")
 
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=731345280]
+libraries/ = SubResource("AnimationLibrary_45vxd")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=320036411]
+visible = false
+z_index = 1
+texture_filter = 1
+position = Vector2(6, -24)
+rotation = 0.50265485
+scale = Vector2(0.77500004, 0.792469)
+sprite_frames = SubResource("SpriteFrames_gfxkb")
+offset = Vector2(0, 3.87)
+
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

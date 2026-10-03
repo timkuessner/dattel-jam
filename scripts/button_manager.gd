@@ -9,11 +9,6 @@ func _ready() -> void:
 	$Quit.set_pivot_offset($Quit.size/2)
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-	
-
 
 
 func _on_start_mouse_entered() -> void:

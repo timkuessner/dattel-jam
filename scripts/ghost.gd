@@ -23,10 +23,14 @@ func start(p: Array, replay: float, gallow: float, gallow_position: Vector2) -> 
 
 
 func _process(delta: float) -> void:
-	if not active:
-		return
 
 	t += delta
+	
+	if not active:
+		if t > replay_time + gallow_time + 2:
+			queue_free()
+		return
+
 	var new_pos: Vector2
 
 	if t < replay_time:

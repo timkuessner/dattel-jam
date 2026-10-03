@@ -119,9 +119,16 @@ func start_night() -> void:
 
 	nav_agent.target_position = BED_POSITION
 
+var t = 0
 
 func _physics_process(delta: float) -> void:
 	if finale:
+		t += delta
+		
+		if t >= 17:
+			$"../PlayerHUD".night(false)
+			$"../Gallows".updateGallows(6)
+		
 		return
 		
 	if $"../PlayerHUD".get_energy() <= 0 and isDay:
@@ -269,7 +276,6 @@ func _walk_at_night(delta: float) -> void:
 
 
 func start_finale() -> void:
-	print("test")
 
 	finale = true
 	velocity = Vector2.ZERO
