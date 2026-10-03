@@ -9,3 +9,4 @@ func start():
 
 func _on_animation_player_animation_finished(anim_name: StringName) -> void:
 	$"../AnimationPlayer".play("idle")
+	get_tree().change_scene_to_file("res://scenes/WinMenu.tscn")
