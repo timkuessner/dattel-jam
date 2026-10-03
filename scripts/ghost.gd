@@ -13,6 +13,7 @@ var facing := "down"
 
 
 func start(p: Array, replay: float, gallow: float, gallow_position: Vector2) -> void:
+	add_to_group("ghost")
 	points = p
 	replay_time = replay
 	gallow_time = gallow
