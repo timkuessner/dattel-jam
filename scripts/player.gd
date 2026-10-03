@@ -95,6 +95,9 @@ func _physics_process(delta: float) -> void:
 				if Item.items.WOOD in inventory:
 					$"../Fire".buildFire()
 					inventory[Item.items.WOOD] -= 1
+					
+					if inventory[Item.items.WOOD] <= 0:
+						inventory.erase(Item.items.WOOD)
 				
 				exitFire()
 				
