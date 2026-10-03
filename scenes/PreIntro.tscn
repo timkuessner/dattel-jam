@@ -1,9 +1,10 @@
 [gd_scene format=3 uid="uid://qt32pwhkthko"]
 
-[ext_resource type="Script" uid="uid://c48elb1dah611" path="res://scenes/pre_intro.gd" id="1_h7dj3"]
-[ext_resource type="Texture2D" uid="uid://dngblvqxx31t4" path="res://assets/sprites/ui/schlechter_schlaf.png" id="13_284bx"]
+[ext_resource type="Script" uid="uid://c48elb1dah611" path="res://scripts/pre_intro.gd" id="1_h7dj3"]
+[ext_resource type="Texture2D" uid="uid://dv7hqb6saw0n6" path="res://assets/sprites/ui/Triggerwarnung_Deutsch.png" id="2_h7dj3"]
+[ext_resource type="Texture2D" uid="uid://bvji74hhqvwg" path="res://assets/sprites/ui/Triggerwarnung_Englisch.png" id="3_vgvlo"]
+[ext_resource type="AudioStream" uid="uid://6dgkn1sogfm8" path="res://assets/Music/night_v2.wav" id="5_h7dj3"]
 [ext_resource type="PackedScene" uid="uid://dyw7n5l2cssd3" path="res://scenes/fade_transition.tscn" id="14_mj6a5"]
-[ext_resource type="AudioStream" uid="uid://b8dyn1nqmgxqm" path="res://assets/Music/start_v1.wav" id="15_f6ur1"]
 
 [node name="PreIntro" type="Control" unique_id=522822813]
 layout_mode = 3
@@ -29,7 +30,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.015686275, 0.015686275, 0.28627452, 1)
+color = Color(0.00589374, 0.0059079295, 0.1719478, 1)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1004744896]
 layout_mode = 1
@@ -53,7 +54,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("13_284bx")
+texture = ExtResource("2_h7dj3")
 stretch_mode = 5
 
 [node name="Label2" type="Label" parent="VBoxContainer" unique_id=739884258]
@@ -69,7 +70,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("13_284bx")
+texture = ExtResource("3_vgvlo")
 stretch_mode = 5
 
 [node name="Fadetransition" parent="." unique_id=397057972 instance=ExtResource("14_mj6a5")]
@@ -78,8 +79,12 @@ mouse_filter = 2
 
 [node name="fade_timer" type="Timer" parent="Fadetransition" unique_id=1361220803]
 
+[node name="delay_timer" type="Timer" parent="Fadetransition" unique_id=1367232754]
+wait_time = 10.0
+
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1082651867]
-stream = ExtResource("15_f6ur1")
+stream = ExtResource("5_h7dj3")
 autoplay = true
 
 [connection signal="timeout" from="Fadetransition/fade_timer" to="." method="_on_fade_timer_timeout"]
+[connection signal="timeout" from="Fadetransition/delay_timer" to="." method="_on_delay_timer_timeout"]
