@@ -107,6 +107,11 @@ func _physics_process(delta: float) -> void:
 				exitFire()
 				
 				return
+				
+			if area.has_method("interact"):
+				area.interact(self)
+				return
+				
 			add_item(area.item)
 			area.queue_free()
 			
