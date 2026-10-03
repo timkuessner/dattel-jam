@@ -3,7 +3,6 @@
 [ext_resource type="Script" uid="uid://cnqnvld7nyirs" path="res://scripts/player.gd" id="1_g2els"]
 [ext_resource type="Texture2D" uid="uid://cns2to50ti2tv" path="res://assets/sprites/player/player_sprites_new.png" id="2_qhqgy"]
 [ext_resource type="Texture2D" uid="uid://bu1y23ts5neag" path="res://assets/sprites/player/emote__.png" id="5_qlg0r"]
-[ext_resource type="PackedScene" uid="uid://ckw68w5dq66hd" path="res://scenes/Inventory.tscn" id="5_tuyoq"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dqkch"]
 atlas = ExtResource("2_qhqgy")
@@ -289,6 +288,3 @@ theme_override_font_sizes/font_size = 10
 text = "E"
 horizontal_alignment = 1
 vertical_alignment = 1
-
-[node name="Inventory" parent="." unique_id=56858956 instance=ExtResource("5_tuyoq")]
-metadata/_edit_use_anchors_ = true

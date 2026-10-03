@@ -10,6 +10,8 @@ var slots: Array = []
 func _ready() -> void:
 	create_inventory_slots()
 	
+	var test_icon = load("res://assets/sprites/HUD/Heart.png")
+	add_item_to_first_free_slot(test_icon)
 
 func create_inventory_slots() -> void:
 	# Bisherige Slots löschen (falls vorhanden)
