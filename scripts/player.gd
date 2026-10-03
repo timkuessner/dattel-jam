@@ -17,12 +17,26 @@ var n = 0
 var isDay = true
 var night_phase = 0
 
+enum items {MUSHROOM}
+
+var inventar: Array = []
+
+var area: Node2D
 
 func _ready() -> void:
 	nav_agent.path_desired_distance = 4.0
 	nav_agent.target_desired_distance = 4.0
 	
 	$"../Gallows".updateGallows(n)
+
+func enterArea(parent):
+	area = parent
+
+func exitArea(parent):
+	area = null
+
+func addItem(item):
+	inventar.append(item)
 
 func start_night() -> void:
 	isDay = false
@@ -38,6 +52,8 @@ func _physics_process(delta: float) -> void:
 	if !isDay:
 		_walk_at_night(delta)
 		return
+	
+	
 	
 	var direction := Input.get_vector(
 		"ui_left",
@@ -64,7 +80,10 @@ func _physics_process(delta: float) -> void:
 		velocity = Vector2.ZERO
 	
 	move_and_slide()
-
+	
+	if Input.is_action_just_pressed("e"):
+		area.queue_free()
+	
 	var farm_system := get_tree().get_first_node_in_group("farm_system")
 	if farm_system:
 		farm_system.update_player_target(self, facing_direction)

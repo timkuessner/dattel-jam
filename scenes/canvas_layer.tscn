@@ -5,7 +5,9 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_k5pq1"]
 shader = ExtResource("2_ghj5q")
-shader_parameter/night_color = Color(0.05, 0.05, 0.15, 0.5)
+shader_parameter/wave_strength = 1.0
+shader_parameter/wave_speed = 20.0
+shader_parameter/wave_size = 10.0
 
 [node name="CanvasLayer" type="CanvasLayer" unique_id=2054024999]
 script = ExtResource("1_c4rma")
