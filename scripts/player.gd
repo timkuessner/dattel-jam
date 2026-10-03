@@ -7,10 +7,6 @@ const GALLOW_POSITION := Vector2(96, 200)
 
 @onready var nav_agent: NavigationAgent2D = $NavigationAgent2D
 
-var energy = 5
-var psyche = 5
-var hunger = 5
-
 var facing_direction := Vector2.DOWN
 
 var n = 0
@@ -209,7 +205,6 @@ func _walk_at_night(delta: float) -> void:
 			night_phase = 0
 			
 			velocity = Vector2.ZERO
-			energy = 5
 			$"../PlayerHUD".increase_energy(4)
 			$"../PlayerHUD".update()
 			
