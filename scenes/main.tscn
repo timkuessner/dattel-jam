@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://bhrc5shrd2wi3" path="res://scenes/map.tscn" id="1_o5qli"]
 [ext_resource type="PackedScene" uid="uid://biqxtnpr5iilq" path="res://scenes/gallows.tscn" id="3_sugp2"]
 [ext_resource type="Script" uid="uid://bwxkeso3yk6ts" path="res://scripts/camera_2d.gd" id="4_jyhfs"]
-[ext_resource type="PackedScene" uid="uid://babuvkwl8tc66" path="res://scenes/farming.tscn" id="6_farming"]
+[ext_resource type="PackedScene" path="res://scenes/farming.tscn" id="6_farming"]
 [ext_resource type="PackedScene" uid="uid://c5exmsolf3ckc" path="res://scenes/PlayerHUD.tscn" id="7_tipki"]
 [ext_resource type="PackedScene" uid="uid://ckw68w5dq66hd" path="res://scenes/Inventory.tscn" id="8_choun"]
 [ext_resource type="PackedScene" uid="uid://clfdljgfyuust" path="res://scenes/fire.tscn" id="9_85g3d"]
@@ -23,9 +23,7 @@ agent_radius = 2.8
 y_sort_enabled = true
 texture_filter = 1
 
-
 [node name="Farming" parent="." unique_id=1774282984 instance=ExtResource("6_farming")]
-
 
 [node name="Map" parent="." unique_id=1059486782 instance=ExtResource("1_o5qli")]
 

@@ -4,6 +4,8 @@ extends CanvasLayer
 @onready var hunger_icons: Array = $Attributes/Health.get_children()
 @onready var energy_icons: Array = $Attributes/Energy.get_children()
 
+var track_number = null
+
 var psyche_full = preload("res://assets/sprites/HUD/Psyche.png")
 var psyche_empty = preload("res://assets/sprites/HUD/Psyche_Shadow.png")
 
@@ -107,7 +109,35 @@ func update():
 	update_psyche_display()
 	update_hunger_display()
 	update_energy_display()
-
+	update_audiotracks()
+	
+func update_audiotracks():
+	if psyche <3 :
+		if hunger <3 :
+			if (track_number != 3):
+				$AudioStreamPlayer.stream = preload("res://assets/Music/low_hp_low_mental_v1.wav")
+				track_number = 3
+				$AudioStreamPlayer.play()
+			# play super creepy
+		else :
+			if (track_number != 2):
+				$AudioStreamPlayer.stream = preload("res://assets/Music/good_hp_low_mental_v2.wav")
+				track_number = 2
+				$AudioStreamPlayer.play()
+			# play low psyche
+	elif hunger <3 :
+		if (track_number != 1):
+			$AudioStreamPlayer.stream = preload("res://assets/Music/low_hp_high_mental_v1.wav")
+			track_number = 1
+			$AudioStreamPlayer.play()
+		# play low hunger
+	else :
+		if (track_number != 0):
+			$AudioStreamPlayer.stream = preload("res://assets/Music/good_hp_good_mental_v2.wav")
+			track_number = 0
+			$AudioStreamPlayer.play()
+		# play normal
+	
 
 func update_psyche_display() -> void:
 	_update_stat_display("psyche", psyche_icons, psyche, max_psyche, psyche_full, psyche_empty)

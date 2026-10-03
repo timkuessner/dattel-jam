@@ -108,3 +108,5 @@ size_flags_horizontal = 3
 [node name="TextureRect4" type="TextureRect" parent="Attributes/Energy" unique_id=463097194]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=23669835]
