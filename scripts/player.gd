@@ -10,6 +10,8 @@ var energy = 5
 var psyche = 5
 var hunger = 5
 
+var facing_direction := Vector2.DOWN
+
 var n = 0
 
 var isDay = true
@@ -49,6 +51,7 @@ func _physics_process(delta: float) -> void:
 		$"../CanvasLayer".updateEnergy(energy)
 	
 	if direction:
+		_update_facing_direction(direction)
 		if direction.x > 0:
 			$AnimatedSprite2D.flip_h = false
 		elif direction.x < 0:
@@ -61,6 +64,45 @@ func _physics_process(delta: float) -> void:
 		velocity = Vector2.ZERO
 	
 	move_and_slide()
+
+	var farm_system := get_tree().get_first_node_in_group("farm_system")
+	if farm_system:
+		farm_system.update_player_target(self, facing_direction)
+
+
+func _update_facing_direction(direction: Vector2) -> void:
+	if abs(direction.x) > abs(direction.y):
+		facing_direction = Vector2.RIGHT if direction.x > 0 else Vector2.LEFT
+	elif abs(direction.y) > abs(direction.x):
+		facing_direction = Vector2.DOWN if direction.y > 0 else Vector2.UP
+	elif facing_direction.x != 0 and direction.x != 0:
+		facing_direction = Vector2.RIGHT if direction.x > 0 else Vector2.LEFT
+	elif direction.y != 0:
+		facing_direction = Vector2.DOWN if direction.y > 0 else Vector2.UP
+
+
+func _unhandled_key_input(event: InputEvent) -> void:
+	if not isDay:
+		return
+	var key_event := event as InputEventKey
+	if key_event == null or not key_event.pressed or key_event.echo:
+		return
+
+	var farm_system := get_tree().get_first_node_in_group("farm_system")
+	if farm_system == null:
+		return
+
+	var key := key_event.keycode
+	var physical := key_event.physical_keycode
+
+	if key == KEY_5 or physical == KEY_5:
+		farm_system.select_tool(FarmManager.TOOL_HOE)
+	elif key == KEY_6 or physical == KEY_6:
+		farm_system.select_tool(FarmManager.TOOL_SEEDS)
+	elif key == KEY_7 or physical == KEY_7:
+		farm_system.select_tool(FarmManager.TOOL_BUCKET)
+	elif key == KEY_E or physical == KEY_E:
+		farm_system.request_interact(self, facing_direction)
 
 
 func _walk_at_night(delta: float) -> void:
