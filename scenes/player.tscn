@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://cns2to50ti2tv" path="res://assets/sprites/player/player_sprites_new.png" id="2_qhqgy"]
 [ext_resource type="SpriteFrames" uid="uid://cxsy8hean11b1" path="res://assets/item_sprites.tres" id="4_dqkch"]
 [ext_resource type="Texture2D" uid="uid://bu1y23ts5neag" path="res://assets/sprites/player/emote__.png" id="5_qlg0r"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/click_icon.png" id="6_click"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dqkch"]
 atlas = ExtResource("2_qhqgy")
@@ -429,6 +430,7 @@ animations = [{
 size = Vector2(17, 2)
 
 [node name="Player" type="CharacterBody2D" unique_id=1690923371]
+z_index = 0
 script = ExtResource("1_g2els")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=726144485]
@@ -465,6 +467,13 @@ theme_override_font_sizes/font_size = 10
 text = "E"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="ClickIcon" type="Sprite2D" parent="Interact"]
+visible = false
+texture_filter = 1
+position = Vector2(0, -0.5)
+scale = Vector2(0.06, 0.06)
+texture = ExtResource("6_click")
 
 [node name="Items" type="AnimatedSprite2D" parent="Interact" unique_id=138190837]
 visible = false

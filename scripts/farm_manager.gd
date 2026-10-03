@@ -2,7 +2,25 @@ class_name FarmManager
 extends Node2D
 
 const CropPlotScene := preload("res://scenes/crop_plot.tscn")
-const SOIL_AUTOTILE_TEXTURE := preload("res://assets/Tilemap/soil_autotile.png")
+
+const SOIL_TEXTURES := {
+	"dry_h_left": preload("res://assets/Tilemap/soil_runtime/dry_h_left.png"),
+	"dry_h_middle": preload("res://assets/Tilemap/soil_runtime/dry_h_middle.png"),
+	"dry_h_right": preload("res://assets/Tilemap/soil_runtime/dry_h_right.png"),
+	"dry_h_single": preload("res://assets/Tilemap/soil_runtime/dry_h_single.png"),
+	"wet_h_left": preload("res://assets/Tilemap/soil_runtime/wet_h_left.png"),
+	"wet_h_middle": preload("res://assets/Tilemap/soil_runtime/wet_h_middle.png"),
+	"wet_h_right": preload("res://assets/Tilemap/soil_runtime/wet_h_right.png"),
+	"wet_h_single": preload("res://assets/Tilemap/soil_runtime/wet_h_single.png"),
+	"dry_v_single": preload("res://assets/Tilemap/soil_runtime/dry_v_single.png"),
+	"dry_v_top": preload("res://assets/Tilemap/soil_runtime/dry_v_top.png"),
+	"dry_v_middle": preload("res://assets/Tilemap/soil_runtime/dry_v_middle.png"),
+	"dry_v_bottom": preload("res://assets/Tilemap/soil_runtime/dry_v_bottom.png"),
+	"wet_v_single": preload("res://assets/Tilemap/soil_runtime/wet_v_single.png"),
+	"wet_v_top": preload("res://assets/Tilemap/soil_runtime/wet_v_top.png"),
+	"wet_v_middle": preload("res://assets/Tilemap/soil_runtime/wet_v_middle.png"),
+	"wet_v_bottom": preload("res://assets/Tilemap/soil_runtime/wet_v_bottom.png"),
+}
 
 const TOWN_ATLAS_SOURCE_ID := 1
 const WELL_ATLAS := Vector2i(8, 8)
@@ -21,8 +39,8 @@ var crops: Dictionary = {}
 var tilled_cells: Dictionary = {}
 var soil_sprites: Dictionary = {}
 
-# Speichert alle Felder, die HEUTE gegossen wurden.
-# Ein Feld kann dadurch pro Tag nur einmal gegossen werden.
+# Alle Felder, die HEUTE gegossen wurden.
+# In der Nacht wachsen Pflanzen auf diesen Feldern und der Boden trocknet wieder.
 var watered_cells: Dictionary = {}
 
 var _player_using_farm_prompt: Player = null
@@ -54,35 +72,21 @@ func select_tool(tool: String, player: Player) -> void:
 				return
 
 	selected_tool = tool
-
-	update_player_target(
-		player,
-		player.facing_direction
-	)
+	update_player_target(player)
 
 
 func interact(player: Player) -> void:
-	var interaction := _get_interaction(
-		player,
-		player.facing_direction
-	)
+	var interaction := _get_interaction(player)
 
 	if interaction.is_empty():
 		return
 
 	var action: String = interaction["type"]
-	var cell: Vector2i = interaction.get(
-		"cell",
-		Vector2i.ZERO
-	)
+	var cell: Vector2i = interaction.get("cell", Vector2i.ZERO)
 
 	match action:
 		"harvest":
-			_harvest_crop(
-				player,
-				cell,
-				crops[cell]
-			)
+			_harvest_crop(player, cell, crops[cell])
 
 		"fill_bucket":
 			water_units = bucket_capacity
@@ -92,77 +96,68 @@ func interact(player: Player) -> void:
 			_use_hoe(cell)
 
 		"plant":
-			_use_seeds(
-				player,
-				cell
-			)
+			_use_seeds(player, cell)
 
 		"water":
 			_use_bucket(cell)
 
-	update_player_target(
-		player,
-		player.facing_direction
-	)
+	update_player_target(player)
 
 
+# Das unsichtbare Interaktionsfeld ist ein 3x3-Raster um den Player.
+# Welches der 9 Tiles benutzt wird, bestimmt ausschließlich die Mausposition.
 func update_player_target(
 	player: Player,
-	facing_direction: Vector2
+	_facing_direction: Vector2 = Vector2.ZERO
 ) -> void:
+	var target_cell_variant = _get_mouse_target_cell(player)
 
-	var cell := _get_target_cell(
-		player,
-		facing_direction
-	)
-
-	var cell_world := ground.to_global(
-		ground.map_to_local(cell)
-	)
-
-	target_outline.global_position = cell_world
-	target_outline.visible = selected_tool != TOOL_NONE
-
-	var interaction := _get_interaction(
-		player,
-		facing_direction
-	)
-
-	if interaction.is_empty():
+	if target_cell_variant == null:
+		target_outline.visible = false
 
 		if player.area == self:
 			player.exitArea(self)
 
 		_player_using_farm_prompt = null
+		return
 
+	var cell: Vector2i = target_cell_variant
+	var cell_world := ground.to_global(ground.map_to_local(cell))
+
+	target_outline.global_position = cell_world
+	target_outline.visible = selected_tool != TOOL_NONE
+
+	var interaction := _get_interaction(player)
+
+	if interaction.is_empty():
+		if player.area == self:
+			player.exitArea(self)
+
+		_player_using_farm_prompt = null
 	elif player.area == null or player.area == self:
-
 		player.enterArea(self)
 		_player_using_farm_prompt = player
 
 
-func _get_interaction(
-	player: Player,
-	facing_direction: Vector2
-) -> Dictionary:
+func _get_interaction(player: Player) -> Dictionary:
+	var target_cell_variant = _get_mouse_target_cell(player)
 
-	var cell := _get_target_cell(
-		player,
-		facing_direction
-	)
+	if target_cell_variant == null:
+		return {}
 
-	# Reife Pflanze kann immer geerntet werden.
+	var cell: Vector2i = target_cell_variant
+
+	# Eine reife Karotte kann mit E geerntet werden, egal welches Werkzeug aktiv ist.
 	if crops.has(cell):
-
 		var crop: CropPlot = crops[cell]
-
 		if crop.is_mature:
 			return {
 				"type": "harvest",
 				"cell": cell
 			}
 
-	# Eimer am Brunnen auffüllen.
+	# Eimer am Brunnen auffüllen, wenn der Cursor auf dem Brunnen liegt
+	# und dieser innerhalb des 3x3-Bereichs um den Player ist.
 	if (
 		selected_tool == TOOL_BUCKET
 		and player.inventory.has(Item.items.BUCKET)
@@ -175,9 +170,7 @@ func _get_interaction(
 		}
 
 	match selected_tool:
-
 		TOOL_HOE:
-
 			if (
 				player.inventory.has(Item.items.HOE)
 				and not crops.has(cell)
@@ -190,12 +183,8 @@ func _get_interaction(
 				}
 
 		TOOL_SEEDS:
-
 			if (
-				player.inventory.get(
-					Item.items.CARROT_SEEDS,
-					0
-				) > 0
+				player.inventory.get(Item.items.CARROT_SEEDS, 0) > 0
 				and _is_tilled_soil(cell)
 				and not crops.has(cell)
 			):
@@ -205,25 +194,18 @@ func _get_interaction(
 				}
 
 		TOOL_BUCKET:
-
+			# Auch ein noch unbepflanztes gehacktes Feld kann gegossen werden.
+			# Wachstum passiert trotzdem erst in der Nacht und nur, falls eine Pflanze darauf steht.
 			if (
 				player.inventory.has(Item.items.BUCKET)
 				and water_units > 0
-				and crops.has(cell)
+				and _is_tilled_soil(cell)
+				and not watered_cells.has(cell)
 			):
-
-				var crop: CropPlot = crops[cell]
-
-				# Nur nicht-reife und heute noch nicht
-				# bewässerte Pflanzen können gegossen werden.
-				if (
-					not crop.is_mature
-					and not watered_cells.has(cell)
-				):
-					return {
-						"type": "water",
-						"cell": cell
-					}
+				return {
+					"type": "water",
+					"cell": cell
+				}
 
 	return {}
 
@@ -239,21 +221,12 @@ func _use_hoe(cell: Vector2i) -> void:
 		return
 
 	tilled_cells[cell] = true
-
 	_ensure_soil_sprite(cell)
-
 	_refresh_soil_connections(cell)
 
 
-func _use_seeds(
-	player: Player,
-	cell: Vector2i
-) -> void:
-
-	if player.inventory.get(
-		Item.items.CARROT_SEEDS,
-		0
-	) <= 0:
+func _use_seeds(player: Player, cell: Vector2i) -> void:
+	if player.inventory.get(Item.items.CARROT_SEEDS, 0) <= 0:
 		return
 
 	if not _is_tilled_soil(cell):
@@ -263,195 +236,98 @@ func _use_seeds(
 		return
 
 	_plant_carrot(cell)
-
-	player.remove_item(
-		Item.items.CARROT_SEEDS
-	)
+	player.remove_item(Item.items.CARROT_SEEDS)
 
 
 func _use_bucket(cell: Vector2i) -> void:
 	if water_units <= 0:
 		return
 
-	if not crops.has(cell):
+	if not _is_tilled_soil(cell):
 		return
 
-	# Dieses Feld wurde heute schon gegossen.
 	if watered_cells.has(cell):
 		return
 
-	var crop: CropPlot = crops[cell]
-
-	if crop.is_mature:
-		return
-
-	# WICHTIG:
-	# Hier KEIN crop.grow()!
-	#
-	# Gießen macht nur:
-	# 1. Feld als gegossen markieren
-	# 2. Wasser verbrauchen
-	# 3. Boden dunkel machen
-
+	# Gießen lässt die Pflanze NICHT sofort wachsen.
+	# Es markiert nur das Feld als gegossen und schaltet auf den dunklen Boden-Frame.
 	watered_cells[cell] = true
-
 	water_units -= 1
-
-	_set_soil_wet(
-		cell,
-		true
-	)
-
+	_set_soil_wet(cell, true)
 	_refresh_bucket_inventory_icon()
 
 
 func advance_day() -> void:
-	# Diese Funktion wird vom Player
-	# genau beim Schlafengehen aufgerufen.
-
+	# Wird beim Schlafengehen einmal aufgerufen:
+	# 1. gegossene Karotten wachsen um genau eine Stufe
+	# 2. alle heute gegossenen Böden werden wieder trocken/hell
+	# 3. am neuen Tag können sie erneut gegossen werden
 	var watered_today := watered_cells.keys().duplicate()
 
 	for cell_variant in watered_today:
-
 		var cell: Vector2i = cell_variant
 
-		# Nur Pflanzen auf bewässerten Feldern wachsen.
 		if crops.has(cell):
-
 			var crop: CropPlot = crops[cell]
-
 			if not crop.is_mature:
 				crop.grow()
 
-		# Danach ist der Boden wieder trocken/hell.
-		_set_soil_wet(
-			cell,
-			false
-		)
+		_set_soil_wet(cell, false)
 
-	# Dadurch können die Felder am nächsten Tag
-	# wieder einmal gegossen werden.
 	watered_cells.clear()
 
 
 func _refresh_bucket_inventory_icon() -> void:
-	var player := get_tree().get_first_node_in_group(
-		"player"
-	)
+	var player := get_tree().get_first_node_in_group("player")
 
 	if player == null:
 		return
 
-	var inventory_ui := player.get_node_or_null(
-		"../PlayerHUD/Inventory"
-	)
+	var inventory_ui := player.get_node_or_null("../PlayerHUD/Inventory")
 
-	if (
-		inventory_ui != null
-		and inventory_ui.has_method(
-			"refresh_bucket_visual"
-		)
-	):
+	if inventory_ui != null and inventory_ui.has_method("refresh_bucket_visual"):
 		inventory_ui.refresh_bucket_visual()
 
 
-func _harvest_crop(
-	player: Player,
-	cell: Vector2i,
-	crop: CropPlot
-) -> void:
-
+func _harvest_crop(player: Player, cell: Vector2i, crop: CropPlot) -> void:
 	crops.erase(cell)
-
 	watered_cells.erase(cell)
-
-	_set_soil_wet(
-		cell,
-		false
-	)
-
+	_set_soil_wet(cell, false)
 	crop.queue_free()
-
-	player.add_item(
-		Item.items.CARROT
-	)
+	player.add_item(Item.items.CARROT)
 
 
 func _plant_carrot(cell: Vector2i) -> void:
 	var crop := CropPlotScene.instantiate() as CropPlot
-
 	crop.cell = cell
-
 	crops_root.add_child(crop)
-
-	crop.global_position = ground.to_global(
-		ground.map_to_local(cell)
-	)
-
+	crop.global_position = ground.to_global(ground.map_to_local(cell))
 	crops[cell] = crop
 
 
-func _get_target_cell(
-	player: Node2D,
-	facing_direction: Vector2
-) -> Vector2i:
+func _get_mouse_target_cell(player: Node2D) -> Variant:
+	# Die CharacterBody2D-Position liegt wegen der Player-Collision optisch zu tief.
+	# Das 3x3-Feld wird deshalb bewusst EIN TILE nach oben verschoben, damit
+	# es wirklich um die sichtbare Spielfigur liegt.
+	var player_cell := ground.local_to_map(ground.to_local(player.global_position)) + Vector2i.UP
+	var mouse_cell := ground.local_to_map(ground.to_local(get_global_mouse_position()))
+	var offset := mouse_cell - player_cell
 
-	var player_cell := ground.local_to_map(
-		ground.to_local(
-			player.global_position
-		)
-	)
+	# Unsichtbares 3x3-Raster rund um den korrigierten Player-Mittelpunkt.
+	if abs(offset.x) > 1 or abs(offset.y) > 1:
+		return null
 
-	return player_cell + _cardinal_direction(
-		facing_direction
-	)
-
-
-func _cardinal_direction(
-	direction: Vector2
-) -> Vector2i:
-
-	if direction == Vector2.ZERO:
-		return Vector2i.DOWN
-
-	if abs(direction.x) > abs(direction.y):
-
-		return (
-			Vector2i.RIGHT
-			if direction.x > 0.0
-			else Vector2i.LEFT
-		)
-
-	return (
-		Vector2i.DOWN
-		if direction.y > 0.0
-		else Vector2i.UP
-	)
+	return mouse_cell
 
 
-func _is_plantable_grass(
-	cell: Vector2i
-) -> bool:
-
+func _is_plantable_grass(cell: Vector2i) -> bool:
 	const PLANTABLE_GRASS := {
-		1: [
-			Vector2i(0, 0),
-			Vector2i(1, 0)
-		],
-
-		2: [
-			Vector2i(0, 0),
-			Vector2i(1, 0)
-		],
+		1: [Vector2i(0, 0), Vector2i(1, 0)],
+		2: [Vector2i(0, 0), Vector2i(1, 0)],
 	}
 
-	var source_id := ground.get_cell_source_id(
-		cell
-	)
-
-	var atlas_coords := ground.get_cell_atlas_coords(
-		cell
-	)
+	var source_id := ground.get_cell_source_id(cell)
+	var atlas_coords := ground.get_cell_atlas_coords(cell)
 
 	if not PLANTABLE_GRASS.has(source_id):
 		return false
@@ -465,136 +341,108 @@ func _is_plantable_grass(
 	return true
 
 
-func _is_tilled_soil(
-	cell: Vector2i
-) -> bool:
-
+func _is_tilled_soil(cell: Vector2i) -> bool:
 	return tilled_cells.has(cell)
 
 
-func _ensure_soil_sprite(
-	cell: Vector2i
-) -> Sprite2D:
-
+func _ensure_soil_sprite(cell: Vector2i) -> Sprite2D:
 	if soil_sprites.has(cell):
 		return soil_sprites[cell] as Sprite2D
 
 	var sprite := Sprite2D.new()
-
-	sprite.name = "Soil_%d_%d" % [
-		cell.x,
-		cell.y
-	]
-
-	sprite.position = ground.map_to_local(
-		cell
-	)
-
+	sprite.name = "Soil_%d_%d" % [cell.x, cell.y]
+	sprite.position = ground.map_to_local(cell)
 	sprite.centered = true
-
+	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	# FarmSoil selbst liegt bereits über dem Ground. z_index 0 hält
+	# alle Bodenstücke auf derselben Ebene innerhalb dieses Layers.
 	soil_root.add_child(sprite)
-
 	soil_sprites[cell] = sprite
-
 	return sprite
 
 
-func _soil_neighbor_mask(
-	cell: Vector2i
-) -> int:
-
+func _soil_neighbor_mask(cell: Vector2i) -> int:
 	var mask := 0
 
-	if _is_tilled_soil(
-		cell + Vector2i.UP
-	):
+	if _is_tilled_soil(cell + Vector2i.UP):
 		mask |= 1
-
-	if _is_tilled_soil(
-		cell + Vector2i.RIGHT
-	):
+	if _is_tilled_soil(cell + Vector2i.RIGHT):
 		mask |= 2
-
-	if _is_tilled_soil(
-		cell + Vector2i.DOWN
-	):
+	if _is_tilled_soil(cell + Vector2i.DOWN):
 		mask |= 4
-
-	if _is_tilled_soil(
-		cell + Vector2i.LEFT
-	):
+	if _is_tilled_soil(cell + Vector2i.LEFT):
 		mask |= 8
 
 	return mask
 
 
-func _set_soil_visual(
-	cell: Vector2i
-) -> void:
-
+func _set_soil_visual(cell: Vector2i) -> void:
 	if not _is_tilled_soil(cell):
 		return
 
-	var sprite := _ensure_soil_sprite(
-		cell
-	)
-
-	var mask := _soil_neighbor_mask(
-		cell
-	)
-
-	var atlas := AtlasTexture.new()
-
-	atlas.atlas = SOIL_AUTOTILE_TEXTURE
-
-	atlas.region = Rect2(
-		Vector2(
-			(mask % 4) * 16,
-			int(mask / 4) * 16
-		),
-		Vector2(
-			16,
-			16
-		)
-	)
-
-	sprite.texture = atlas
-
-	_set_soil_wet(
-		cell,
-		watered_cells.has(cell)
-	)
+	_set_soil_wet(cell, watered_cells.has(cell))
 
 
-func _set_soil_wet(
-	cell: Vector2i,
-	wet: bool
-) -> void:
-
+func _set_soil_wet(cell: Vector2i, wet: bool) -> void:
 	if not _is_tilled_soil(cell):
 		return
 
-	var sprite := _ensure_soil_sprite(
-		cell
-	)
-
-	# Nass = dunkler.
-	# Trocken = wieder normal hell.
-	if wet:
-		sprite.modulate = Color(
-			0.62,
-			0.62,
-			0.62,
-			1.0
-		)
-	else:
-		sprite.modulate = Color.WHITE
+	var sprite := _ensure_soil_sprite(cell)
+	sprite.texture = _get_soil_texture(cell, wet)
+	sprite.modulate = Color.WHITE
 
 
-func _refresh_soil_connections(
-	changed_cell: Vector2i
-) -> void:
+func _get_soil_texture(cell: Vector2i, wet: bool) -> Texture2D:
+	var up := _is_tilled_soil(cell + Vector2i.UP)
+	var right := _is_tilled_soil(cell + Vector2i.RIGHT)
+	var down := _is_tilled_soil(cell + Vector2i.DOWN)
+	var left := _is_tilled_soil(cell + Vector2i.LEFT)
 
+	var horizontal_count := int(left) + int(right)
+	var vertical_count := int(up) + int(down)
+	var prefix := "dry" if wet else "wet"
+
+	# Reine horizontale Reihe
+	if horizontal_count > vertical_count:
+		if left and right:
+			return SOIL_TEXTURES["%s_h_middle" % prefix]
+		if right:
+			return SOIL_TEXTURES["%s_h_left" % prefix]
+		if left:
+			return SOIL_TEXTURES["%s_h_right" % prefix]
+		return SOIL_TEXTURES["%s_h_single" % prefix]
+
+	# Reine vertikale Reihe
+	if vertical_count > horizontal_count:
+		if up and down:
+			return SOIL_TEXTURES["%s_v_middle" % prefix]
+		if down:
+			return SOIL_TEXTURES["%s_v_top" % prefix]
+		if up:
+			return SOIL_TEXTURES["%s_v_bottom" % prefix]
+		return SOIL_TEXTURES["%s_v_single" % prefix]
+
+	# Einzelnes Feld oder Mischform: lieber das sichere einzelne Feld,
+	# damit nie wieder ein falscher Ausschnitt aus dem Atlas erscheint.
+	if horizontal_count == 0 and vertical_count == 0:
+		return SOIL_TEXTURES["%s_h_single" % prefix]
+
+	# Bei Ecken/T-Kreuzungen/Kreuzen ist das horizontale Feld optisch am stimmigsten.
+	if left and right:
+		return SOIL_TEXTURES["%s_h_middle" % prefix]
+	if right:
+		return SOIL_TEXTURES["%s_h_left" % prefix]
+	if left:
+		return SOIL_TEXTURES["%s_h_right" % prefix]
+	if down:
+		return SOIL_TEXTURES["%s_v_top" % prefix]
+	if up:
+		return SOIL_TEXTURES["%s_v_bottom" % prefix]
+
+	return SOIL_TEXTURES["%s_h_single" % prefix]
+
+
+func _refresh_soil_connections(changed_cell: Vector2i) -> void:
 	var affected_cells := [
 		changed_cell,
 		changed_cell + Vector2i.UP,
@@ -604,39 +452,21 @@ func _refresh_soil_connections(
 	]
 
 	for cell in affected_cells:
-
 		if _is_tilled_soil(cell):
 			_set_soil_visual(cell)
 
 
-func _is_well_target(
-	cell: Vector2i
-) -> bool:
-
+func _is_well_target(cell: Vector2i) -> bool:
 	if (
-		objects.get_cell_source_id(cell)
-		== TOWN_ATLAS_SOURCE_ID
-		and
-		objects.get_cell_atlas_coords(cell)
-		== WELL_ATLAS
+		objects.get_cell_source_id(cell) == TOWN_ATLAS_SOURCE_ID
+		and objects.get_cell_atlas_coords(cell) == WELL_ATLAS
 	):
 		return true
 
-	var well := get_tree().get_first_node_in_group(
-		"water_well"
-	) as Node2D
+	var well := get_tree().get_first_node_in_group("water_well") as Node2D
 
 	if well != null:
-
-		var cell_world := ground.to_global(
-			ground.map_to_local(cell)
-		)
-
-		return (
-			cell_world.distance_to(
-				well.global_position
-			)
-			<= 14.0
-		)
+		var cell_world := ground.to_global(ground.map_to_local(cell))
+		return cell_world.distance_to(well.global_position) <= 14.0
 
 	return false

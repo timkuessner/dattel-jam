@@ -14,6 +14,7 @@ y_sort_enabled = true
 script = ExtResource("1_farm")
 
 [node name="Crops" type="Node2D" parent="FarmManager"]
+z_index = 0
 y_sort_enabled = true
 
 [node name="TargetOutline" type="Line2D" parent="FarmManager"]

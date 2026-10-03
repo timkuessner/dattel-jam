@@ -4,6 +4,7 @@ extends CharacterBody2D
 const RECORD_INTERVAL := 0.1
 const GHOST_SCENE := preload("res://scenes/ghost.tscn")
 const FINALE_DAY := 5
+const INTERACT_PROMPT_SWAP_INTERVAL := 0.7
 
 var recording: Array = []
 var record_timer := 0.0
@@ -29,6 +30,14 @@ var inventory: Dictionary = {}
 var pos_array: Array[Array] = []
 
 var area: Node2D
+var _alternate_interact_prompt := false
+var _interact_prompt_timer := 0.0
+var _show_click_prompt := false
+
+@onready var interact_ui: Sprite2D = $Interact
+@onready var interact_label: Label = $Interact/Label
+@onready var interact_items: AnimatedSprite2D = $Interact/Items
+@onready var interact_click_icon: Sprite2D = $Interact/ClickIcon
 
 
 func add_item(item, amount: int = 1):
@@ -64,28 +73,62 @@ func showLabel(text):
 	if !isDay:
 		return
 
-	$Interact.show()
-	$Interact/Label.text = text
-	$Interact/Label.show()
-	$Interact/Items.hide()
+	if text == "E / LMB":
+		_show_alternating_interact_prompt()
+		return
+
+	_alternate_interact_prompt = false
+	interact_ui.show()
+	interact_label.text = text
+	interact_label.show()
+	interact_click_icon.hide()
+	interact_items.hide()
 
 
 func showInteractItem(item):
 	if !isDay:
 		return
 
-	$Interact.show()
-	$Interact/Label.hide()
-	$Interact/Items.play(str(Item.items.keys()[item]))
-	$Interact/Items.show()
+	_alternate_interact_prompt = false
+	interact_ui.show()
+	interact_label.hide()
+	interact_click_icon.hide()
+	interact_items.play(str(Item.items.keys()[item]))
+	interact_items.show()
 
 
 func hideInteract():
-	$Interact.hide()
+	_alternate_interact_prompt = false
+	interact_ui.hide()
+	interact_label.hide()
+	interact_click_icon.hide()
+	interact_items.hide()
+
+
+func _show_alternating_interact_prompt() -> void:
+	_alternate_interact_prompt = true
+	_interact_prompt_timer = 0.0
+	_show_click_prompt = false
+	interact_ui.show()
+	interact_items.hide()
+	_update_alternating_interact_prompt()
+
+
+func _update_alternating_interact_prompt() -> void:
+	if not _alternate_interact_prompt:
+		return
+
+	if _show_click_prompt:
+		interact_label.hide()
+		interact_click_icon.show()
+	else:
+		interact_click_icon.hide()
+		interact_label.text = "E"
+		interact_label.show()
 
 
 func enterArea(a):
-	showLabel("E")
+	showLabel("E / LMB")
 	area = a
 
 
@@ -98,7 +141,7 @@ func exitArea(a):
 
 func enterFire():
 	if Item.items.WOOD in inventory:
-		showLabel("E")
+		showLabel("E / LMB")
 	else:
 		showInteractItem(Item.items.WOOD)
 
@@ -122,6 +165,18 @@ func start_night() -> void:
 	nav_agent.target_position = BED_POSITION
 
 var t = 0
+
+func _process(delta: float) -> void:
+	if not _alternate_interact_prompt or not interact_ui.visible:
+		return
+
+	_interact_prompt_timer += delta
+
+	if _interact_prompt_timer >= INTERACT_PROMPT_SWAP_INTERVAL:
+		_interact_prompt_timer = 0.0
+		_show_click_prompt = not _show_click_prompt
+		_update_alternating_interact_prompt()
+
 
 func _physics_process(delta: float) -> void:
 	if finale:
@@ -177,18 +232,7 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	
 	if Input.is_action_just_pressed("e"):
-		if area:
-			if area == $"../Fire":
-				if Item.items.WOOD in inventory:
-					$"../Fire".buildFire()
-					remove_item(Item.items.WOOD)
-				
-				exitFire()
-				return
-				
-			if area.has_method("interact"):
-				area.interact(self)
-				return
+		_try_context_interaction()
 	
 	if Input.is_action_just_pressed("ui_home"):
 		$"../Fire".buildFire()
@@ -203,6 +247,56 @@ func _physics_process(delta: float) -> void:
 	if record_timer >= RECORD_INTERVAL:
 		record_timer = 0.0
 		recording.append(global_position)
+
+
+func _input(event: InputEvent) -> void:
+	# Linksklick hat seine EIGENE Input-Action und ist nicht an die Action "e" gebunden.
+	# Beide rufen am Ende nur dieselbe Kontextfunktion auf.
+	if event.is_action_pressed("mouse_interact"):
+		if event is InputEventMouseButton and (event as InputEventMouseButton).double_click:
+			return
+
+		# Klicks auf das Inventar dürfen keine Aktion in der Welt auslösen.
+		var hovered_control := get_viewport().gui_get_hovered_control()
+		var inventory_ui := get_node_or_null("../PlayerHUD/Inventory") as Control
+
+		if (
+			inventory_ui != null
+			and hovered_control != null
+			and (
+				hovered_control == inventory_ui
+				or inventory_ui.is_ancestor_of(hovered_control)
+			)
+		):
+			return
+
+		_try_context_interaction()
+
+
+func _try_context_interaction() -> void:
+	if not isDay or is_chopping:
+		return
+
+	# Vor einem Klick das aktuelle Maus-Tile noch einmal sofort prüfen.
+	# So funktioniert ein Klick auch dann zuverlässig, wenn die Maus gerade erst
+	# auf ein anderes Feld bewegt wurde und noch kein neuer Physics-Frame lief.
+	var farm_system := get_tree().get_first_node_in_group("farm_system")
+	if farm_system != null:
+		farm_system.update_player_target(self, facing_direction)
+
+	if area == null:
+		return
+
+	if area == $"../Fire":
+		if Item.items.WOOD in inventory:
+			$"../Fire".buildFire()
+			remove_item(Item.items.WOOD)
+
+		exitFire()
+		return
+
+	if area.has_method("interact"):
+		area.interact(self)
 
 func play_tree_animation() -> void:
 	is_chopping = true
