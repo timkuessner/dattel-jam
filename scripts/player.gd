@@ -44,9 +44,9 @@ func _ready() -> void:
 	
 	$"../Gallows".updateGallows(n)
 
-func showE():
+func showLabel(text):
 	$Interact.show()
-	$Interact/Label.text = "E"
+	$Interact/Label.text = text
 	$Interact/Label.show()
 	$Interact/Items.hide()
 
@@ -60,7 +60,7 @@ func hideInteract():
 	$Interact.hide()
 
 func enterArea(a):
-	showE()
+	showLabel("E")
 	area = a
 
 func exitArea(a):
@@ -70,7 +70,7 @@ func exitArea(a):
 
 func enterFire():
 	if Item.items.WOOD in inventory:
-		showE()
+		showLabel("E")
 	else:
 		showInteractItem(Item.items.WOOD)
 	area = $"../Fire"
