@@ -88,10 +88,12 @@ func night(b):
 		$Attributes/Health.show()
 		$Attributes/Energy.propagate_call("set_visible", [false])
 		$Attributes/Energy.show()
+		$Panel.hide()
 	else:
 		$NightOverlay.hide()
 		$Attributes/Health.propagate_call("set_visible", [true])
 		$Attributes/Energy.propagate_call("set_visible", [true])
+		$Panel.show()
 
 func update():
 	update_psyche_display()

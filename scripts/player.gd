@@ -232,6 +232,7 @@ func _walk_at_night(delta: float) -> void:
 
 			nav_agent.target_position = GALLOW_POSITION
 			$"../PlayerHUD".night(true)
+			$"../PlayerHUD/Inventory".hide()
 			$AnimatedSprite2D.modulate = Color(0.0, 0.0, 0.0, 1.0)
 			return
 
@@ -259,6 +260,7 @@ func _walk_at_night(delta: float) -> void:
 			
 			_play_direction_animation("idle")
 			$"../PlayerHUD".night(false)
+			$"../PlayerHUD/Inventory".show()
 			$AnimatedSprite2D.modulate = Color(1.0, 1.0, 1.0, 1.0)
 			return
 	
