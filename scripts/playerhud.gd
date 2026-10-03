@@ -13,6 +13,14 @@ var hunger_empty = preload("res://assets/sprites/HUD/Heart_Shadow.png")
 var energy_full = preload("res://assets/sprites/HUD/Energy.png")
 var energy_empty = preload("res://assets/sprites/HUD/Energy_Shadow.png")
 
+# --- Blink settings (tweak these) ---
+const BLINK_COUNT := 3          # how many full<->empty flashes
+const BLINK_INTERVAL := 0.12    # seconds between each texture swap
+
+# Last displayed value per stat, used to detect which icons changed
+var _displayed: Dictionary = {}
+# Running blink tweens per icon, so a new change can cancel an old blink
+var _blink_tweens: Dictionary = {}
 
 
 func _ready() -> void:
@@ -101,24 +109,57 @@ func update():
 	update_energy_display()
 
 
-
 func update_psyche_display() -> void:
-	for i in range(max_psyche):
-		if i < psyche:
-			psyche_icons[i].texture = psyche_full
-		else :
-			psyche_icons[i].texture = psyche_empty
+	_update_stat_display("psyche", psyche_icons, psyche, max_psyche, psyche_full, psyche_empty)
 
 func update_hunger_display() -> void:
-	for i in range(max_hunger):
-		if i < hunger:
-			hunger_icons[i].texture = hunger_full
-		else :
-			hunger_icons[i].texture = hunger_empty
+	_update_stat_display("hunger", hunger_icons, hunger, max_hunger, hunger_full, hunger_empty)
 
 func update_energy_display() -> void:
-	for i in range(max_energy):
-		if i < energy:
-			energy_icons[i].texture = energy_full
-		else :
-			energy_icons[i].texture = energy_empty
+	_update_stat_display("energy", energy_icons, energy, max_energy, energy_full, energy_empty)
+
+
+# Generic display updater: sets textures and blinks every icon whose state changed
+func _update_stat_display(key: String, icons: Array, value: int, max_value: int, full_tex: Texture2D, empty_tex: Texture2D) -> void:
+	var old_value: int = _displayed.get(key, -1)
+	_displayed[key] = value
+
+	# Range of icon indices that changed (e.g. 4 -> 2 changes icons 2 and 3)
+	var change_start := mini(old_value, value)
+	var change_end := maxi(old_value, value)
+
+	for i in range(mini(max_value, icons.size())):
+		var final_tex: Texture2D = full_tex if i < value else empty_tex
+		var other_tex: Texture2D = empty_tex if i < value else full_tex
+
+		_stop_blink(icons[i])
+
+		var changed := old_value >= 0 and i >= change_start and i < change_end
+		if changed:
+			_blink_icon(icons[i], final_tex, other_tex)
+		else:
+			icons[i].texture = final_tex
+
+
+func _blink_icon(icon, final_tex: Texture2D, other_tex: Texture2D) -> void:
+	var steps := BLINK_COUNT * 2   # even number, so the last step is always the final texture
+	var tween: Tween = icon.create_tween()
+	_blink_tweens[icon.get_instance_id()] = tween
+
+	for k in range(steps):
+		# Starts on the old state and alternates, ending on the final state
+		var tex: Texture2D = final_tex if (steps - 1 - k) % 2 == 0 else other_tex
+		tween.tween_callback(func(): icon.texture = tex)
+		tween.tween_interval(BLINK_INTERVAL)
+
+	# Safety: guarantee the final texture at the end
+	tween.tween_callback(func(): icon.texture = final_tex)
+
+
+func _stop_blink(icon) -> void:
+	var id: int = icon.get_instance_id()
+	if _blink_tweens.has(id):
+		var t: Tween = _blink_tweens[id]
+		if t and t.is_valid():
+			t.kill()
+		_blink_tweens.erase(id)

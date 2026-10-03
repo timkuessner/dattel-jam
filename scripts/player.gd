@@ -234,6 +234,7 @@ func _walk_at_night(delta: float) -> void:
 			$"../PlayerHUD".night(true)
 			$"../PlayerHUD/Inventory".hide()
 			$AnimatedSprite2D.modulate = Color(0.0, 0.0, 0.0, 1.0)
+			$"../PlayerHUD".decrease_psyche(1)
 			return
 
 		elif night_phase == 1:
@@ -242,14 +243,14 @@ func _walk_at_night(delta: float) -> void:
 			n += 1
 			$"../Gallows".updateGallows(n)
 			
-			if n >= FINALE_DAY:
-				start_finale()
-				return
-			
 			nav_agent.target_position = BED_POSITION
+			
 			return
 		
 		elif night_phase == 2:
+			if n >= FINALE_DAY:
+				start_finale()
+				return
 			isDay = true
 			night_phase = 0
 			
