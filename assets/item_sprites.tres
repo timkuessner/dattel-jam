@@ -1,0 +1,39 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://dfg71fehg6tv1"]
+
+[ext_resource type="Texture2D" uid="uid://be8tnr8cleucd" path="res://assets/Tiles/tile_0029.png" id="1_olo7m"]
+[ext_resource type="Texture2D" uid="uid://2vmn4cbaaxo1" path="res://assets/Tiles/tile_0106.png" id="2_5cnpl"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s8enn"]
+atlas = ExtResource("1_olo7m")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vljjh"]
+atlas = ExtResource("2_5cnpl")
+region = Rect2(0, 0, 16, 16)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": null
+}],
+"loop": 1,
+"name": &"EMPTY",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s8enn")
+}],
+"loop": 1,
+"name": &"MUSHROOM",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vljjh")
+}],
+"loop": 1,
+"name": &"WOOD",
+"speed": 5.0
+}]

@@ -1,14 +1,23 @@
 [gd_scene format=3 uid="uid://dhnbk0cef70d"]
 
 [ext_resource type="Script" uid="uid://bp7dyhw3q20rj" path="res://scripts/inventory_slot.gd" id="1_ftvev"]
+[ext_resource type="Texture2D" uid="uid://50ul3w23s72a" path="res://assets/sprites/ui/panel_brown_corners_b.png" id="1_ue8xi"]
+[ext_resource type="SpriteFrames" uid="uid://dfg71fehg6tv1" path="res://assets/item_sprites.tres" id="2_3s2bb"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_olo7m"]
+texture = ExtResource("1_ue8xi")
 
 [node name="Slot" type="PanelContainer" unique_id=1967903635]
+texture_filter = 1
 custom_minimum_size = Vector2(64, 64)
 offset_right = 40.0
 offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxTexture_olo7m")
 script = ExtResource("1_ftvev")
 
-[node name="ItemIcon" type="TextureRect" parent="." unique_id=1541113724]
-layout_mode = 2
-expand_mode = 1
-stretch_mode = 5
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1123038884]
+texture_filter = 1
+position = Vector2(32, 32)
+scale = Vector2(3.5, 3.5)
+sprite_frames = ExtResource("2_3s2bb")
+animation = &"EMPTY"

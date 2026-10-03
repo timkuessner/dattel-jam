@@ -2,7 +2,7 @@
 class_name Item
 extends Node2D
 
-enum items {MUSHROOM, WOOD}
+enum items {MUSHROOM, WOOD, EMPTY}
 
 @export var item: items:
 	set(value):

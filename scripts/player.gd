@@ -20,6 +20,21 @@ var night_phase = 0
 
 var inventory: Dictionary = {}
 
+func add_item(item):
+	inventory[item] = inventory.get(item, 0) + 1
+	$"../PlayerHUD/Inventory".update_slots(inventory)
+
+func remove_item(item):
+	if not inventory.has(item):
+		return
+
+	inventory[item] -= 1
+
+	if inventory[item] <= 0:
+		inventory.erase(item)
+
+	$"../PlayerHUD/Inventory".update_slots(inventory)
+
 var area: Node2D
 
 
@@ -45,13 +60,6 @@ func enterFire():
 
 func exitFire():
 	exitArea($"../Fire")
-
-
-func addItem(item):
-	if item in inventory:
-		inventory[item] += 1
-	else:
-		inventory[item] = 1
 
 func start_night() -> void:
 	isDay = false
@@ -94,15 +102,12 @@ func _physics_process(delta: float) -> void:
 			if area == $"../Fire":
 				if Item.items.WOOD in inventory:
 					$"../Fire".buildFire()
-					inventory[Item.items.WOOD] -= 1
-					
-					if inventory[Item.items.WOOD] <= 0:
-						inventory.erase(Item.items.WOOD)
+					remove_item(Item.items.WOOD)
 				
 				exitFire()
 				
 				return
-			addItem(area.item)
+			add_item(area.item)
 			area.queue_free()
 			
 	if Input.is_action_just_pressed("ui_home"):

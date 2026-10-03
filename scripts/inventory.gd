@@ -11,7 +11,7 @@ func _ready() -> void:
 	create_inventory_slots()
 	
 	var test_icon = load("res://assets/sprites/HUD/Heart.png")
-	add_item_to_first_free_slot(test_icon)
+	#add_item_to_first_free_slot(test_icon)
 
 func create_inventory_slots() -> void:
 	# Bisherige Slots löschen (falls vorhanden)
@@ -24,6 +24,18 @@ func create_inventory_slots() -> void:
 		var slot_instance = slot_scene.instantiate()
 		grid_container.add_child(slot_instance)
 		slots.append(slot_instance)
+
+func update_slots(items):
+	var slot = 0
+	for item in items:
+		for i in range(items[item]):
+			
+			slots[slot].set_item(item)
+			print(i)
+			slot += 1
+	
+	for i in range(slot, len(slots)):
+		slots[slot].set_item(Item.items.EMPTY)
 
 # Funktion zum Hinzufügen eines Items an den ersten freien Slot
 func add_item_to_first_free_slot(texture: Texture2D) -> bool:

@@ -13,13 +13,15 @@ script = ExtResource("1_kh8if")
 
 [node name="GridContainer" type="GridContainer" parent="." unique_id=1463512378]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 512.0
-offset_top = 512.0
-offset_right = -64.0
-offset_bottom = -72.0
+offset_left = -628.0
+offset_top = -109.0
+offset_right = -52.19995
+offset_bottom = -45.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
