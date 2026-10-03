@@ -13,8 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://dqtu8b5iiu2sk" path="res://assets/sprites/ui/Buttons/Optionsbutton/Optionsbutton_hovered.png" id="8_l4mxc"]
 [ext_resource type="Texture2D" uid="uid://b8nd2ffke21ef" path="res://assets/sprites/ui/Buttons/Quitbutton/Quitbutton_pressed.png" id="10_5faoh"]
 [ext_resource type="Texture2D" uid="uid://ckjpygqrb644i" path="res://assets/sprites/ui/Buttons/Quitbutton/Quitbutton_hovered.png" id="11_ptake"]
-[ext_resource type="Texture2D" uid="uid://dngblvqxx31t4" path="res://assets/sprites/ui/schlechter_schlaf.png" id="13_5faoh"]
-[ext_resource type="AudioStream" uid="uid://b8dyn1nqmgxqm" path="res://assets/Music/start_v1.wav" id="15_ptake"]
+[ext_resource type="Texture2D" uid="uid://8rnqy37wonfv" path="res://assets/sprites/ui/Bad_Sleep.png" id="12_l4mxc"]
 
 [node name="Main_Menu" type="Control" unique_id=522822813]
 layout_mode = 3
@@ -33,6 +32,17 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_5faoh")
+
+[node name="ColorRect" type="ColorRect" parent="Startmenu_Background" unique_id=661773268]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.12941177, 0.4392157, 0.41960785, 0.5019608)
 
 [node name="Button_Manager" type="Control" parent="." unique_id=1874472119]
 layout_mode = 1
@@ -109,7 +119,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("13_5faoh")
+texture = ExtResource("12_l4mxc")
 stretch_mode = 5
 
 [node name="Fadetransition" parent="." unique_id=397057972 instance=ExtResource("3_l72w3")]
@@ -117,10 +127,6 @@ layout_mode = 1
 mouse_filter = 2
 
 [node name="fade_timer" type="Timer" parent="Fadetransition" unique_id=1361220803]
-
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1082651867]
-stream = ExtResource("15_ptake")
-autoplay = true
 
 [connection signal="mouse_entered" from="Button_Manager/Start" to="Button_Manager" method="_on_start_mouse_entered"]
 [connection signal="mouse_exited" from="Button_Manager/Start" to="Button_Manager" method="_on_start_mouse_exited"]

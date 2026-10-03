@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dq86acvnfa1hy"
-path="res://.godot/imported/Retrybutton_pressed.png-0e37e45f24550d428be9654f7f6ed72b.ctex"
+uid="uid://c66ir8ft72d2g"
+path="res://.godot/imported/Retrybutton.png-6ee45e77bc6fa534c08f89d6abd0203a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/ui/Buttons/Retrybutton/Retrybutton_pressed.png"
-dest_files=["res://.godot/imported/Retrybutton_pressed.png-0e37e45f24550d428be9654f7f6ed72b.ctex"]
+source_file="res://assets/sprites/ui/Buttons/Retrybutton.png"
+dest_files=["res://.godot/imported/Retrybutton.png-6ee45e77bc6fa534c08f89d6abd0203a.ctex"]
 
 [params]
 

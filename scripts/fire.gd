@@ -17,9 +17,9 @@ func updateFire():
 
 
 func _on_animated_sprite_2d_animation_finished() -> void:
+	print("test")
 	if $AnimatedSprite2D.animation == "fire_start":
 		$AnimatedSprite2D.play("fire_run")
-		$"../Ship".start()
 
 func buildFire():
 	level += 1
