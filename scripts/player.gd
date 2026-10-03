@@ -18,7 +18,7 @@ var n = 0
 var isDay = true
 var night_phase = 0
 
-enum items {MUSHROOM = 0, WOOD = 1}
+enum items {MUSHROOM, WOOD}
 
 var inventar: Array = []
 
@@ -31,13 +31,14 @@ func _ready() -> void:
 	
 	$"../Gallows".updateGallows(n)
 
+func enterArea(a):
+	$Interact.show()
+	area = a
 
-func enterArea(parent):
-	area = parent
-
-
-func exitArea(parent):
-	area = null
+func exitArea(a):
+	$Interact.hide()
+	if area == a:
+		area = null
 
 
 func addItem(item):
@@ -81,7 +82,8 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	
 	if Input.is_action_just_pressed("e"):
-		area.queue_free()
+		if area:
+			area.queue_free()
 	
 	var farm_system := get_tree().get_first_node_in_group("farm_system")
 	if farm_system:

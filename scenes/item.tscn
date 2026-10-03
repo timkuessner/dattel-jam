@@ -19,7 +19,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_s8enn")
 }],
 "loop": 1,
-"name": &"0",
+"name": &"MUSHROOM",
 "speed": 5.0
 }, {
 "frames": [{
@@ -27,7 +27,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_vljjh")
 }],
 "loop": 1,
-"name": &"1",
+"name": &"WOOD",
 "speed": 5.0
 }]
 
@@ -39,31 +39,13 @@ script = ExtResource("1_s8enn")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1491302785]
 sprite_frames = SubResource("SpriteFrames_k5pq1")
-animation = &"1"
+animation = &"MUSHROOM"
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1572581502]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1174220882]
 position = Vector2(0, -6)
 shape = SubResource("CircleShape2D_k5pq1")
-
-[node name="Panel" type="Panel" parent="." unique_id=81402782]
-visible = false
-offset_left = 5.0
-offset_top = -40.0
-offset_right = 29.0
-offset_bottom = -16.0
-
-[node name="Label" type="Label" parent="Panel" unique_id=1641137119]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "E"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]

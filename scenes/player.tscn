@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://cnqnvld7nyirs" path="res://scripts/player.gd" id="1_g2els"]
 [ext_resource type="Texture2D" uid="uid://7lgo4rey04d0" path="res://assets/sprites/player/player_sprites.png" id="2_qhqgy"]
 [ext_resource type="Texture2D" uid="uid://blhdxntf1y4md" path="res://assets/sprites/player/tile_0003.png" id="4_tuyoq"]
+[ext_resource type="Texture2D" uid="uid://bu1y23ts5neag" path="res://assets/sprites/player/emote__.png" id="5_qlg0r"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dqkch"]
 atlas = ExtResource("2_qhqgy")
@@ -235,3 +236,26 @@ position = Vector2(0, -1)
 shape = SubResource("RectangleShape2D_dqkch")
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=578797685]
+
+[node name="Interact" type="Sprite2D" parent="." unique_id=1049096806]
+visible = false
+texture_filter = 1
+position = Vector2(-9, -28)
+texture = ExtResource("5_qlg0r")
+
+[node name="Label" type="Label" parent="Interact" unique_id=1980198152]
+texture_filter = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -8.0
+offset_top = -10.0
+offset_right = -8.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 10
+text = "E"
+horizontal_alignment = 1
+vertical_alignment = 1
