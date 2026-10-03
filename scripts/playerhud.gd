@@ -15,78 +15,90 @@ var hunger_empty = preload("res://assets/sprites/HUD/Heart_Shadow.png")
 var energy_full = preload("res://assets/sprites/HUD/Energy.png")
 var energy_empty = preload("res://assets/sprites/HUD/Energy_Shadow.png")
 
-# --- Blink settings (tweak these) ---
-const BLINK_COUNT := 3          # how many full<->empty flashes
-const BLINK_INTERVAL := 0.12    # seconds between each texture swap
 
-# Last displayed value per stat, used to detect which icons changed
+# --- Blink settings ---
+const BLINK_COUNT := 3
+const BLINK_INTERVAL := 0.12
+
+# Last displayed value per stat
 var _displayed: Dictionary = {}
-# Running blink tweens per icon, so a new change can cancel an old blink
+
+# Running blink tweens per icon
 var _blink_tweens: Dictionary = {}
 
-
-func _ready() -> void:
-	update()
 
 var psyche = 4
 var hunger = 4
 var energy = 4
 
-
 var max_psyche = 4
 var max_hunger = 4
 var max_energy = 4
 
+
+func _ready() -> void:
+	update()
+
+
 func decrease_psyche(n):
-	if psyche - n >= 0 :
+	if psyche - n >= 0:
 		psyche = psyche - n
 		return true
-	else :
+	else:
 		return false
 
+
 func increase_psyche(n):
-	if psyche + n <= max_psyche :
+	if psyche + n <= max_psyche:
 		psyche = psyche + n
 		return true
-	else :
+	else:
 		return false
+
 
 func get_psyche():
 	return psyche
 
+
 func decrease_hunger(n):
-	if hunger - n >= 0 :
+	if hunger - n >= 0:
 		hunger = hunger - n
 		return true
-	else :
+	else:
 		return false
 
+
 func increase_hunger(n):
-	if hunger + n <= max_hunger :
+	if hunger + n <= max_hunger:
 		hunger = hunger + n
 		return true
-	else :
+	else:
 		return false
+
 
 func get_hunger():
 	return hunger
 
+
 func decrease_energy(n):
-	if energy - n >= 0 :
+	if energy - n >= 0:
 		energy = energy - n
 		return true
-	else :
+	else:
 		return false
 
+
 func increase_energy(n):
-	if energy + n <= max_energy :
+	if energy + n <= max_energy:
 		energy = energy + n
 		return true
-	else :
+	else:
 		return false
+
 
 func get_energy():
 	return energy
+
 
 func reset_energy():
 	energy = max_energy
@@ -95,143 +107,116 @@ func reset_energy():
 func night(b):
 	if b:
 		$NightOverlay.show()
+
 		$Attributes/Health.propagate_call("set_visible", [false])
 		$Attributes/Health.show()
+
 		$Attributes/Energy.propagate_call("set_visible", [false])
 		$Attributes/Energy.show()
+
 		$Panel.hide()
-		night_audiotrack()
 	else:
 		$NightOverlay.hide()
+
 		$Attributes/Health.propagate_call("set_visible", [true])
 		$Attributes/Energy.propagate_call("set_visible", [true])
+
 		$Panel.show()
-		update_audiotracks(true)
+
+		update_audiotracks()
+
 
 func update():
 	update_psyche_display()
 	update_hunger_display()
 	update_energy_display()
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
-	update_audiotracks(false)
-	
-func night_audiotrack():
-	$AudioStreamPlayer.stream = preload("res://assets/Music/night_v2.wav")
-	$AudioStreamPlayer.play()
-
-func update_audiotracks(override: bool):
-	if psyche <3 :
-		if hunger <3 :
-			if (track_number != 3)||override:
-=======
-=======
->>>>>>> parent of e6a6a1f (psuh)
-=======
->>>>>>> parent of e6a6a1f (psuh)
 	update_audiotracks()
-	
+
+
 func update_audiotracks():
-	if psyche <3 :
-		if hunger <3 :
-			if (track_number != 3):
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> parent of e6a6a1f (psuh)
-=======
->>>>>>> parent of e6a6a1f (psuh)
-=======
->>>>>>> parent of e6a6a1f (psuh)
-				$AudioStreamPlayer.stream = preload("res://assets/Music/low_hp_low_mental_v1.wav")
+	if psyche < 3:
+		if hunger < 3:
+			if track_number != 3:
+				$AudioStreamPlayer.stream = preload(
+					"res://assets/Music/low_hp_low_mental_v1.wav"
+				)
 				track_number = 3
 				$AudioStreamPlayer.play()
-			# play super creepy
-		else :
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-			if (track_number != 2)||override:
-=======
-			if (track_number != 2):
->>>>>>> parent of e6a6a1f (psuh)
-=======
-			if (track_number != 2):
->>>>>>> parent of e6a6a1f (psuh)
-=======
-			if (track_number != 2):
->>>>>>> parent of e6a6a1f (psuh)
-				$AudioStreamPlayer.stream = preload("res://assets/Music/good_hp_low_mental_v3.wav")
+
+		else:
+			if track_number != 2:
+				$AudioStreamPlayer.stream = preload(
+					"res://assets/Music/good_hp_low_mental_v3.wav"
+				)
 				track_number = 2
 				$AudioStreamPlayer.play()
-			# play low psyche
-	elif hunger <3 :
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-		if (track_number != 1)||override:
-=======
-		if (track_number != 1):
->>>>>>> parent of e6a6a1f (psuh)
-=======
-		if (track_number != 1):
->>>>>>> parent of e6a6a1f (psuh)
-=======
-		if (track_number != 1):
->>>>>>> parent of e6a6a1f (psuh)
-			$AudioStreamPlayer.stream = preload("res://assets/Music/low_hp_high_mental_v1.wav")
+
+	elif hunger < 3:
+		if track_number != 1:
+			$AudioStreamPlayer.stream = preload(
+				"res://assets/Music/low_hp_high_mental_v1.wav"
+			)
 			track_number = 1
 			$AudioStreamPlayer.play()
-		# play low hunger
-	else :
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-		if (track_number != 0)||override:
-=======
-		if (track_number != 0):
->>>>>>> parent of e6a6a1f (psuh)
-=======
-		if (track_number != 0):
->>>>>>> parent of e6a6a1f (psuh)
-=======
-		if (track_number != 0):
->>>>>>> parent of e6a6a1f (psuh)
-			$AudioStreamPlayer.stream = preload("res://assets/Music/good_hp_good_mental_v2.wav")
+
+	else:
+		if track_number != 0:
+			$AudioStreamPlayer.stream = preload(
+				"res://assets/Music/good_hp_good_mental_v2.wav"
+			)
 			track_number = 0
 			$AudioStreamPlayer.play()
-		# play normal
-	
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> HUDbranch
-=======
->>>>>>> parent of e6a6a1f (psuh)
-=======
->>>>>>> parent of e6a6a1f (psuh)
-=======
->>>>>>> parent of e6a6a1f (psuh)
+
 
 func update_psyche_display() -> void:
-	_update_stat_display("psyche", psyche_icons, psyche, max_psyche, psyche_full, psyche_empty)
+	_update_stat_display(
+		"psyche",
+		psyche_icons,
+		psyche,
+		max_psyche,
+		psyche_full,
+		psyche_empty
+	)
+
 
 func update_hunger_display() -> void:
-	_update_stat_display("hunger", hunger_icons, hunger, max_hunger, hunger_full, hunger_empty)
+	_update_stat_display(
+		"hunger",
+		hunger_icons,
+		hunger,
+		max_hunger,
+		hunger_full,
+		hunger_empty
+	)
+
 
 func update_energy_display() -> void:
-	_update_stat_display("energy", energy_icons, energy, max_energy, energy_full, energy_empty)
+	_update_stat_display(
+		"energy",
+		energy_icons,
+		energy,
+		max_energy,
+		energy_full,
+		energy_empty
+	)
 
 
-# Generic display updater: sets textures and blinks every icon whose state changed
-func _update_stat_display(key: String, icons: Array, value: int, max_value: int, full_tex: Texture2D, empty_tex: Texture2D) -> void:
+# Generic display updater:
+# sets textures and blinks every icon whose state changed
+func _update_stat_display(
+	key: String,
+	icons: Array,
+	value: int,
+	max_value: int,
+	full_tex: Texture2D,
+	empty_tex: Texture2D
+) -> void:
+
 	var old_value: int = _displayed.get(key, -1)
 	_displayed[key] = value
 
-	# Range of icon indices that changed (e.g. 4 -> 2 changes icons 2 and 3)
+	# Example:
+	# 4 -> 2 changes icons 2 and 3
 	var change_start := mini(old_value, value)
 	var change_end := maxi(old_value, value)
 
@@ -241,32 +226,62 @@ func _update_stat_display(key: String, icons: Array, value: int, max_value: int,
 
 		_stop_blink(icons[i])
 
-		var changed := old_value >= 0 and i >= change_start and i < change_end
+		var changed := (
+			old_value >= 0
+			and i >= change_start
+			and i < change_end
+		)
+
 		if changed:
-			_blink_icon(icons[i], final_tex, other_tex)
+			_blink_icon(
+				icons[i],
+				final_tex,
+				other_tex
+			)
 		else:
 			icons[i].texture = final_tex
 
 
-func _blink_icon(icon, final_tex: Texture2D, other_tex: Texture2D) -> void:
-	var steps := BLINK_COUNT * 2   # even number, so the last step is always the final texture
+func _blink_icon(
+	icon,
+	final_tex: Texture2D,
+	other_tex: Texture2D
+) -> void:
+
+	var steps := BLINK_COUNT * 2
+
 	var tween: Tween = icon.create_tween()
+
 	_blink_tweens[icon.get_instance_id()] = tween
 
 	for k in range(steps):
-		# Starts on the old state and alternates, ending on the final state
-		var tex: Texture2D = final_tex if (steps - 1 - k) % 2 == 0 else other_tex
-		tween.tween_callback(func(): icon.texture = tex)
+		var tex: Texture2D = (
+			final_tex
+			if (steps - 1 - k) % 2 == 0
+			else other_tex
+		)
+
+		tween.tween_callback(
+			func():
+				icon.texture = tex
+		)
+
 		tween.tween_interval(BLINK_INTERVAL)
 
-	# Safety: guarantee the final texture at the end
-	tween.tween_callback(func(): icon.texture = final_tex)
+	# Guarantee final texture
+	tween.tween_callback(
+		func():
+			icon.texture = final_tex
+	)
 
 
 func _stop_blink(icon) -> void:
 	var id: int = icon.get_instance_id()
+
 	if _blink_tweens.has(id):
 		var t: Tween = _blink_tweens[id]
+
 		if t and t.is_valid():
 			t.kill()
+
 		_blink_tweens.erase(id)

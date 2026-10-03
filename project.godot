@@ -11,19 +11,7 @@ config_version=5
 [application]
 
 config/name="DattelJam"
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-run/main_scene="uid://qt32pwhkthko"
-=======
 run/main_scene="uid://poocvw48cfia"
->>>>>>> parent of e6a6a1f (psuh)
-=======
-run/main_scene="uid://poocvw48cfia"
->>>>>>> parent of e6a6a1f (psuh)
-=======
-run/main_scene="uid://poocvw48cfia"
->>>>>>> parent of e6a6a1f (psuh)
 config/features=PackedStringArray("4.7", "Forward Plus")
 boot_splash/show_image=false
 config/icon="res://icon.svg"
