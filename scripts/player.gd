@@ -39,7 +39,6 @@ func exitArea(a):
 		area = null
 
 func enterFire():
-	print(inventory)
 	if Item.items.WOOD in inventory:
 		$Interact.show()
 	area = $"../Fire"
@@ -53,8 +52,6 @@ func addItem(item):
 		inventory[item] += 1
 	else:
 		inventory[item] = 1
-	print(item in inventory)
-
 
 func start_night() -> void:
 	isDay = false
