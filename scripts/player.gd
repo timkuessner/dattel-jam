@@ -10,6 +10,8 @@ var recording: Array = []
 var record_timer := 0.0
 var finale := false
 var is_chopping := false
+var is_eating := false
+var eating_item: Item.items = Item.items.EMPTY
 
 const SPEED = 80.0
 const BED_POSITION := Vector2(50, 50)
@@ -38,6 +40,7 @@ var _show_click_prompt := false
 @onready var interact_label: Label = $Interact/Label
 @onready var interact_items: AnimatedSprite2D = $Interact/Items
 @onready var interact_click_icon: Sprite2D = $Interact/ClickIcon
+@onready var eat_sound: AudioStreamPlayer = $EatSound
 
 
 func add_item(item, amount: int = 1):
@@ -67,6 +70,9 @@ func _ready() -> void:
 	nav_agent.target_desired_distance = 4.0
 	
 	$"../Gallows".updateGallows(n)
+
+	# Das Essen wird erst am Ende des ca. 2 Sekunden langen Sounds verbraucht.
+	eat_sound.finished.connect(_on_eat_sound_finished)
 
 
 func showLabel(text):
@@ -233,6 +239,9 @@ func _physics_process(delta: float) -> void:
 	
 	if Input.is_action_just_pressed("e"):
 		_try_context_interaction()
+
+	if Input.is_action_just_pressed("eat"):
+		_try_eat_selected_item()
 	
 	if Input.is_action_just_pressed("ui_home"):
 		$"../Fire".buildFire()
@@ -297,6 +306,61 @@ func _try_context_interaction() -> void:
 
 	if area.has_method("interact"):
 		area.interact(self)
+
+
+func _try_eat_selected_item() -> void:
+	# Nur Karotte und Pilz koennen mit F gegessen werden.
+	if not isDay or is_chopping or is_eating:
+		return
+
+	var inventory_ui := get_node_or_null("../PlayerHUD/Inventory")
+	if inventory_ui == null:
+		return
+
+	var selected_food: Item.items = inventory_ui.selected_item
+	if selected_food != Item.items.CARROT and selected_food != Item.items.MUSHROOM:
+		return
+
+	if inventory.get(selected_food, 0) <= 0:
+		return
+
+	is_eating = true
+	eating_item = selected_food
+	eat_sound.stop()
+	eat_sound.play()
+
+
+func _on_eat_sound_finished() -> void:
+	if not is_eating:
+		return
+
+	var eaten_item := eating_item
+	is_eating = false
+	eating_item = Item.items.EMPTY
+
+	# Falls das Item waehrend des Sounds irgendwie aus dem Inventar verschwunden ist,
+	# wird kein Effekt angewendet.
+	if inventory.get(eaten_item, 0) <= 0:
+		return
+
+	remove_item(eaten_item)
+
+	var hud := get_node_or_null("../PlayerHUD")
+	if hud == null:
+		return
+
+	# Beide Lebensmittel geben +1 Energie.
+	hud.increase_energy(1)
+
+	# Pilz: exakt 50/50. Entweder +1 Psyche oder -2 Hunger/Leben.
+	if eaten_item == Item.items.MUSHROOM:
+		if randi() % 2 == 0:
+			hud.increase_psyche(1)
+		else:
+			var hunger_loss: int = mini(2, hud.get_hunger())
+			hud.decrease_hunger(hunger_loss)
+
+	hud.update()
 
 func play_tree_animation() -> void:
 	is_chopping = true

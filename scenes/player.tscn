@@ -5,6 +5,7 @@
 [ext_resource type="SpriteFrames" uid="uid://cxsy8hean11b1" path="res://assets/item_sprites.tres" id="4_dqkch"]
 [ext_resource type="Texture2D" uid="uid://bu1y23ts5neag" path="res://assets/sprites/player/emote__.png" id="5_qlg0r"]
 [ext_resource type="Texture2D" path="res://assets/sprites/player/click_icon.png" id="6_click"]
+[ext_resource type="AudioStream" path="res://assets/sounds/eat_placeholder.wav" id="7_eat"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dqkch"]
 atlas = ExtResource("2_qhqgy")
@@ -438,6 +439,10 @@ position = Vector2(0, -12)
 sprite_frames = SubResource("SpriteFrames_k5pq1")
 animation = &"tree_right"
 autoplay = "idle_down"
+
+[node name="EatSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_eat")
+volume_db = -3.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=881906499]
 position = Vector2(0, -1)

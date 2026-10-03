@@ -22,8 +22,8 @@ const SOIL_TEXTURES := {
 	"wet_v_bottom": preload("res://assets/Tilemap/soil_runtime/wet_v_bottom.png"),
 }
 
-const TOWN_ATLAS_SOURCE_ID := 1
-const WELL_ATLAS := Vector2i(8, 8)
+const WATER_ATLAS_SOURCE_ID := 2
+const WATERSET_LAND_TILES := [Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, 0)]
 
 const TOOL_NONE := "none"
 const TOOL_HOE := "hoe"
@@ -115,6 +115,14 @@ func update_player_target(
 	if target_cell_variant == null:
 		target_outline.visible = false
 
+		# Das Auffüllen am Wasser hängt nur davon ab, wo der Player steht.
+		# Dafür muss die Maus nicht auf einem bestimmten Tile liegen.
+		if _can_fill_bucket_at_water_edge(player):
+			if player.area == null or player.area == self:
+				player.enterArea(self)
+			_player_using_farm_prompt = player
+			return
+
 		if player.area == self:
 			player.exitArea(self)
 
@@ -140,6 +148,14 @@ func update_player_target(
 
 
 func _get_interaction(player: Player) -> Dictionary:
+	# Der alte Brunnen ist komplett entfernt. Mit ausgewähltem Eimer kann man
+	# ihn jetzt direkt am Ufer auffüllen, sobald der Player auf einem Rand-Tile
+	# steht bzw. direkt an ein Wasser-Tile angrenzt.
+	if _can_fill_bucket_at_water_edge(player):
+		return {
+			"type": "fill_bucket"
+		}
+
 	var target_cell_variant = _get_mouse_target_cell(player)
 
 	if target_cell_variant == null:
@@ -155,19 +171,6 @@ func _get_interaction(player: Player) -> Dictionary:
 				"type": "harvest",
 				"cell": cell
 			}
-
-	# Eimer am Brunnen auffüllen, wenn der Cursor auf dem Brunnen liegt
-	# und dieser innerhalb des 3x3-Bereichs um den Player ist.
-	if (
-		selected_tool == TOOL_BUCKET
-		and player.inventory.has(Item.items.BUCKET)
-		and water_units < bucket_capacity
-		and _is_well_target(cell)
-	):
-		return {
-			"type": "fill_bucket",
-			"cell": cell
-		}
 
 	match selected_tool:
 		TOOL_HOE:
@@ -456,17 +459,43 @@ func _refresh_soil_connections(changed_cell: Vector2i) -> void:
 			_set_soil_visual(cell)
 
 
-func _is_well_target(cell: Vector2i) -> bool:
-	if (
-		objects.get_cell_source_id(cell) == TOWN_ATLAS_SOURCE_ID
-		and objects.get_cell_atlas_coords(cell) == WELL_ATLAS
-	):
+func _can_fill_bucket_at_water_edge(player: Player) -> bool:
+	if selected_tool != TOOL_BUCKET:
+		return false
+
+	if not player.inventory.has(Item.items.BUCKET):
+		return false
+
+	# Der Eimer kann erst wieder aufgefüllt werden, wenn beide Wasser-Einheiten
+	# verbraucht sind. Eine Füllung reicht dadurch exakt für 2 Felder.
+	if water_units > 0:
+		return false
+
+	return _player_is_at_water_edge(player)
+
+
+func _player_is_at_water_edge(player: Node2D) -> bool:
+	# Gleicher optischer Zell-Offset wie beim 3x3-Interaktionsraster.
+	var player_cell := ground.local_to_map(ground.to_local(player.global_position)) + Vector2i.UP
+
+	# Einige Ufer-Tiles enthalten gleichzeitig Gras und Wasser. Wenn der Player
+	# auf dem begehbaren Rand dieser Zelle steht, soll Auffüllen ebenfalls gehen.
+	if _tile_contains_water(player_cell):
 		return true
 
-	var well := get_tree().get_first_node_in_group("water_well") as Node2D
-
-	if well != null:
-		var cell_world := ground.to_global(ground.map_to_local(cell))
-		return cell_world.distance_to(well.global_position) <= 14.0
+	for direction in [Vector2i.UP, Vector2i.RIGHT, Vector2i.DOWN, Vector2i.LEFT]:
+		if _tile_contains_water(player_cell + direction):
+			return true
 
 	return false
+
+
+func _tile_contains_water(cell: Vector2i) -> bool:
+	if ground.get_cell_source_id(cell) != WATER_ATLAS_SOURCE_ID:
+		return false
+
+	var atlas_coords := ground.get_cell_atlas_coords(cell)
+
+	# Die ersten drei Tiles der Wasser-Atlas-Zeile sind reine Grasvarianten.
+	# Alle anderen im verwendeten Wasser-Tileset enthalten Wasser/Ufer.
+	return atlas_coords not in WATERSET_LAND_TILES

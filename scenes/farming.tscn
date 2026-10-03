@@ -1,10 +1,9 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scripts/farm_manager.gd" id="1_farm"]
 [ext_resource type="PackedScene" path="res://scenes/items/carrot_seeds.tscn" id="2_seeds"]
 [ext_resource type="PackedScene" path="res://scenes/items/hoe.tscn" id="3_hoe"]
 [ext_resource type="PackedScene" path="res://scenes/items/bucket.tscn" id="4_bucket"]
-[ext_resource type="PackedScene" path="res://scenes/well.tscn" id="5_well"]
 
 [node name="Farming" type="Node2D"]
 y_sort_enabled = true
@@ -29,6 +28,3 @@ position = Vector2(37, 122)
 
 [node name="Bucket" parent="." instance=ExtResource("4_bucket")]
 position = Vector2(55, 122)
-
-[node name="Well" parent="." instance=ExtResource("5_well")]
-position = Vector2(152, 137)
