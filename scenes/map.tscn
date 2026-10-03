@@ -33,4 +33,3 @@ position = Vector2(149, 265)
 
 [node name="Item2" parent="." unique_id=220673546 instance=ExtResource("2_paxxb")]
 position = Vector2(216, 186)
-item = 1
