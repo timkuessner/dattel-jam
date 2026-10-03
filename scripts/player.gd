@@ -24,20 +24,25 @@ var inventar: Array = []
 
 var area: Node2D
 
+
 func _ready() -> void:
 	nav_agent.path_desired_distance = 4.0
 	nav_agent.target_desired_distance = 4.0
 	
 	$"../Gallows".updateGallows(n)
 
+
 func enterArea(parent):
 	area = parent
+
 
 func exitArea(parent):
 	area = null
 
+
 func addItem(item):
 	inventar.append(item)
+
 
 func start_night() -> void:
 	isDay = false
@@ -54,8 +59,6 @@ func _physics_process(delta: float) -> void:
 		_walk_at_night(delta)
 		return
 	
-	
-	
 	var direction := Input.get_vector(
 		"ui_left",
 		"ui_right",
@@ -69,16 +72,11 @@ func _physics_process(delta: float) -> void:
 	
 	if direction:
 		_update_facing_direction(direction)
-		if direction.x > 0:
-			$AnimatedSprite2D.flip_h = false
-		elif direction.x < 0:
-			$AnimatedSprite2D.flip_h = true
-		
 		velocity = direction * SPEED
-		$AnimatedSprite2D.play("run")
+		_play_direction_animation("run")
 	else:
-		$AnimatedSprite2D.play("idle")
 		velocity = Vector2.ZERO
+		_play_direction_animation("idle")
 	
 	move_and_slide()
 	
@@ -99,6 +97,17 @@ func _update_facing_direction(direction: Vector2) -> void:
 		facing_direction = Vector2.RIGHT if direction.x > 0 else Vector2.LEFT
 	elif direction.y != 0:
 		facing_direction = Vector2.DOWN if direction.y > 0 else Vector2.UP
+
+
+func _play_direction_animation(animation_type: String) -> void:
+	if facing_direction == Vector2.RIGHT:
+		$AnimatedSprite2D.play(animation_type + "_right")
+	elif facing_direction == Vector2.LEFT:
+		$AnimatedSprite2D.play(animation_type + "_left")
+	elif facing_direction == Vector2.UP:
+		$AnimatedSprite2D.play(animation_type + "_up")
+	elif facing_direction == Vector2.DOWN:
+		$AnimatedSprite2D.play(animation_type + "_down")
 
 
 func _unhandled_key_input(event: InputEvent) -> void:
@@ -151,19 +160,18 @@ func _walk_at_night(delta: float) -> void:
 			energy = 5
 			$"../PlayerHUD".updateEnergy(energy)
 			
-			$AnimatedSprite2D.play("idle")
+			_play_direction_animation("idle")
 			$"../PlayerHUD".night(false)
 			return
 	
 	var next_pos := nav_agent.get_next_path_position()
 	var dir := global_position.direction_to(next_pos)
 	
-	if dir.x != 0:
-		$AnimatedSprite2D.flip_h = dir.x < 0
+	_update_facing_direction(dir)
 	
 	global_position = global_position.move_toward(
 		next_pos,
 		SPEED * delta
 	)
 
-	$AnimatedSprite2D.play("run")
+	_play_direction_animation("run")
