@@ -1,5 +1,13 @@
 extends CanvasLayer
 
+func night(b):
+	if b:
+		$VBoxContainer.hide()
+		$NightOverlay.show()
+	else:
+		$VBoxContainer.show()
+		$NightOverlay.hide()
+
 func updatePsyche(n):
 	$VBoxContainer/Label.text = "psyche: " + str(n)
 
