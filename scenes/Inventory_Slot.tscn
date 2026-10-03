@@ -10,14 +10,14 @@ texture = ExtResource("1_ue8xi")
 [node name="Slot" type="PanelContainer" unique_id=1967903635]
 texture_filter = 1
 custom_minimum_size = Vector2(64, 64)
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 64.0
+offset_bottom = 64.0
 theme_override_styles/panel = SubResource("StyleBoxTexture_olo7m")
 script = ExtResource("1_ftvev")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1123038884]
 texture_filter = 1
-position = Vector2(32, 32)
-scale = Vector2(3.5, 3.5)
+position = Vector2(31.999998, 31.999998)
+scale = Vector2(2.7499998, 2.7499998)
 sprite_frames = ExtResource("2_3s2bb")
 animation = &"EMPTY"
