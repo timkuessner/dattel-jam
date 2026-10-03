@@ -18,8 +18,6 @@ var n = 0
 var isDay = true
 var night_phase = 0
 
-enum items {MUSHROOM, WOOD}
-
 var inventory: Dictionary = {}
 
 var area: Node2D
@@ -42,11 +40,12 @@ func exitArea(a):
 
 func enterFire():
 	print(inventory)
-	if items.WOOD in inventory:
+	if Item.items.WOOD in inventory:
 		$Interact.show()
+	area = $"../Fire"
 
 func exitFire():
-	$Interact.hide()
+	exitArea($"../Fire")
 
 
 func addItem(item):
@@ -95,6 +94,14 @@ func _physics_process(delta: float) -> void:
 	
 	if Input.is_action_just_pressed("e"):
 		if area:
+			if area == $"../Fire":
+				if Item.items.WOOD in inventory:
+					$"../Fire".buildFire()
+					inventory[Item.items.WOOD] -= 1
+				
+				exitFire()
+				
+				return
 			addItem(area.item)
 			area.queue_free()
 			
