@@ -11,8 +11,9 @@ config_version=5
 [application]
 
 config/name="DattelJam"
-run/main_scene="uid://dvrvarggot07d"
+run/main_scene="uid://poocvw48cfia"
 config/features=PackedStringArray("4.7", "Forward Plus")
+boot_splash/show_image=false
 config/icon="res://icon.svg"
 
 [display]
