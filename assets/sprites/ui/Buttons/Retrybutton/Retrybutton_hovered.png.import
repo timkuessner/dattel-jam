@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dfenmswemegdp"
-path="res://.godot/imported/lesen.png-17c6d9f7957501ecea8cf8f1017f969b.ctex"
+uid="uid://k4t1nh2aviu3"
+path="res://.godot/imported/Retrybutton_hovered.png-c415c732a50a6c7b3eb87039a6e32983.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/player/lesen.png"
-dest_files=["res://.godot/imported/lesen.png-17c6d9f7957501ecea8cf8f1017f969b.ctex"]
+source_file="res://assets/sprites/ui/Buttons/Retrybutton/Retrybutton_hovered.png"
+dest_files=["res://.godot/imported/Retrybutton_hovered.png-c415c732a50a6c7b3eb87039a6e32983.ctex"]
 
 [params]
 

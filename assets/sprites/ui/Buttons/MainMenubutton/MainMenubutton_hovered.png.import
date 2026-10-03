@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cwr10xkaotpp0"
-path="res://.godot/imported/Resumebutton.png-d1471be04e82c25c3c086d12d54f9a70.ctex"
+uid="uid://bb4mukbetbln4"
+path="res://.godot/imported/MainMenubutton_hovered.png-8d4b3e633e765e28d6f720910491333f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/ui/Buttons/Resumebutton.png"
-dest_files=["res://.godot/imported/Resumebutton.png-d1471be04e82c25c3c086d12d54f9a70.ctex"]
+source_file="res://assets/sprites/ui/Buttons/MainMenubutton/MainMenubutton_hovered.png"
+dest_files=["res://.godot/imported/MainMenubutton_hovered.png-8d4b3e633e765e28d6f720910491333f.ctex"]
 
 [params]
 
