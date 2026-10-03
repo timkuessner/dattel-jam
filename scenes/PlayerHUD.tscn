@@ -1,9 +1,39 @@
-[gd_scene format=3 uid="uid://c660bqfs8pwus"]
+[gd_scene format=3 uid="uid://c5exmsolf3ckc"]
 
-[node name="PlayerHud" type="Control" unique_id=2056307990]
-layout_mode = 3
+[ext_resource type="Script" uid="uid://b4akg01jybdei" path="res://scripts/playerhud.gd" id="1_c4rma"]
+[ext_resource type="Shader" uid="uid://c5cx8ipwfeuug" path="res://shader/canvas_layer.gdshader" id="2_ghj5q"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_k5pq1"]
+shader = ExtResource("2_ghj5q")
+shader_parameter/wave_strength = 1.0
+shader_parameter/wave_speed = 20.0
+shader_parameter/wave_size = 10.0
+
+[node name="PlayerHUD" type="CanvasLayer" unique_id=2054024999]
+script = ExtResource("1_c4rma")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1956546617]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="VBoxContainer" unique_id=1468188792]
+layout_mode = 2
+text = "psyche"
+
+[node name="Label2" type="Label" parent="VBoxContainer" unique_id=2075473877]
+layout_mode = 2
+text = "hunger"
+
+[node name="Label3" type="Label" parent="VBoxContainer" unique_id=196901057]
+layout_mode = 2
+text = "energy"
+
+[node name="NightOverlay" type="ColorRect" parent="." unique_id=1281856628]
+visible = false
+material = SubResource("ShaderMaterial_k5pq1")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
