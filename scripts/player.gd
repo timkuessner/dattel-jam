@@ -18,7 +18,7 @@ var n = 0
 var isDay = true
 var night_phase = 0
 
-enum items {MUSHROOM}
+enum items {MUSHROOM = 0, WOOD = 1}
 
 var inventar: Array = []
 

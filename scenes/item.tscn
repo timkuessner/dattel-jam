@@ -2,6 +2,34 @@
 
 [ext_resource type="Script" uid="uid://ccyngucdsyefb" path="res://scripts/item.gd" id="1_s8enn"]
 [ext_resource type="Texture2D" uid="uid://be8tnr8cleucd" path="res://assets/Tiles/tile_0029.png" id="2_6muww"]
+[ext_resource type="Texture2D" uid="uid://2vmn4cbaaxo1" path="res://assets/Tiles/tile_0106.png" id="3_6muww"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s8enn"]
+atlas = ExtResource("2_6muww")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vljjh"]
+atlas = ExtResource("3_6muww")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_k5pq1"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s8enn")
+}],
+"loop": 1,
+"name": &"0",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vljjh")
+}],
+"loop": 1,
+"name": &"1",
+"speed": 5.0
+}]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_k5pq1"]
 radius = 20.0
@@ -9,9 +37,9 @@ radius = 20.0
 [node name="Item" type="Node2D" unique_id=768521017]
 script = ExtResource("1_s8enn")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1124616133]
-position = Vector2(0, -6)
-texture = ExtResource("2_6muww")
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1491302785]
+sprite_frames = SubResource("SpriteFrames_k5pq1")
+animation = &"1"
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1572581502]
 
