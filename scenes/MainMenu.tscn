@@ -82,6 +82,7 @@ grow_vertical = 2
 texture_normal = ExtResource("4_826wr")
 texture_pressed = ExtResource("7_bky6r")
 texture_hover = ExtResource("8_l4mxc")
+stretch_mode = 5
 
 [node name="Quit" type="TextureButton" parent="Button_Manager" unique_id=1572185687]
 layout_mode = 1
@@ -97,6 +98,7 @@ grow_vertical = 2
 texture_normal = ExtResource("5_ucygd")
 texture_pressed = ExtResource("10_5faoh")
 texture_hover = ExtResource("11_ptake")
+stretch_mode = 5
 
 [node name="Label" type="Label" parent="." unique_id=703293355]
 layout_mode = 1
