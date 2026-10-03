@@ -4,6 +4,17 @@
 [ext_resource type="PackedScene" uid="uid://bhrc5shrd2wi3" path="res://scenes/map.tscn" id="1_o5qli"]
 [ext_resource type="PackedScene" uid="uid://biqxtnpr5iilq" path="res://scenes/gallows.tscn" id="3_sugp2"]
 [ext_resource type="Script" uid="uid://bwxkeso3yk6ts" path="res://scripts/camera_2d.gd" id="4_jyhfs"]
+[ext_resource type="PackedScene" uid="uid://c5exmsolf3ckc" path="res://scenes/canvas_layer.tscn" id="5_tbgi4"]
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_k5pq1"]
+vertices = PackedVector2Array(202, 210, 6, 210, 6, 6, 202, 6)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(0, 216, 208, 216, 208, 0, 0, 0)])
+parsed_geometry_type = 1
+parsed_collision_mask = 4294901761
+source_geometry_mode = 1
+source_geometry_group_name = &"nav_source"
+agent_radius = 6.0
 
 [node name="Main" type="Node2D" unique_id=968523059]
 y_sort_enabled = true
@@ -14,8 +25,13 @@ texture_filter = 1
 [node name="Map" parent="." unique_id=1059486782 instance=ExtResource("1_o5qli")]
 
 [node name="Gallows" parent="." unique_id=1027896803 instance=ExtResource("3_sugp2")]
-position = Vector2(240, 141)
+position = Vector2(155, 50)
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1633204486]
 zoom = Vector2(3, 3)
 script = ExtResource("4_jyhfs")
+
+[node name="CanvasLayer" parent="." unique_id=2054024999 instance=ExtResource("5_tbgi4")]
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="." unique_id=355803038]
+navigation_polygon = SubResource("NavigationPolygon_k5pq1")

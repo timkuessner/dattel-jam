@@ -36,7 +36,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dqkch"]
-size = Vector2(8, 2)
+size = Vector2(17, 2)
 
 [node name="Player" type="CharacterBody2D" unique_id=1690923371]
 script = ExtResource("1_g2els")
@@ -49,3 +49,5 @@ animation = &"idle"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=881906499]
 position = Vector2(0, -1)
 shape = SubResource("RectangleShape2D_dqkch")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=578797685]
