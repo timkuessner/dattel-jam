@@ -121,7 +121,7 @@ func update_audiotracks():
 			# play super creepy
 		else :
 			if (track_number != 2):
-				$AudioStreamPlayer.stream = preload("res://assets/Music/good_hp_low_mental_v2.wav")
+				$AudioStreamPlayer.stream = preload("res://assets/Music/good_hp_low_mental_v3.wav")
 				track_number = 2
 				$AudioStreamPlayer.play()
 			# play low psyche

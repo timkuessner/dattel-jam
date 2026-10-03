@@ -14,7 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://ckjpygqrb644i" path="res://assets/sprites/ui/Buttons/Quitbutton/Quitbutton_hovered.png" id="12_jnhjp"]
 [ext_resource type="Texture2D" uid="uid://bdgqfbdjc8c56" path="res://assets/sprites/ui/Gerettet.png" id="12_okuvq"]
 [ext_resource type="PackedScene" uid="uid://dyw7n5l2cssd3" path="res://scenes/fade_transition.tscn" id="14_ry17e"]
-[ext_resource type="AudioStream" uid="uid://bi0amd6ufg53n" path="res://assets/Music/death_v1.wav" id="15_h8kjy"]
+[ext_resource type="AudioStream" uid="uid://dnrr83meoe0if" path="res://assets/Music/victory_v1.wav" id="15_ea0kj"]
 
 [node name="Win_Menu" type="Control" unique_id=522822813]
 layout_mode = 3
@@ -120,7 +120,7 @@ mouse_filter = 2
 [node name="fade_timer" type="Timer" parent="Fadetransition" unique_id=1361220803]
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1654592671]
-stream = ExtResource("15_h8kjy")
+stream = ExtResource("15_ea0kj")
 autoplay = true
 
 [connection signal="mouse_entered" from="Button_Manager/Start" to="Button_Manager" method="_on_start_mouse_entered"]
