@@ -111,7 +111,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_ia3m4")
 }],
-"loop": 1,
+"loop": 0,
 "name": &"fire_run",
 "speed": 5.0
 }, {
@@ -138,6 +138,8 @@ script = ExtResource("1_xqmqg")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1012914390]
 texture_filter = 1
+position = Vector2(0, -19)
 sprite_frames = SubResource("SpriteFrames_k5pq1")
-animation = &"1"
-frame_progress = 0.63728434
+animation = &"fire_run"
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

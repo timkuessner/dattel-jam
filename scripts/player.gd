@@ -84,6 +84,9 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("e"):
 		if area:
 			area.queue_free()
+			
+	if Input.is_action_just_pressed("ui_home"):
+		$"../Fire".buildFire()
 	
 	var farm_system := get_tree().get_first_node_in_group("farm_system")
 	if farm_system:
