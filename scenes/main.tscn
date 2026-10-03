@@ -78,9 +78,14 @@ _data = {
 y_sort_enabled = true
 texture_filter = 1
 
+<<<<<<< Updated upstream
 [node name="Farming" parent="." unique_id=1774282984 instance=ExtResource("6_farming")]
 
+=======
+>>>>>>> Stashed changes
 [node name="Map" parent="." unique_id=1059486782 instance=ExtResource("1_o5qli")]
+
+[node name="Farming" parent="." unique_id=981586112 instance=ExtResource("6_farming")]
 
 [node name="Gallows" parent="." unique_id=1027896803 instance=ExtResource("3_sugp2")]
 position = Vector2(120, 195)
