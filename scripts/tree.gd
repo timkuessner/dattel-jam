@@ -1,6 +1,6 @@
 extends Node2D
 
-const ITEM_SCENE = preload("res://scenes/item.tscn")
+const WOOD_SCENE = preload("res://scenes/items/wood.tscn")
 
 var used := false
 
@@ -34,8 +34,7 @@ func interact(player: Player) -> void:
 
 	await sprite.animation_finished
 
-	var wood := ITEM_SCENE.instantiate()
-	wood.item = Item.items.WOOD
+	var wood := WOOD_SCENE.instantiate()
 
 	get_tree().current_scene.add_child(wood)
 	wood.global_position = global_position

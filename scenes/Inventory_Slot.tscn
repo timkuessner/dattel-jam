@@ -15,6 +15,30 @@ offset_bottom = 64.0
 theme_override_styles/panel = SubResource("StyleBoxTexture_olo7m")
 script = ExtResource("1_ftvev")
 
+[node name="NumberOverlay" type="Control" parent="."]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="SlotNumber" type="Label" parent="NumberOverlay"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -25.0
+offset_top = 2.0
+offset_right = -3.0
+offset_bottom = 27.0
+grow_horizontal = 0
+mouse_filter = 2
+z_index = 20
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 18
+text = "1"
+horizontal_alignment = 2
+vertical_alignment = 0
+
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1123038884]
 texture_filter = 1
 position = Vector2(31.999998, 31.999998)

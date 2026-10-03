@@ -4,11 +4,9 @@
 [ext_resource type="PackedScene" uid="uid://bhrc5shrd2wi3" path="res://scenes/map.tscn" id="1_o5qli"]
 [ext_resource type="PackedScene" uid="uid://biqxtnpr5iilq" path="res://scenes/gallows.tscn" id="3_sugp2"]
 [ext_resource type="Script" uid="uid://bwxkeso3yk6ts" path="res://scripts/camera_2d.gd" id="4_jyhfs"]
-[ext_resource type="Script" uid="uid://8cowln6dfc7k" path="res://scripts/farm_manager.gd" id="6_farm"]
-[ext_resource type="PackedScene" path="res://scenes/farm_pickup.tscn" id="7_pickup"]
+[ext_resource type="PackedScene" path="res://scenes/farming.tscn" id="6_farming"]
 [ext_resource type="PackedScene" uid="uid://c5exmsolf3ckc" path="res://scenes/PlayerHUD.tscn" id="7_tipki"]
 [ext_resource type="PackedScene" uid="uid://ckw68w5dq66hd" path="res://scenes/Inventory.tscn" id="8_choun"]
-[ext_resource type="PackedScene" uid="uid://c20gsa5d88yfr" path="res://scenes/well.tscn" id="8_well"]
 [ext_resource type="PackedScene" uid="uid://clfdljgfyuust" path="res://scenes/fire.tscn" id="9_85g3d"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_k5pq1"]
@@ -25,105 +23,7 @@ agent_radius = 3.0
 y_sort_enabled = true
 texture_filter = 1
 
-[node name="Farming" type="Node" parent="." unique_id=128577369]
-
-[node name="FarmManager" type="Node2D" parent="Farming" unique_id=324144061]
-visible = false
-y_sort_enabled = true
-script = ExtResource("6_farm")
-
-[node name="Crops" type="Node2D" parent="Farming/FarmManager" unique_id=376801365]
-y_sort_enabled = true
-
-[node name="TargetOutline" type="Line2D" parent="Farming/FarmManager" unique_id=1519585562]
-points = PackedVector2Array(-7.5, -7.5, 7.5, -7.5, 7.5, 7.5, -7.5, 7.5, -7.5, -7.5)
-width = 1.0
-
-[node name="InteractionPrompt" type="Label" parent="Farming/FarmManager" unique_id=163395251]
-z_index = 20
-offset_left = -18.0
-offset_top = -5.0
-offset_right = 40.0
-offset_bottom = 8.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 1
-theme_override_constants/shadow_offset_y = 1
-theme_override_font_sizes/font_size = 8
-text = "E  Aktion"
-
-[node name="HUD" type="CanvasLayer" parent="Farming/FarmManager" unique_id=471705999]
-
-[node name="InventoryLabel" type="Label" parent="Farming/FarmManager/HUD" unique_id=1952461517]
-offset_left = 72.0
-offset_top = 8.0
-offset_right = 344.0
-offset_bottom = 28.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 1
-theme_override_constants/shadow_offset_y = 1
-theme_override_font_sizes/font_size = 10
-text = "Samen: 0   Karotten: 0   Wasser: 0/3"
-
-[node name="ToolLabel" type="Label" parent="Farming/FarmManager/HUD" unique_id=1978787258]
-offset_left = 94.0
-offset_top = 31.0
-offset_right = 294.0
-offset_bottom = 48.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 1
-theme_override_constants/shadow_offset_y = 1
-theme_override_font_sizes/font_size = 9
-text = "Ausgerüstet: Leer"
-
-[node name="EquippedIcon" type="Sprite2D" parent="Farming/FarmManager/HUD" unique_id=29949951]
-position = Vector2(81, 39)
-
-[node name="HelpLabel" type="Label" parent="Farming/FarmManager/HUD" unique_id=1464375651]
-offset_left = 72.0
-offset_top = 52.0
-offset_right = 424.0
-offset_bottom = 68.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 1
-theme_override_constants/shadow_offset_y = 1
-theme_override_font_sizes/font_size = 8
-text = "5 Hacke   6 Samen   7 Eimer"
-
-[node name="MessageLabel" type="Label" parent="Farming/FarmManager/HUD" unique_id=505678750]
-offset_left = 72.0
-offset_top = 70.0
-offset_right = 424.0
-offset_bottom = 88.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 1
-theme_override_constants/shadow_offset_y = 1
-theme_override_font_sizes/font_size = 9
-
-[node name="SeedBag" parent="Farming" unique_id=760564970 instance=ExtResource("7_pickup")]
-visible = false
-position = Vector2(22, 122)
-amount = 3
-
-[node name="HoePickup" parent="Farming" unique_id=621287400 instance=ExtResource("7_pickup")]
-visible = false
-position = Vector2(37, 122)
-item_type = "hoe"
-atlas_coord = Vector2i(3, 7)
-
-[node name="BucketPickup" parent="Farming" unique_id=567097248 instance=ExtResource("7_pickup")]
-visible = false
-position = Vector2(55, 122)
-item_type = "bucket"
-atlas_coord = Vector2i(0, 6)
-
-[node name="Well" parent="Farming" unique_id=723396748 instance=ExtResource("8_well")]
-visible = false
-position = Vector2(152, 137)
+[node name="Farming" parent="." instance=ExtResource("6_farming")]
 
 [node name="Map" parent="." unique_id=1059486782 instance=ExtResource("1_o5qli")]
 

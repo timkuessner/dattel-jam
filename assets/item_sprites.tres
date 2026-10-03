@@ -1,39 +1,77 @@
-[gd_resource type="SpriteFrames" format=3 uid="uid://dfg71fehg6tv1"]
+[gd_resource type="SpriteFrames" format=3]
 
-[ext_resource type="Texture2D" uid="uid://be8tnr8cleucd" path="res://assets/Tiles/tile_0029.png" id="1_olo7m"]
-[ext_resource type="Texture2D" uid="uid://2vmn4cbaaxo1" path="res://assets/Tiles/tile_0106.png" id="2_5cnpl"]
+[ext_resource type="Texture2D" path="res://assets/Tiles/tile_0029.png" id="1_mush"]
+[ext_resource type="Texture2D" path="res://assets/Tiles/tile_0106.png" id="2_wood"]
+[ext_resource type="Texture2D" path="res://assets/Tilemap/tilemap_farm.png" id="3_farm"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_s8enn"]
-atlas = ExtResource("1_olo7m")
+[sub_resource type="AtlasTexture" id="Mushroom"]
+atlas = ExtResource("1_mush")
 region = Rect2(0, 0, 16, 16)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_vljjh"]
-atlas = ExtResource("2_5cnpl")
+[sub_resource type="AtlasTexture" id="Wood"]
+atlas = ExtResource("2_wood")
 region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="Hoe"]
+atlas = ExtResource("3_farm")
+region = Rect2(51, 119, 16, 16)
+
+[sub_resource type="AtlasTexture" id="Bucket"]
+atlas = ExtResource("3_farm")
+region = Rect2(0, 102, 16, 16)
+
+
+[sub_resource type="AtlasTexture" id="BucketFull"]
+atlas = ExtResource("3_farm")
+region = Rect2(17, 102, 16, 16)
+
+[sub_resource type="AtlasTexture" id="Seeds"]
+atlas = ExtResource("3_farm")
+region = Rect2(153, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="Carrot"]
+atlas = ExtResource("3_farm")
+region = Rect2(102, 0, 16, 16)
 
 [resource]
 animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": null
-}],
-"loop": 1,
+"frames": [{"duration": 1.0, "texture": null}],
+"loop": true,
 "name": &"EMPTY",
 "speed": 5.0
 }, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_s8enn")
-}],
-"loop": 1,
+"frames": [{"duration": 1.0, "texture": SubResource("Mushroom")}],
+"loop": true,
 "name": &"MUSHROOM",
 "speed": 5.0
 }, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_vljjh")
-}],
-"loop": 1,
+"frames": [{"duration": 1.0, "texture": SubResource("Wood")}],
+"loop": true,
 "name": &"WOOD",
+"speed": 5.0
+}, {
+"frames": [{"duration": 1.0, "texture": SubResource("Hoe")}],
+"loop": true,
+"name": &"HOE",
+"speed": 5.0
+}, {
+"frames": [{"duration": 1.0, "texture": SubResource("Bucket")}],
+"loop": true,
+"name": &"BUCKET",
+"speed": 5.0
+}, {
+"frames": [{"duration": 1.0, "texture": SubResource("BucketFull")}],
+"loop": true,
+"name": &"BUCKET_FULL",
+"speed": 5.0
+}, {
+"frames": [{"duration": 1.0, "texture": SubResource("Seeds")}],
+"loop": true,
+"name": &"CARROT_SEEDS",
+"speed": 5.0
+}, {
+"frames": [{"duration": 1.0, "texture": SubResource("Carrot")}],
+"loop": true,
+"name": &"CARROT",
 "speed": 5.0
 }]

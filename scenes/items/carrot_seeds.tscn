@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/item.gd" id="1_item"]
+[ext_resource type="SpriteFrames" path="res://assets/item_sprites.tres" id="2_frames"]
+
+[sub_resource type="CircleShape2D" id="CircleShape_item"]
+radius = 12.0
+
+[node name="CarrotSeeds" type="Node2D"]
+script = ExtResource("1_item")
+item = 4
+amount = 3
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = ExtResource("2_frames")
+animation = &"CARROT_SEEDS"
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(0, -4)
+shape = SubResource("CircleShape_item")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]
