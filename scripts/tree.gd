@@ -5,7 +5,6 @@ const WOOD_SCENE = preload("res://scenes/items/wood.tscn")
 var used := false
 
 
-
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if not used and body is Player:
 		body.enterArea(self)
@@ -19,9 +18,8 @@ func _on_area_2d_body_exited(body: Node2D) -> void:
 func interact(player: Player) -> void:
 	if used:
 		return
-
-	player.get_node("../PlayerHUD").decrease_energy(1)
-	player.get_node("../PlayerHUD").update()
+	
+	player.play_tree_animation()
 
 	used = true
 	player.exitArea(self)
@@ -38,6 +36,9 @@ func interact(player: Player) -> void:
 
 	get_tree().current_scene.add_child(wood)
 	wood.global_position = global_position
+	
+	player.get_node("../PlayerHUD").decrease_energy(1)
+	player.get_node("../PlayerHUD").update()
 
 
 func _on_area_2d_mouse_entered() -> void:

@@ -8,10 +8,12 @@ const FINALE_DAY := 5
 var recording: Array = []
 var record_timer := 0.0
 var finale := false
+var is_chopping := false
 
 const SPEED = 80.0
 const BED_POSITION := Vector2(50, 50)
 const GALLOW_POSITION := Vector2(96, 200)
+
 
 @onready var nav_agent: NavigationAgent2D = $NavigationAgent2D
 
@@ -138,6 +140,7 @@ func _physics_process(delta: float) -> void:
 		_walk_at_night(delta)
 		return
 	
+	# Pfeiltasten bleiben erhalten; WASD ist zusätzlich möglich.
 	var direction := Input.get_vector(
 		"ui_left",
 		"ui_right",
@@ -145,17 +148,31 @@ func _physics_process(delta: float) -> void:
 		"ui_down"
 	)
 
+	var wasd_direction := Input.get_vector(
+		"move_left",
+		"move_right",
+		"move_up",
+		"move_down"
+	)
+
+	if wasd_direction != Vector2.ZERO:
+		direction = wasd_direction
+
 	if Input.is_action_just_pressed("ui_accept"):
 		$"../PlayerHUD".decrease_energy(1)
 		$"../PlayerHUD".update()
 	
-	if direction:
-		_update_facing_direction(direction)
-		velocity = direction * SPEED
-		_play_direction_animation("run")
+	if not is_chopping:
+		if direction:
+			_update_facing_direction(direction)
+			velocity = direction * SPEED
+			_play_direction_animation("run")
+		else:
+			velocity = Vector2.ZERO
+			_play_direction_animation("idle")
 	else:
 		velocity = Vector2.ZERO
-		_play_direction_animation("idle")
+		
 	
 	move_and_slide()
 	
@@ -187,6 +204,15 @@ func _physics_process(delta: float) -> void:
 		record_timer = 0.0
 		recording.append(global_position)
 
+func play_tree_animation() -> void:
+	is_chopping = true
+	velocity = Vector2.ZERO
+
+	_play_direction_animation("tree")
+
+	await $AnimatedSprite2D.animation_finished
+
+	is_chopping = false
 
 func _update_facing_direction(direction: Vector2) -> void:
 	if abs(direction.x) > abs(direction.y):
