@@ -1,10 +1,12 @@
 @tool
+class_name Item
 extends Node2D
 
-@export var item: Player.items:
+enum items {MUSHROOM, WOOD}
+
+@export var item: items:
 	set(value):
 		item = value
-		print("set item: ", item)
 		_update_sprite()
 
 func _ready() -> void:
@@ -13,16 +15,12 @@ func _ready() -> void:
 func _update_sprite() -> void:
 	var sprite: AnimatedSprite2D = $AnimatedSprite2D
 
-	var animation_name: String = str(Player.items.keys()[item])
-	print("animation: ", animation_name)
+	var animation_name: String = str(items.keys()[item])
 
 	if sprite.sprite_frames.has_animation(animation_name):
 		sprite.animation = animation_name
 		sprite.frame = 0
 		sprite.pause()
-	else:
-		print("Animation does not exist: ", animation_name)
-
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body is CharacterBody2D:

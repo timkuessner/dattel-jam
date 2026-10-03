@@ -133,6 +133,9 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_k5pq1"]
+radius = 32.01562
+
 [node name="Fire" type="Node2D" unique_id=1389335117]
 script = ExtResource("1_xqmqg")
 
@@ -142,4 +145,12 @@ position = Vector2(0, -19)
 sprite_frames = SubResource("SpriteFrames_k5pq1")
 animation = &"fire_start"
 
+[node name="Area2D" type="Area2D" parent="." unique_id=890828427]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=906878584]
+position = Vector2(0, -11)
+shape = SubResource("CircleShape2D_k5pq1")
+
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]
