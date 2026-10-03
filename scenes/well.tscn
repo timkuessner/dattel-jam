@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://c20gsa5d88yfr"]
+
+[ext_resource type="Script" uid="uid://d27l6004o4p8m" path="res://scripts/well.gd" id="1_well"]
+[ext_resource type="Texture2D" uid="uid://cm1kie6kbpav5" path="res://assets/Tilemap/tilemap_town.png" id="2_town"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_well"]
+atlas = ExtResource("2_town")
+region = Rect2(136, 136, 16, 16)
+
+[node name="Well" type="Node2D" unique_id=570421120]
+y_sort_enabled = true
+script = ExtResource("1_well")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=733465722]
+position = Vector2(0, -1)
+texture = SubResource("AtlasTexture_well")

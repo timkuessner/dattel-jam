@@ -21,12 +21,3 @@ Dadurch existieren alle **16 möglichen Verbindungstypen**.
 Beim Hacken werden die neue Zelle und alle vier Nachbarn sofort neu berechnet. Dadurch verbinden sich Felder korrekt in jeder Form.
 
 Die Visuals liegen in `assets/Tilemap/soil_autotile.png` als 4x4-Sheet mit 16 echten 16x16-Pixel-Tiles.
-
-## Eimer am Wasser auffüllen
-Der alte Brunnen/Wasser-Auffüller wurde entfernt.
-Mit ausgewähltem Eimer kann der Eimer jetzt direkt am Ufer aufgefüllt werden:
-- Der Player steht auf einem begehbaren Rand-Tile am Wasser oder direkt neben einem Wasser-Tile.
-- **E** (oder die vorhandene Welt-Interaktion) füllt den Eimer vollständig auf.
-- Eine volle Eimerfüllung reicht für genau **2 gegossene Tiles**. Danach ist der Eimer leer und muss am Wasser neu aufgefüllt werden.
-- Nach nur 1 gegossenen Tile kann der Eimer noch nicht nachgefüllt werden; erst wenn er komplett leer ist.
-- Die Maus muss dafür nicht auf einen Brunnen oder ein bestimmtes Wasser-Tile zeigen.
