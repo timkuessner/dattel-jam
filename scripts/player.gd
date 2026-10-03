@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 const SPEED = 80.0
 const BED_POSITION := Vector2(50, 50)
-const GALLOW_POSITION := Vector2(144, 66)
+const GALLOW_POSITION := Vector2(96, 200)
 
 @onready var nav_agent: NavigationAgent2D = $NavigationAgent2D
 

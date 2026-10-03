@@ -58,7 +58,18 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Gallows" type="AnimatedSprite2D" unique_id=1027896803]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gfxkb"]
+size = Vector2(32, 1.5)
+
+[node name="Gallows" type="AnimatedSprite2D" unique_id=1027896803 groups=["nav_source"]]
+y_sort_enabled = true
 sprite_frames = SubResource("SpriteFrames_k5pq1")
-animation = &"0"
+animation = &"2"
+offset = Vector2(0, -17)
 script = ExtResource("6_ymgdw")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1147662774 groups=["nav_source"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1534440358 groups=["nav_source"]]
+position = Vector2(0, -0.75)
+shape = SubResource("RectangleShape2D_gfxkb")
