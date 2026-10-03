@@ -47,7 +47,7 @@ func start_night() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if energy <= 0 and isDay:
+	if $"../PlayerHUD".get_energy() <= 0 and isDay:
 		start_night()
 	
 	if !isDay:
@@ -64,8 +64,8 @@ func _physics_process(delta: float) -> void:
 	)
 
 	if Input.is_action_just_pressed("ui_accept"):
-		energy -= 1
-		$"../PlayerHUD".updateEnergy(energy)
+		$"../PlayerHUD".decrease_energy(1)
+		$"../PlayerHUD".update()
 	
 	if direction:
 		_update_facing_direction(direction)
