@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c5exmsolf3ckc"]
 
-[ext_resource type="Script" uid="uid://bsvlrm3xeetlb" path="res://scripts/playerhut.gd" id="1_c4rma"]
+[ext_resource type="Script" uid="uid://bsvlrm3xeetlb" path="res://scripts/playerhud.gd" id="1_c4rma"]
 [ext_resource type="Shader" uid="uid://c5cx8ipwfeuug" path="res://shader/canvas_layer.gdshader" id="2_ghj5q"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_k5pq1"]

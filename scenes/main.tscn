@@ -128,7 +128,7 @@ animation = &"5"
 zoom = Vector2(3, 3)
 script = ExtResource("4_jyhfs")
 
-[node name="PlayerHUT" parent="." unique_id=2054024999 instance=ExtResource("5_tbgi4")]
+[node name="PlayerHUD" parent="." unique_id=2054024999 instance=ExtResource("5_tbgi4")]
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="." unique_id=355803038]
 navigation_polygon = SubResource("NavigationPolygon_k5pq1")
