@@ -114,6 +114,7 @@ func update():
 	update_energy_display()
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 	update_audiotracks(false)
@@ -127,12 +128,17 @@ func update_audiotracks(override: bool):
 		if hunger <3 :
 			if (track_number != 3)||override:
 =======
+=======
+>>>>>>> parent of e6a6a1f (psuh)
 	update_audiotracks()
 	
 func update_audiotracks():
 	if psyche <3 :
 		if hunger <3 :
 			if (track_number != 3):
+<<<<<<< HEAD
+>>>>>>> parent of e6a6a1f (psuh)
+=======
 >>>>>>> parent of e6a6a1f (psuh)
 				$AudioStreamPlayer.stream = preload("res://assets/Music/low_hp_low_mental_v1.wav")
 				track_number = 3
@@ -140,7 +146,11 @@ func update_audiotracks():
 			# play super creepy
 		else :
 <<<<<<< HEAD
+<<<<<<< HEAD
 			if (track_number != 2)||override:
+=======
+			if (track_number != 2):
+>>>>>>> parent of e6a6a1f (psuh)
 =======
 			if (track_number != 2):
 >>>>>>> parent of e6a6a1f (psuh)
@@ -150,7 +160,11 @@ func update_audiotracks():
 			# play low psyche
 	elif hunger <3 :
 <<<<<<< HEAD
+<<<<<<< HEAD
 		if (track_number != 1)||override:
+=======
+		if (track_number != 1):
+>>>>>>> parent of e6a6a1f (psuh)
 =======
 		if (track_number != 1):
 >>>>>>> parent of e6a6a1f (psuh)
@@ -160,7 +174,11 @@ func update_audiotracks():
 		# play low hunger
 	else :
 <<<<<<< HEAD
+<<<<<<< HEAD
 		if (track_number != 0)||override:
+=======
+		if (track_number != 0):
+>>>>>>> parent of e6a6a1f (psuh)
 =======
 		if (track_number != 0):
 >>>>>>> parent of e6a6a1f (psuh)
@@ -170,7 +188,10 @@ func update_audiotracks():
 		# play normal
 	
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> HUDbranch
+=======
+>>>>>>> parent of e6a6a1f (psuh)
 =======
 >>>>>>> parent of e6a6a1f (psuh)
 
