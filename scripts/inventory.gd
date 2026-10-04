@@ -126,6 +126,7 @@ func _refresh_bucket_visual() -> void:
 		bucket_full = farm_system.water_units > 0
 	for slot in slots:
 		slot.set_bucket_full(bucket_full)
+	_refresh_info_label()
 
 func refresh_bucket_visual() -> void:
 	_refresh_bucket_visual()
@@ -141,6 +142,7 @@ func _refresh_selection_after_inventory_change() -> void:
 		selected_item = slots[selected_slot_index].current_item
 		_refresh_selection_visual()
 		_apply_selected_item()
+		_refresh_info_label()
 
 func _on_slot_item_selected(_item: Item.items, slot_index: int) -> void:
 	select_slot(slot_index)
@@ -177,6 +179,7 @@ func _set_selected_slot(slot_index: int) -> void:
 
 	_refresh_selection_visual()
 	_apply_selected_item()
+	_refresh_info_label()
 
 func _refresh_selection_visual() -> void:
 	for i in range(slots.size()):
@@ -268,3 +271,52 @@ func _display_name(item: Item.items) -> String:
 			return "Flint and Steel"
 		_:
 			return "Item"
+
+func _refresh_info_label() -> void:
+	# Der Overflow-Text hat immer Vorrang vor dem Info-Text.
+	if choosing_overflow_drop:
+		return
+
+	if selected_slot_index < 0 or selected_slot_index >= slots.size():
+		overflow_label.hide()
+		return
+
+	var item: Item.items = slots[selected_slot_index].current_item
+	if item == Item.items.EMPTY:
+		overflow_label.hide()
+		return
+
+	overflow_label.text = "%s: %s\nErneut klicken oder dieselbe Zahl drücken = Auswahl aufheben." % [
+		_display_name(item),
+		_item_hint(item)
+	]
+	overflow_label.show()
+
+
+func _item_hint(item: Item.items) -> String:
+	match item:
+		Item.items.HOE:
+			return "Klicke auf Erde, um sie umzugraben."
+		Item.items.CARROT_SEEDS:
+			return "Klicke auf umgegrabene Erde, um Karotten zu säen."
+		Item.items.BUCKET:
+			var farm_system := get_tree().get_first_node_in_group("farm_system") as FarmManager
+			if farm_system != null and farm_system.water_units > 0:
+				return "Der Eimer ist voll. Klicke auf ein Beet, um zu gießen."
+			return "Klicke auf Wasser, um den Eimer zu füllen."
+		Item.items.FISHING_ROD:
+			return "Klicke auf das Wasser, um zu angeln."
+		Item.items.FLINT_AND_STEEL:
+			return "Damit kannst du etwas anzünden."
+		Item.items.CARROT:
+			return "Eine frische Karotte."
+		Item.items.MUSHROOM:
+			return "Ein gesammelter Pilz."
+		Item.items.WOOD:
+			return "Material zum Sammeln und Bauen."
+		Item.items.FISH_BLUE, Item.items.FISH_ORANGE, Item.items.FISH_GREEN:
+			return "Ein gefangener Fisch."
+		Item.items.TRASH:
+			return "Das ist nur Müll."
+		_:
+			return "Kann aktuell nicht benutzt werden."
