@@ -18,6 +18,7 @@ var record_timer := 0.0
 var finale := false
 var is_chopping := false
 var is_fishing := false
+var carrot_bait_ready: bool = false
 var is_eating := false
 var eating_item: Item.items = Item.items.EMPTY
 var pending_inventory_items: Array = []
@@ -636,6 +637,10 @@ func start_fishing(direction: Vector2) -> void:
 	if direction == Vector2.ZERO:
 		return
 
+	var hud := get_node_or_null("../PlayerHUD")
+	if hud == null or hud.get_energy() < 1:
+		return
+
 	is_fishing = true
 	velocity = Vector2.ZERO
 	hideInteract()
@@ -651,22 +656,33 @@ func start_fishing(direction: Vector2) -> void:
 	_play_direction_animation("fish")
 	await $AnimatedSprite2D.animation_finished
 
-	# Die Angel ist draußen: Statt der zufälligen Wartezeit dreht sich jetzt das Rad.
+	# Eine aktivierte Karotte wird genau einmal beim Auswerfen als Koeder verbraucht.
+	var use_carrot_bait: bool = carrot_bait_ready and int(inventory.get(Item.items.CARROT, 0)) > 0
+	if use_carrot_bait:
+		remove_item(Item.items.CARROT)
+
+	carrot_bait_ready = false
+
+	# Die Angel ist draußen: Roulette starten.
 	var caught: Item.items = Item.items.TRASH
 	var reel_ui := get_node_or_null("../PlayerHUD/GamblingOverlay")
 
 	if reel_ui != null:
 		reel_ui.show()
-		await get_tree().process_frame   # Layout-Größe setzen lassen
-		reel_ui.spin(FISHING_SPIN_DURATION)
+		await get_tree().process_frame
+
+		reel_ui.spin(FISHING_SPIN_DURATION, 60, use_carrot_bait)
+
 		var result: Array = await reel_ui.finished
 		var id: int = result[0]
-		if id < REEL_ITEM_MAP.size():    # Monster Energy kann nicht gewinnen
+
+		if id < REEL_ITEM_MAP.size():
 			caught = REEL_ITEM_MAP[id]
 
 		# Kurze Pause, damit man sieht, was man gefangen hat.
 		await get_tree().create_timer(1.0).timeout
 		reel_ui.hide()
+
 	else:
 		# Fallback, falls das Rad nicht gefunden wird.
 		await get_tree().create_timer(randf_range(3.0, 6.0)).timeout
@@ -677,9 +693,12 @@ func start_fishing(direction: Vector2) -> void:
 
 	add_item(caught)
 
+	# Angeln kostet 1 Energie.
+	hud.decrease_energy(1)
+	hud.update()
+
 	is_fishing = false
 	_play_direction_animation("idle")
-
 
 func play_tree_animation() -> void:
 	is_chopping = true
@@ -751,9 +770,9 @@ func _walk_at_night(delta: float) -> void:
 				hud.increase_energy(energy_gain)
 
 			# 2. Danach -2 Essen/Leben, niemals unter 0.
-			# var hunger_loss: int = mini(2, hud.get_hunger())
-			# if hunger_loss > 0:
-				# hud.decrease_hunger(hunger_loss)
+			var hunger_loss: int = mini(2, hud.get_hunger())
+			if hunger_loss > 0:
+				hud.decrease_hunger(hunger_loss)
 
 			hud.decrease_psyche(1)
 			

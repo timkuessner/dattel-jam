@@ -20,7 +20,7 @@ func interact(player: Player) -> void:
 		return
 
 	var hud = player.get_node("../PlayerHUD")
-	if hud == null or hud.get_energy() < 3:
+	if hud == null or hud.get_energy() < 2:
 		return
 	
 	player.play_tree_animation()
@@ -41,7 +41,7 @@ func interact(player: Player) -> void:
 	get_tree().current_scene.add_child(wood)
 	wood.global_position = global_position
 	
-	hud.decrease_energy(3)
+	hud.decrease_energy(2)
 	if randf() < 0.15:
 		hud.decrease_hunger(1)
 	hud.update()
