@@ -8,7 +8,7 @@ func _ready() -> void:
 
 
 func _on_fade_timer_timeout() -> void:
-	get_tree().change_scene_to_file("res://scenes/MainMenu.tscn")
+	get_tree().change_scene_to_file("res://scenes/Intro.tscn")
 
 
 func _on_delay_timer_timeout() -> void:

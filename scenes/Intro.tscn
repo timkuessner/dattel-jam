@@ -1,24 +1,29 @@
 [gd_scene format=3 uid="uid://bl7ultl77rwkv"]
 
-[ext_resource type="Script" uid="uid://c48elb1dah611" path="res://scripts/pre_intro.gd" id="1_mkji7"]
+[ext_resource type="Script" uid="uid://b1i3853kgbvj0" path="res://scenes/intro.gd" id="1_hc7eg"]
+[ext_resource type="VideoStream" uid="uid://58o7rptfm3yt" path="res://assets/video/Start_Video.ogv" id="2_aqbct"]
 [ext_resource type="PackedScene" uid="uid://dyw7n5l2cssd3" path="res://scenes/fade_transition.tscn" id="4_r2s4q"]
 
-[node name="PreIntro" type="Control" unique_id=522822813]
+[node name="Intro" type="Control" unique_id=522822813]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_mkji7")
+script = ExtResource("1_hc7eg")
 
 [node name="VideoStreamPlayer" type="VideoStreamPlayer" parent="." unique_id=181862239]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = 768.0
+offset_bottom = 432.0
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(0.6, 0.6)
+stream = ExtResource("2_aqbct")
 
 [node name="Startmenu_Background" type="TextureRect" parent="." unique_id=969983526]
 visible = false
@@ -51,5 +56,6 @@ wait_time = 8.0
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1082651867]
 autoplay = true
 
+[connection signal="finished" from="VideoStreamPlayer" to="." method="_on_video_stream_player_finished"]
 [connection signal="timeout" from="Fadetransition/fade_timer" to="." method="_on_fade_timer_timeout"]
 [connection signal="timeout" from="Fadetransition/delay_timer" to="." method="_on_delay_timer_timeout"]
