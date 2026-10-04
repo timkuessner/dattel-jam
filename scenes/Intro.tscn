@@ -1,0 +1,55 @@
+[gd_scene format=3 uid="uid://bl7ultl77rwkv"]
+
+[ext_resource type="Script" uid="uid://c48elb1dah611" path="res://scripts/pre_intro.gd" id="1_mkji7"]
+[ext_resource type="PackedScene" uid="uid://dyw7n5l2cssd3" path="res://scenes/fade_transition.tscn" id="4_r2s4q"]
+
+[node name="PreIntro" type="Control" unique_id=522822813]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_mkji7")
+
+[node name="VideoStreamPlayer" type="VideoStreamPlayer" parent="." unique_id=181862239]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Startmenu_Background" type="TextureRect" parent="." unique_id=969983526]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="Startmenu_Background" unique_id=1839827219]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0049199224, 0.0049333298, 0.15549523, 1)
+
+[node name="Fadetransition" parent="." unique_id=397057972 instance=ExtResource("4_r2s4q")]
+visible = false
+layout_mode = 1
+mouse_filter = 2
+
+[node name="fade_timer" type="Timer" parent="Fadetransition" unique_id=1361220803]
+
+[node name="delay_timer" type="Timer" parent="Fadetransition" unique_id=727860686]
+wait_time = 8.0
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1082651867]
+autoplay = true
+
+[connection signal="timeout" from="Fadetransition/fade_timer" to="." method="_on_fade_timer_timeout"]
+[connection signal="timeout" from="Fadetransition/delay_timer" to="." method="_on_delay_timer_timeout"]
