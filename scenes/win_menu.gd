@@ -10,13 +10,13 @@ func _ready() -> void:
 
 
 func _on_start_pressed() -> void:
-	button_type = "start"
+	button_type = "Credits"
 	$Fadetransition.show()
 	$Fadetransition/fade_timer.start()
 	$Fadetransition/AnimationPlayer.play("Fade_out")
 
 func _on_options_pressed() -> void:
-	button_type = "Credits"
+	button_type = "MainMenu"
 	$Fadetransition.show()
 	$Fadetransition/fade_timer.start()
 	$Fadetransition/AnimationPlayer.play("Fade_out")
@@ -27,7 +27,8 @@ func _on_quit_pressed() -> void:
 
 
 func _on_fade_timer_timeout() -> void:
-	if button_type == "start" :
-		get_tree().change_scene_to_file("res://scenes/main.tscn")
-	elif button_type == "Credits" :
+	if button_type == "Credits" :
 		get_tree().change_scene_to_file("res://scenes/CreditMenu.tscn")
+	elif button_type == "MainMenu" :
+		get_tree().change_scene_to_file("res://scenes/MainMenu.tscn")
+		pass
