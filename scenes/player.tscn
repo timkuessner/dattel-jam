@@ -9,10 +9,10 @@
 [ext_resource type="AudioStream" uid="uid://cbtr7185xldid" path="res://assets/sounds/step_left.wav" id="7_smehm"]
 [ext_resource type="AudioStream" uid="uid://cybaxxnbq5vw2" path="res://assets/sounds/step_right.wav" id="8_ur7pv"]
 [ext_resource type="AudioStream" uid="uid://cgdbo2m4ililp" path="res://assets/Music/angeln.wav" id="9_ur7pv"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/tile_0000.png" id="10_death0"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/tile_0001.png" id="11_death1"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/tile_0002.png" id="12_death2"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/tile_0003.png" id="13_death3"]
+[ext_resource type="Texture2D" uid="uid://c2mercxb1c2fq" path="res://assets/sprites/player/tile_0000.png" id="10_death0"]
+[ext_resource type="Texture2D" uid="uid://bnq8mgbfdvpvd" path="res://assets/sprites/player/tile_0001.png" id="11_death1"]
+[ext_resource type="Texture2D" uid="uid://cp46chgxd0yd6" path="res://assets/sprites/player/tile_0002.png" id="12_death2"]
+[ext_resource type="Texture2D" uid="uid://blhdxntf1y4md" path="res://assets/sprites/player/tile_0003.png" id="13_death3"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fish_down_0"]
 atlas = ExtResource("2_qhqgy")
@@ -618,7 +618,7 @@ size = Vector2(17, 2)
 script = ExtResource("1_g2els")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=726144485]
-position = Vector2(0, -12)
+position = Vector2(0, -10)
 sprite_frames = SubResource("SpriteFrames_k5pq1")
 animation = &"tree_right"
 autoplay = "idle_down"
