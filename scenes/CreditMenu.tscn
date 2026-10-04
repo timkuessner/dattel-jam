@@ -15,7 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://d2f6yu215mr6b" path="res://assets/sprites/ui/Credits.png" id="13_kdgp6"]
 [ext_resource type="PackedScene" uid="uid://dyw7n5l2cssd3" path="res://scenes/fade_transition.tscn" id="14_g61e4"]
 [ext_resource type="AudioStream" uid="uid://foudxmu52o8l" path="res://assets/Music/good_hp_good_mental_v2.wav" id="15_kdgp6"]
-[ext_resource type="Texture2D" uid="uid://vfv7skd5on3w" path="res://assets/sprites/ui/Credits_text.png" id="16_np70e"]
+[ext_resource type="Texture2D" uid="uid://betm02lyginy3" path="res://assets/sprites/ui/Credits_text.png" id="16_np70e"]
 
 [node name="Credit_Menu" type="Control" unique_id=522822813]
 layout_mode = 3
