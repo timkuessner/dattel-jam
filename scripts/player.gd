@@ -427,10 +427,6 @@ func _physics_process(delta: float) -> void:
 
 	if wasd_direction != Vector2.ZERO:
 		direction = wasd_direction
-
-	if Input.is_action_just_pressed("ui_accept"):
-		$"../PlayerHUD".decrease_energy(1)
-		$"../PlayerHUD".update()
 	
 	if not is_chopping and not is_fishing:
 		if direction:
@@ -462,9 +458,6 @@ func _physics_process(delta: float) -> void:
 
 	if Input.is_action_just_pressed("eat"):
 		_try_eat_selected_item()
-	
-	if Input.is_action_just_pressed("ui_home"):
-		$"../Fire".buildFire()
 	
 	var farm_system := get_tree().get_first_node_in_group("farm_system")
 
