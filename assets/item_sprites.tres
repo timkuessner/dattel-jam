@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://c28ix74vtqwv5" path="res://assets/sprites/items/fish_orange.png" id="6_fish_orange"]
 [ext_resource type="Texture2D" uid="uid://nqqkes0qp7k1" path="res://assets/sprites/items/fish_green.png" id="7_fish_green"]
 [ext_resource type="Texture2D" uid="uid://d1w7c52lws6hj" path="res://assets/sprites/items/trash.png" id="8_trash"]
-[ext_resource type="Texture2D" uid="uid://c4kveye8wvda4" path="res://assets/sprites/items/flint_and_steel.png" id="9_flint"]
+[ext_resource type="Texture2D" uid="uid://ci55ynsng50b5" path="res://assets/sprites/items/flint_and_steel.png" id="9_flint"]
 
 [sub_resource type="AtlasTexture" id="Bucket"]
 atlas = ExtResource("3_farm")
