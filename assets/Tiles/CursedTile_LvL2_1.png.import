@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://crjqmg6ou86a2"
-path="res://.godot/imported/Gerettet.png-513fa57effb5f24bfd7ad6070ca33ba7.ctex"
+uid="uid://da2e3q01phs30"
+path="res://.godot/imported/CursedTile_LvL2_1.png-053bd992a46364b8eb2b5a9d2e57436d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/ui/Gerettet.png"
-dest_files=["res://.godot/imported/Gerettet.png-513fa57effb5f24bfd7ad6070ca33ba7.ctex"]
+source_file="res://assets/Tiles/CursedTile_LvL2_1.png"
+dest_files=["res://.godot/imported/CursedTile_LvL2_1.png-053bd992a46364b8eb2b5a9d2e57436d.ctex"]
 
 [params]
 

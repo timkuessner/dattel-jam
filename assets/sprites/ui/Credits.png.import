@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://crjqmg6ou86a2"
-path="res://.godot/imported/Gerettet.png-513fa57effb5f24bfd7ad6070ca33ba7.ctex"
+uid="uid://d2f6yu215mr6b"
+path="res://.godot/imported/Credits.png-9be7575e29c632435996285852b82833.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/ui/Gerettet.png"
-dest_files=["res://.godot/imported/Gerettet.png-513fa57effb5f24bfd7ad6070ca33ba7.ctex"]
+source_file="res://assets/sprites/ui/Credits.png"
+dest_files=["res://.godot/imported/Credits.png-9be7575e29c632435996285852b82833.ctex"]
 
 [params]
 
