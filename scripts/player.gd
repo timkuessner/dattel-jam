@@ -20,6 +20,12 @@ const SPEED = 80.0
 const BED_POSITION := Vector2(50, 50)
 const GALLOW_POSITION := Vector2(96, 200)
 
+const REEL_ITEM_MAP: Array = [
+	Item.items.FISH_BLUE,
+	Item.items.FISH_GREEN,
+	Item.items.FISH_ORANGE,
+	Item.items.TRASH,
+]
 
 @onready var nav_agent: NavigationAgent2D = $NavigationAgent2D
 
@@ -541,6 +547,8 @@ func _on_eat_sound_finished() -> void:
 
 	hud.update()
 
+const FISHING_SPIN_DURATION := 9.0
+
 func start_fishing(direction: Vector2) -> void:
 	if not isDay or is_chopping or is_fishing or is_eating:
 		return
@@ -562,25 +570,31 @@ func start_fishing(direction: Vector2) -> void:
 	_play_direction_animation("fish")
 	await $AnimatedSprite2D.animation_finished
 
-	# Der letzte Frame bleibt mit ausgeworfener Angel zufällig 3-6 Sekunden stehen.
-	await get_tree().create_timer(randf_range(3.0, 6.0)).timeout
+	# Die Angel ist draußen: Statt der zufälligen Wartezeit dreht sich jetzt das Rad.
+	var caught: Item.items = Item.items.TRASH
+	var reel_ui := get_node_or_null("../PlayerHUD/GamblingOverlay")
 
-	# Danach dieselben Frames rückwärts abspielen.
+	if reel_ui != null:
+		reel_ui.show()
+		await get_tree().process_frame   # Layout-Größe setzen lassen
+		reel_ui.spin(FISHING_SPIN_DURATION)
+		var result: Array = await reel_ui.finished
+		var id: int = result[0]
+		if id < REEL_ITEM_MAP.size():    # Monster Energy kann nicht gewinnen
+			caught = REEL_ITEM_MAP[id]
+
+		# Kurze Pause, damit man sieht, was man gefangen hat.
+		await get_tree().create_timer(1.0).timeout
+		reel_ui.hide()
+	else:
+		# Fallback, falls das Rad nicht gefunden wird.
+		await get_tree().create_timer(randf_range(3.0, 6.0)).timeout
+
+	# Angel wieder einholen.
 	_play_direction_animation("fish_reverse")
 	await $AnimatedSprite2D.animation_finished
 
-	var catch_roll := randf()
-	if catch_roll < 0.30:
-		# Kein Fisch: Statt leer auszugehen wird Muell aus dem Wasser gezogen.
-		add_item(Item.items.TRASH)
-	else:
-		var fish_roll := randf()
-		if fish_roll < 0.60:
-			add_item(Item.items.FISH_BLUE)
-		elif fish_roll < 0.90:
-			add_item(Item.items.FISH_ORANGE)
-		else:
-			add_item(Item.items.FISH_GREEN)
+	add_item(caught)
 
 	is_fishing = false
 	_play_direction_animation("idle")

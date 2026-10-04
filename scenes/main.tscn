@@ -4,7 +4,8 @@
 [ext_resource type="PackedScene" uid="uid://bhrc5shrd2wi3" path="res://scenes/map.tscn" id="1_o5qli"]
 [ext_resource type="PackedScene" uid="uid://biqxtnpr5iilq" path="res://scenes/gallows.tscn" id="3_sugp2"]
 [ext_resource type="Script" uid="uid://bwxkeso3yk6ts" path="res://scripts/camera_2d.gd" id="4_jyhfs"]
-[ext_resource type="PackedScene" path="res://scenes/farming.tscn" id="6_farming"]
+[ext_resource type="PackedScene" uid="uid://babuvkwl8tc66" path="res://scenes/farming.tscn" id="6_farming"]
+[ext_resource type="PackedScene" uid="uid://dhshfgyr8iehn" path="res://scenes/gambling_overlay.tscn" id="7_choun"]
 [ext_resource type="PackedScene" uid="uid://c5exmsolf3ckc" path="res://scenes/PlayerHUD.tscn" id="7_tipki"]
 [ext_resource type="PackedScene" uid="uid://ckw68w5dq66hd" path="res://scenes/Inventory.tscn" id="8_choun"]
 [ext_resource type="PackedScene" uid="uid://clfdljgfyuust" path="res://scenes/fire.tscn" id="9_85g3d"]
@@ -95,6 +96,9 @@ script = ExtResource("4_jyhfs")
 [node name="PlayerHUD" parent="." unique_id=2054024999 instance=ExtResource("7_tipki")]
 
 [node name="Inventory" parent="PlayerHUD" unique_id=56858956 instance=ExtResource("8_choun")]
+
+[node name="GamblingOverlay" parent="PlayerHUD" unique_id=1140264010 instance=ExtResource("7_choun")]
+visible = false
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="." unique_id=355803038]
 navigation_polygon = SubResource("NavigationPolygon_k5pq1")

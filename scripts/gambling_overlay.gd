@@ -1,6 +1,6 @@
 extends Control
 
-signal finished(winner_index: int, item_name: String)
+signal finished(item_id: int, item_name: String)
 
 const SLOT_SIZE := 64.0                 # size of one slot (same as the cross)
 const PIXEL_SCALE := 3                  # 16px image * 3 = 48px (use 4 to fill the slot completely)
@@ -22,7 +22,7 @@ var item_ids: Array[int] = []
 
 const MONSTER_ID := 4   # index of "Monster Energy" in ITEM_NAMES
 # Blue, Green, Orange, Trash, Monster -> Monster is super rare
-const ITEM_WEIGHTS: Array[float] = [30.0, 30.0, 30.0, 30.0, 0.5]
+const ITEM_WEIGHTS: Array[float] = [42.0, 7.0, 21.0, 30.0, 0.5]
 const MONSTER_NEXT_TO_WINNER_CHANCE := 0.75
 
 func _pick_weighted(allow_monster: bool = true) -> int:
@@ -54,10 +54,6 @@ func _ready() -> void:
 	reel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	reel.clip_contents = true
 	reel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-
-	await get_tree().process_frame
-	await get_tree().process_frame
-	spin()
 
 func spin(duration: float = 6.0, travel_items: int = 60) -> void:
 	if track:
@@ -121,7 +117,7 @@ func spin(duration: float = 6.0, travel_items: int = 60) -> void:
 		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
 	tween.finished.connect(func():
 		track.position.x = final_x
-		var item_name := ITEM_NAMES[item_ids[winner_index]]
-		print("Winner: ", item_name, " (item ", winner_index, ")")
-		finished.emit(winner_index, item_name)
+		var winner_id := item_ids[winner_index]
+		var item_name := ITEM_NAMES[winner_id]
+		finished.emit(winner_id, item_name)
 	)
