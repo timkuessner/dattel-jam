@@ -18,6 +18,10 @@ func _on_area_2d_body_exited(body: Node2D) -> void:
 func interact(player: Player) -> void:
 	if used:
 		return
+
+	var hud = player.get_node("../PlayerHUD")
+	if hud == null or hud.get_energy() < 3:
+		return
 	
 	player.play_tree_animation()
 
@@ -37,8 +41,10 @@ func interact(player: Player) -> void:
 	get_tree().current_scene.add_child(wood)
 	wood.global_position = global_position
 	
-	player.get_node("../PlayerHUD").decrease_energy(1)
-	player.get_node("../PlayerHUD").update()
+	hud.decrease_energy(3)
+	if randf() < 0.15:
+		hud.decrease_hunger(1)
+	hud.update()
 
 
 func _on_area_2d_mouse_entered() -> void:

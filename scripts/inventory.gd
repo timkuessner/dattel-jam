@@ -264,5 +264,7 @@ func _display_name(item: Item.items) -> String:
 			return "Grüner Fisch"
 		Item.items.TRASH:
 			return "Müll"
+		Item.items.FLINT_AND_STEEL:
+			return "Flint and Steel"
 		_:
 			return "Item"

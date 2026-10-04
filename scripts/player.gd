@@ -25,6 +25,7 @@ const REEL_ITEM_MAP: Array = [
 	Item.items.FISH_GREEN,
 	Item.items.FISH_ORANGE,
 	Item.items.TRASH,
+	Item.items.FLINT_AND_STEEL,
 ]
 
 @onready var nav_agent: NavigationAgent2D = $NavigationAgent2D
@@ -218,6 +219,8 @@ func _get_world_item_scene(item: Item.items) -> PackedScene:
 			return preload("res://scenes/items/fish_green.tscn")
 		Item.items.TRASH:
 			return preload("res://scenes/items/trash.tscn")
+		Item.items.FLINT_AND_STEEL:
+			return preload("res://scenes/items/flint_and_steel.tscn")
 		_:
 			return null
 
@@ -305,12 +308,22 @@ func exitArea(a):
 
 
 func enterFire():
-	if Item.items.WOOD in inventory:
-		showLabel("E / LMB")
-	else:
-		showInteractItem(Item.items.WOOD)
+	var fire := $"../Fire"
 
-	area = $"../Fire"
+	if fire.has_method("needs_wood") and fire.needs_wood():
+		if Item.items.WOOD in inventory:
+			showLabel("E / LMB")
+		else:
+			showInteractItem(Item.items.WOOD)
+	elif fire.has_method("needs_flint_and_steel") and fire.needs_flint_and_steel():
+		if Item.items.FLINT_AND_STEEL in inventory:
+			showLabel("E / LMB")
+		else:
+			showInteractItem(Item.items.FLINT_AND_STEEL)
+	else:
+		hideInteract()
+
+	area = fire
 
 
 func exitFire():
@@ -463,9 +476,14 @@ func _try_context_interaction() -> void:
 		return
 
 	if area == $"../Fire":
-		if Item.items.WOOD in inventory:
-			$"../Fire".buildFire()
-			remove_item(Item.items.WOOD)
+		var fire := $"../Fire"
+		if fire.has_method("needs_wood") and fire.needs_wood():
+			if Item.items.WOOD in inventory:
+				fire.buildFire()
+				remove_item(Item.items.WOOD)
+		elif fire.has_method("needs_flint_and_steel") and fire.needs_flint_and_steel():
+			if Item.items.FLINT_AND_STEEL in inventory:
+				fire.ignite_fire()
 
 		exitFire()
 		return

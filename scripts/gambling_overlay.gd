@@ -11,8 +11,8 @@ const STEP := SLOT_SIZE + GAP
 
 const IMAGE_FOLDER := "res://assets/sprites/items/"
 
-const ITEM_NAMES: Array[String] = ["Blue fish", "Green fish", "Orange fish", "Trash", "Monster Energy"]
-const ITEM_FILES: Array[String] = ["fish_blue.png", "fish_green.png", "fish_orange.png", "trash.png", "monster_energy.png"]
+const ITEM_NAMES: Array[String] = ["Blue fish", "Green fish", "Orange fish", "Trash", "Flint and Steel", "Monster Energy"]
+const ITEM_FILES: Array[String] = ["fish_blue.png", "fish_green.png", "fish_orange.png", "trash.png", "flint_and_steel.png", "monster_energy.png"]
 
 var textures: Array[Texture2D] = []
 
@@ -20,9 +20,10 @@ var reel: Control
 var track: Control
 var item_ids: Array[int] = []
 
-const MONSTER_ID := 4   # index of "Monster Energy" in ITEM_NAMES
-# Blue, Green, Orange, Trash, Monster -> Monster is super rare
-const ITEM_WEIGHTS: Array[float] = [42.0, 7.0, 21.0, 30.0, 0.5]
+const MONSTER_ID := 5   # index of "Monster Energy" in ITEM_NAMES
+# Blue, Green, Orange stay unchanged. The old 30% object chance is split 50/50:
+# 15% Trash and 15% Flint and Steel. Monster stays super rare and cannot win.
+const ITEM_WEIGHTS: Array[float] = [42.0, 7.0, 21.0, 15.0, 15.0, 0.5]
 const MONSTER_NEXT_TO_WINNER_CHANCE := 0.5
 
 func _pick_weighted(allow_monster: bool = true) -> int:
