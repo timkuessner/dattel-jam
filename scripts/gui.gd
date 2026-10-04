@@ -6,7 +6,7 @@ func _ready() -> void:
 	$Fadetransition.show()
 	$Fadetransition/fade_timer.start()
 	$Fadetransition/AnimationPlayer.play("Fade_in")
-	pass
+	$Fadetransition/AnimationPlayer.advance(0)
 
 
 func _on_start_pressed() -> void:
