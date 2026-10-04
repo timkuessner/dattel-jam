@@ -529,8 +529,6 @@ func _try_context_interaction() -> void:
 		elif fire.has_method("needs_flint_and_steel") and fire.needs_flint_and_steel():
 			if Item.items.FLINT_AND_STEEL in inventory:
 				fire.ignite_fire()
-
-		exitFire()
 		return
 
 	if area.has_method("interact"):
