@@ -25,6 +25,9 @@ var pending_inventory_items: Array = []
 const SPEED = 80.0
 const BED_POSITION := Vector2(50, 50)
 const GALLOW_POSITION := Vector2(96, 200)
+const TENT_INTERACT_POSITION := Vector2(54.24, 83.42)
+const TENT_EXIT_POSITION := Vector2(54.24, 83.42)
+const TENT_INTERACT_RADIUS := 24.0
 
 const REEL_ITEM_MAP: Array = [
 	Item.items.FISH_BLUE,
@@ -42,6 +45,8 @@ var n = 0
 
 var isDay = true
 var night_phase = 0
+var dies_from_hunger_this_night := false
+var is_dying := false
 
 var inventory: Dictionary = {}
 
@@ -344,8 +349,15 @@ func exitFire():
 
 
 func start_night() -> void:
+	if not isDay or is_dying:
+		return
+
+	# Entscheidend ist der Essensstand BEVOR geschlafen wird:
+	# Nur wer schon mit 0 Essen ins Bett geht, stirbt in dieser Nacht.
+	dies_from_hunger_this_night = $"../PlayerHUD".get_hunger() <= 0
 	isDay = false
 	night_phase = 0
+	hideInteract()
 
 	if recording.size() >= 2:
 		pos_array.append(recording.duplicate())
@@ -377,6 +389,10 @@ func _physics_process(delta: float) -> void:
 			$"../PlayerHUD".night(false)
 			$"../Gallows".updateGallows(6)
 		
+		return
+
+	if is_dying:
+		velocity = Vector2.ZERO
 		return
 		
 	if $"../PlayerHUD".get_energy() <= 0 and isDay:
@@ -453,6 +469,8 @@ func _physics_process(delta: float) -> void:
 
 	if farm_system:
 		farm_system.update_player_target(self, facing_direction)
+
+	_update_tent_interaction_prompt()
 	
 	record_timer += delta
 
@@ -497,6 +515,8 @@ func _try_context_interaction() -> void:
 		farm_system.update_player_target(self, facing_direction)
 
 	if area == null:
+		if _is_near_tent():
+			start_night()
 		return
 
 	if area == $"../Fire":
@@ -514,6 +534,24 @@ func _try_context_interaction() -> void:
 
 	if area.has_method("interact"):
 		area.interact(self)
+
+
+func _is_near_tent() -> bool:
+	return global_position.distance_to(TENT_INTERACT_POSITION) <= TENT_INTERACT_RADIUS
+
+
+func _update_tent_interaction_prompt() -> void:
+	if not isDay or is_chopping or is_fishing or is_eating or has_pending_inventory_choice():
+		return
+
+	# Andere Interaktionen (Items, Feuer, Farming usw.) haben Vorrang.
+	if area != null:
+		return
+
+	if _is_near_tent():
+		showLabel("E")
+	elif interact_ui.visible and not _alternate_interact_prompt:
+		hideInteract()
 
 
 func _try_eat_selected_item() -> void:
@@ -703,12 +741,40 @@ func _walk_at_night(delta: float) -> void:
 			if farm_system != null and farm_system.has_method("advance_day"):
 				farm_system.advance_day()
 
+			var hud := $"../PlayerHUD"
+
+			# Reihenfolge der Nacht:
+			# 1. Energie + aktueller Essensstand (maximal bis 4)
+			var free_energy: int = maxi(hud.max_energy - hud.get_energy(), 0)
+			var energy_gain: int = mini(hud.get_hunger(), free_energy)
+			if energy_gain > 0:
+				hud.increase_energy(energy_gain)
+
+			# 2. Danach -2 Essen/Leben, niemals unter 0.
+			var hunger_loss: int = mini(2, hud.get_hunger())
+			if hunger_loss > 0:
+				hud.decrease_hunger(hunger_loss)
+
+			# 3. 60 % Chance auf -1 Psyche.
+			if randf() < 0.60:
+				hud.decrease_psyche(1)
+
+			hud.update()
+
+			# Wenn der Spieler SCHON mit 0 Essen ins Bett gegangen ist,
+			# läuft er wieder aus dem Zelt und stirbt erst dort sichtbar.
+			if dies_from_hunger_this_night:
+				night_phase = 3
+				nav_agent.target_position = TENT_EXIT_POSITION
+				hud.night(false)
+				$"../PlayerHUD/Inventory".hide()
+				$AnimatedSprite2D.modulate = Color(1.0, 1.0, 1.0, 1.0)
+				return
+
 			nav_agent.target_position = GALLOW_POSITION
-			$"../PlayerHUD".night(true)
+			hud.night(true)
 			$"../PlayerHUD/Inventory".hide()
 			$AnimatedSprite2D.modulate = Color(0.0, 0.0, 0.0, 1.0)
-			$"../PlayerHUD".decrease_psyche(1)
-			$"../PlayerHUD".update_psyche_display()
 			return
 
 		elif night_phase == 1:
@@ -727,16 +793,20 @@ func _walk_at_night(delta: float) -> void:
 				return
 			isDay = true
 			night_phase = 0
+			dies_from_hunger_this_night = false
 			
 			velocity = Vector2.ZERO
 
-			$"../PlayerHUD".increase_energy(4)
 			$"../PlayerHUD".update()
 			
 			_play_direction_animation("idle")
 			$"../PlayerHUD".night(false)
 			$"../PlayerHUD/Inventory".show()
 			$AnimatedSprite2D.modulate = Color(1.0, 1.0, 1.0, 1.0)
+			return
+
+		elif night_phase == 3:
+			_start_hunger_death()
 			return
 	
 	var next_pos := nav_agent.get_next_path_position()
@@ -750,6 +820,21 @@ func _walk_at_night(delta: float) -> void:
 	)
 
 	_play_direction_animation("run")
+
+
+func _start_hunger_death() -> void:
+	if is_dying:
+		return
+
+	is_dying = true
+	velocity = Vector2.ZERO
+	hideInteract()
+	$"../PlayerHUD".night(false)
+	$"../PlayerHUD/Inventory".hide()
+	$AnimatedSprite2D.modulate = Color(1.0, 1.0, 1.0, 1.0)
+	$AnimatedSprite2D.play("death")
+	await $AnimatedSprite2D.animation_finished
+	get_tree().change_scene_to_file("res://scenes/FinalMenu.tscn")
 
 
 func start_finale() -> void:

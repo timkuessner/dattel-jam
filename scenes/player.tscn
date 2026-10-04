@@ -9,6 +9,10 @@
 [ext_resource type="AudioStream" uid="uid://cbtr7185xldid" path="res://assets/sounds/step_left.wav" id="7_smehm"]
 [ext_resource type="AudioStream" uid="uid://cybaxxnbq5vw2" path="res://assets/sounds/step_right.wav" id="8_ur7pv"]
 [ext_resource type="AudioStream" uid="uid://cgdbo2m4ililp" path="res://assets/Music/angeln.wav" id="9_ur7pv"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/tile_0000.png" id="10_death0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/tile_0001.png" id="11_death1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/tile_0002.png" id="12_death2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/tile_0003.png" id="13_death3"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fish_down_0"]
 atlas = ExtResource("2_qhqgy")
@@ -220,6 +224,23 @@ region = Rect2(1080, 20, 120, 20)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_k5pq1"]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("10_death0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_death1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_death2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_death3")
+}],
+"loop": 0,
+"name": &"death",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_fish_down_0")
