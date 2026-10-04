@@ -634,7 +634,6 @@ shape = SubResource("RectangleShape2D_dqkch")
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=578797685]
 
 [node name="Interact" type="Sprite2D" parent="." unique_id=1049096806]
-visible = false
 texture_filter = 1
 position = Vector2(-9, -28)
 texture = ExtResource("5_qlg0r")
@@ -657,10 +656,9 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="ClickIcon" type="Sprite2D" parent="Interact" unique_id=1762459969]
-visible = false
 texture_filter = 1
-position = Vector2(0, -0.5)
-scale = Vector2(0.06, 0.06)
+position = Vector2(4.4703484e-07, -1.9999993)
+scale = Vector2(0.052727267, 0.05604167)
 texture = ExtResource("6_click")
 
 [node name="Items" type="AnimatedSprite2D" parent="Interact" unique_id=138190837]
