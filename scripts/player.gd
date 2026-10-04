@@ -18,7 +18,6 @@ var record_timer := 0.0
 var finale := false
 var is_chopping := false
 var is_fishing := false
-var carrot_bait_ready := false
 var is_eating := false
 var eating_item: Item.items = Item.items.EMPTY
 var pending_inventory_items: Array = []
@@ -315,16 +314,7 @@ func _update_alternating_interact_prompt() -> void:
 
 
 func enterArea(a):
-	var farm_system := get_tree().get_first_node_in_group("farm_system")
-	if a == farm_system and farm_system != null and farm_system.selected_tool == FarmManager.TOOL_FISHING_ROD:
-		if carrot_bait_ready:
-			showLabel("E | F: Köder AN")
-		elif inventory.get(Item.items.CARROT, 0) > 0:
-			showLabel("E | F: Köder")
-		else:
-			showLabel("E / LMB")
-	else:
-		showLabel("E / LMB")
+	showLabel("E / LMB")
 	area = a
 
 
@@ -574,19 +564,6 @@ func _try_eat_selected_item() -> void:
 		return
 
 	var selected_food: Item.items = inventory_ui.selected_item
-
-	# Mit ausgewaehlter Angel kann F eine Karotte als Koeder fuer den naechsten Wurf aktivieren.
-	if selected_food == Item.items.FISHING_ROD:
-		var farm_system := get_tree().get_first_node_in_group("farm_system")
-		if area != farm_system:
-			return
-
-		if carrot_bait_ready:
-			carrot_bait_ready = false
-		elif inventory.get(Item.items.CARROT, 0) > 0:
-			carrot_bait_ready = true
-		return
-
 	var edible_items := [
 		Item.items.CARROT,
 		Item.items.MUSHROOM,
@@ -674,12 +651,6 @@ func start_fishing(direction: Vector2) -> void:
 	_play_direction_animation("fish")
 	await $AnimatedSprite2D.animation_finished
 
-	# Eine aktivierte Karotte wird genau einmal beim Auswerfen als Koeder verbraucht.
-	var use_carrot_bait: bool = carrot_bait_ready and int(inventory.get(Item.items.CARROT, 0)) > 0
-	if use_carrot_bait:
-		remove_item(Item.items.CARROT)
-	carrot_bait_ready = false
-
 	# Die Angel ist draußen: Statt der zufälligen Wartezeit dreht sich jetzt das Rad.
 	var caught: Item.items = Item.items.TRASH
 	var reel_ui := get_node_or_null("../PlayerHUD/GamblingOverlay")
@@ -687,7 +658,7 @@ func start_fishing(direction: Vector2) -> void:
 	if reel_ui != null:
 		reel_ui.show()
 		await get_tree().process_frame   # Layout-Größe setzen lassen
-		reel_ui.spin(FISHING_SPIN_DURATION, 60, use_carrot_bait)
+		reel_ui.spin(FISHING_SPIN_DURATION)
 		var result: Array = await reel_ui.finished
 		var id: int = result[0]
 		if id < REEL_ITEM_MAP.size():    # Monster Energy kann nicht gewinnen
@@ -780,13 +751,14 @@ func _walk_at_night(delta: float) -> void:
 				hud.increase_energy(energy_gain)
 
 			# 2. Danach -2 Essen/Leben, niemals unter 0.
-			var hunger_loss: int = mini(2, hud.get_hunger())
-			if hunger_loss > 0:
-				hud.decrease_hunger(hunger_loss)
+			# var hunger_loss: int = mini(2, hud.get_hunger())
+			# if hunger_loss > 0:
+				# hud.decrease_hunger(hunger_loss)
 
-			# 3. 60 % Chance auf -1 Psyche.
-			if randf() < 0.60:
-				hud.decrease_psyche(1)
+			hud.decrease_psyche(1)
+			
+			if n < 4-$"../PlayerHUD".get_psyche():
+				n = 4-$"../PlayerHUD".get_psyche()
 
 			hud.update()
 
@@ -809,7 +781,9 @@ func _walk_at_night(delta: float) -> void:
 		elif night_phase == 1:
 			night_phase = 2
 			
-			n += 1
+			
+			
+			
 			$"../Gallows".updateGallows(n)
 			
 			nav_agent.target_position = BED_POSITION

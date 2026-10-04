@@ -4,6 +4,7 @@ var n = 0
 
 func updateGallows(_n):
 	n = _n
+	print(n)
 	if n in [0, 1, 2, 3, 4, 5]:
 		play(str(n))
 		

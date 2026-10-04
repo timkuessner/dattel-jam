@@ -41,7 +41,7 @@ func _ready() -> void:
 
 
 func decrease_psyche(n):
-	if psyche - n >= 0:
+	if psyche - n >= -1:
 		psyche = psyche - n
 		return true
 	else:
