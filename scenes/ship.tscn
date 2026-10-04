@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://pyfh2g74umm1"]
+
+[ext_resource type="Script" uid="uid://8i4v6nckynsm" path="res://scripts/ship.gd" id="1_gudjc"]
+[ext_resource type="Texture2D" uid="uid://p7xnb3be7du" path="res://assets/sprites/ship/1.png" id="1_tfsc7"]
+[ext_resource type="Texture2D" uid="uid://bpb5xgn54yqv8" path="res://assets/sprites/ship/2.png" id="2_gudjc"]
+[ext_resource type="Texture2D" uid="uid://cklkh3v6ofc1d" path="res://assets/sprites/ship/3.png" id="3_7j21i"]
+[ext_resource type="Texture2D" uid="uid://b3p3mykaqkp42" path="res://assets/sprites/ship/4.png" id="4_3m36u"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_k5pq1"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_tfsc7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_gudjc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_7j21i")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_3m36u")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Ship" type="Node2D" unique_id=1685034916]
+z_as_relative = false
+y_sort_enabled = true
+script = ExtResource("1_gudjc")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1542833670]
+position = Vector2(-1, 0)
+scale = Vector2(0.055, 0.055)
+sprite_frames = SubResource("SpriteFrames_k5pq1")
+frame_progress = 0.9488834
