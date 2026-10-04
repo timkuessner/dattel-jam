@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://bln4h4mj1yq2t" path="res://scripts/tree.gd" id="1_874r4"]
 [ext_resource type="Texture2D" uid="uid://dcee6e82lbqeo" path="res://assets/sprites/tree/tree_falling_16x16_orange.png" id="1_dn7q5"]
 [ext_resource type="Texture2D" uid="uid://dwlx8oijv6mg7" path="res://assets/sprites/tree/Tree_falling_16x16.png" id="2_72j6q"]
+[ext_resource type="AudioStream" uid="uid://c61gqiittw1hu" path="res://assets/Music/holz_hacken.mp3" id="4_qvbew"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fxwtr"]
 atlas = ExtResource("1_dn7q5")
@@ -92,6 +93,9 @@ animation = &"1"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=423588648]
 position = Vector2(0, -7)
 shape = SubResource("CircleShape2D_gda3e")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=582316633]
+stream = ExtResource("4_qvbew")
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]

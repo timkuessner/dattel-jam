@@ -1,6 +1,7 @@
 extends Node2D
 
 const WOOD_SCENE = preload("res://scenes/items/wood.tscn")
+const SOUND_REPEATS := 3
 
 var used := false
 
@@ -24,6 +25,8 @@ func interact(player: Player) -> void:
 		return
 	
 	player.play_tree_animation()
+	
+	_play_sound_repeated(SOUND_REPEATS)  # no await, runs in parallel
 
 	used = true
 	player.exitArea(self)
@@ -45,6 +48,12 @@ func interact(player: Player) -> void:
 	if randf() < 0.15:
 		hud.decrease_hunger(1)
 	hud.update()
+
+
+func _play_sound_repeated(times: int) -> void:
+	for i in times:
+		$AudioStreamPlayer.play()
+		await $AudioStreamPlayer.finished
 
 
 func _on_area_2d_mouse_entered() -> void:
