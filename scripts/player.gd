@@ -46,6 +46,7 @@ var n = 0
 
 var isDay = true
 var night_phase = 0
+var dies_from_hunger_this_night := false
 var is_dying := false
 
 var inventory: Dictionary = {}
@@ -363,6 +364,7 @@ func start_night() -> void:
 
 	# Entscheidend ist der Essensstand BEVOR geschlafen wird:
 	# Nur wer schon mit 0 Essen ins Bett geht, stirbt in dieser Nacht.
+	dies_from_hunger_this_night = $"../PlayerHUD".get_hunger() <= 0
 	isDay = false
 	night_phase = 0
 	hideInteract()
@@ -402,12 +404,7 @@ func _physics_process(delta: float) -> void:
 	if is_dying:
 		velocity = Vector2.ZERO
 		return
-
-	# Tagsüber sofort sterben, sobald Essen/Leben 0 erreicht.
-	if isDay and $"../PlayerHUD".get_hunger() <= 0:
-		_start_hunger_death()
-		return
-			
+		
 	if $"../PlayerHUD".get_energy() <= 0 and isDay:
 		start_night()
 	
@@ -793,10 +790,9 @@ func _walk_at_night(delta: float) -> void:
 
 			hud.update()
 
-		
-			# Wenn Essen/Leben während der Nacht auf 0 fällt:
-			# erst wieder aus dem Zelt laufen und DANN sterben.
-			if hud.get_hunger() <= 0:
+			# Wenn der Spieler SCHON mit 0 Essen ins Bett gegangen ist,
+			# läuft er wieder aus dem Zelt und stirbt erst dort sichtbar.
+			if dies_from_hunger_this_night:
 				night_phase = 3
 				nav_agent.target_position = TENT_EXIT_POSITION
 				hud.night(false)
@@ -826,6 +822,7 @@ func _walk_at_night(delta: float) -> void:
 				return
 			isDay = true
 			night_phase = 0
+			dies_from_hunger_this_night = false
 			
 			velocity = Vector2.ZERO
 

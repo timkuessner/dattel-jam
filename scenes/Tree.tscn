@@ -77,19 +77,20 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_gda3e"]
-radius = 12.0
+radius = 17.029387
 
 [node name="Tree" type="Node2D" unique_id=65959604]
 script = ExtResource("1_874r4")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1117412258]
+position = Vector2(0, -8)
 sprite_frames = SubResource("SpriteFrames_kej8o")
 animation = &"1"
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1197860525]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=423588648]
-position = Vector2(0, 4)
+position = Vector2(0, -7)
 shape = SubResource("CircleShape2D_gda3e")
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
