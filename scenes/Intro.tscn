@@ -43,6 +43,7 @@ grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.6, 0.6)
 stream = ExtResource("2_aqbct")
+volume_db = 15.999999
 
 [node name="Startmenu_Background" type="TextureRect" parent="." unique_id=969983526]
 visible = false

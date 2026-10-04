@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dpkshphds4yrv"]
 
 [ext_resource type="Script" uid="uid://bqurb25ryppp5" path="res://scripts/finalscreen.gd" id="1_kdgp6"]
-[ext_resource type="Texture2D" uid="uid://c72n6epfofdoe" path="res://assets/sprites/ui/Gerettet_screen.jpg" id="2_np70e"]
+[ext_resource type="Texture2D" uid="uid://cij3l7octyp3v" path="res://assets/sprites/ui/Credits_background.jpeg" id="2_np70e"]
 [ext_resource type="Script" uid="uid://b7hsdkufo4wl6" path="res://scripts/button_manager.gd" id="3_et6d2"]
 [ext_resource type="Texture2D" uid="uid://c66ir8ft72d2g" path="res://assets/sprites/ui/Buttons/Retrybutton/Retrybutton.png" id="4_awlue"]
 [ext_resource type="Texture2D" uid="uid://dq86acvnfa1hy" path="res://assets/sprites/ui/Buttons/Retrybutton/Retrybutton_pressed.png" id="5_ij35b"]
@@ -31,6 +31,7 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_bottom = 118.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_np70e")
