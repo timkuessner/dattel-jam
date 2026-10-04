@@ -10,6 +10,9 @@ extends Camera2D
 
 
 func _process(delta: float) -> void:
+	if player == null:
+		return
+	
 	if player.finale:
 		_follow_ghosts(delta)
 	else:
@@ -43,6 +46,8 @@ func _follow_ghosts(delta: float) -> void:
 	)
 
 	var needed_size := half_extent * 2.0 + margin * 2.0
+	needed_size.x = maxf(needed_size.x, 1.0)
+	needed_size.y = maxf(needed_size.y, 1.0)
 	var viewport_size := get_viewport_rect().size
 
 	# Zoom so groß wie möglich, sodass beide Achsen noch passen
