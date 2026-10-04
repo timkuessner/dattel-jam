@@ -66,4 +66,4 @@ move_down={
 [rendering]
 
 rendering_device/driver.windows="d3d12"
-environment/defaults/default_clear_color=Color(0.7372549, 0.9254902, 0.9882353, 1)
+environment/defaults/default_clear_color=Color(0.078431375, 0.078431375, 0.078431375, 1)
