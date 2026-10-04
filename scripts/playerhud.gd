@@ -107,36 +107,31 @@ func reset_energy():
 func night(b):
 	if b:
 		$NightOverlay.show()
-
 		$Attributes/Health.propagate_call("set_visible", [false])
 		$Attributes/Health.show()
-
 		$Attributes/Energy.propagate_call("set_visible", [false])
 		$Attributes/Energy.show()
-
 		$Panel.hide()
+		night_audio()
 	else:
 		$NightOverlay.hide()
-
 		$Attributes/Health.propagate_call("set_visible", [true])
 		$Attributes/Energy.propagate_call("set_visible", [true])
-
 		$Panel.show()
-
-		update_audiotracks()
+		update_audiotracks(true)
 
 
 func update():
 	update_psyche_display()
 	update_hunger_display()
 	update_energy_display()
-	update_audiotracks()
+	update_audiotracks(false)
 
 
-func update_audiotracks():
+func update_audiotracks(override: bool):
 	if psyche < 3:
 		if hunger < 3:
-			if track_number != 3:
+			if (track_number != 3)||override:
 				$AudioStreamPlayer.stream = preload(
 					"res://assets/Music/low_hp_low_mental_v1.wav"
 				)
@@ -144,7 +139,7 @@ func update_audiotracks():
 				$AudioStreamPlayer.play()
 
 		else:
-			if track_number != 2:
+			if (track_number != 2)||override:
 				$AudioStreamPlayer.stream = preload(
 					"res://assets/Music/good_hp_low_mental_v3.wav"
 				)
@@ -152,7 +147,7 @@ func update_audiotracks():
 				$AudioStreamPlayer.play()
 
 	elif hunger < 3:
-		if track_number != 1:
+		if (track_number != 1)||override:
 			$AudioStreamPlayer.stream = preload(
 				"res://assets/Music/low_hp_high_mental_v1.wav"
 			)
@@ -160,13 +155,16 @@ func update_audiotracks():
 			$AudioStreamPlayer.play()
 
 	else:
-		if track_number != 0:
+		if (track_number != 0)||override:
 			$AudioStreamPlayer.stream = preload(
 				"res://assets/Music/good_hp_good_mental_v2.wav"
 			)
 			track_number = 0
 			$AudioStreamPlayer.play()
 
+func night_audio():
+	$AudioStreamPlayer.stream = preload("res://assets/Music/night_v2.wav")
+	$AudioStreamPlayer.play()
 
 func update_psyche_display() -> void:
 	_update_stat_display(
