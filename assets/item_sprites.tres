@@ -3,6 +3,11 @@
 [ext_resource type="Texture2D" uid="uid://be8tnr8cleucd" path="res://assets/Tiles/tile_0029.png" id="1_mush"]
 [ext_resource type="Texture2D" uid="uid://2vmn4cbaaxo1" path="res://assets/Tiles/tile_0106.png" id="2_wood"]
 [ext_resource type="Texture2D" uid="uid://blriaixpyuu8m" path="res://assets/Tilemap/tilemap_farm.png" id="3_farm"]
+[ext_resource type="Texture2D" uid="uid://bgoxlbuq70txg" path="res://assets/sprites/items/fishing_rod.png" id="4_fishing_rod"]
+[ext_resource type="Texture2D" uid="uid://d328mxpq7giwx" path="res://assets/sprites/items/fish_blue.png" id="5_fish_blue"]
+[ext_resource type="Texture2D" uid="uid://c28ix74vtqwv5" path="res://assets/sprites/items/fish_orange.png" id="6_fish_orange"]
+[ext_resource type="Texture2D" uid="uid://nqqkes0qp7k1" path="res://assets/sprites/items/fish_green.png" id="7_fish_green"]
+[ext_resource type="Texture2D" uid="uid://d1w7c52lws6hj" path="res://assets/sprites/items/trash.png" id="8_trash"]
 
 [sub_resource type="AtlasTexture" id="Bucket"]
 atlas = ExtResource("3_farm")
@@ -76,6 +81,38 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": ExtResource("4_fishing_rod")
+}],
+"loop": 1,
+"name": &"FISHING_ROD",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_fish_blue")
+}],
+"loop": 1,
+"name": &"FISH_BLUE",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_fish_green")
+}],
+"loop": 1,
+"name": &"FISH_GREEN",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_fish_orange")
+}],
+"loop": 1,
+"name": &"FISH_ORANGE",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("Hoe")
 }],
 "loop": 1,
@@ -88,6 +125,14 @@ animations = [{
 }],
 "loop": 1,
 "name": &"MUSHROOM",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8_trash")
+}],
+"loop": 1,
+"name": &"TRASH",
 "speed": 5.0
 }, {
 "frames": [{

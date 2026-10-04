@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" path="res://scenes/items/wood.tscn" id="2_wood"]
 [ext_resource type="PackedScene" uid="uid://l0vkofqryicm" path="res://scenes/Tree.tscn" id="3_gldc4"]
 [ext_resource type="PackedScene" path="res://scenes/items/mushroom.tscn" id="4_mush"]
+[ext_resource type="PackedScene" path="res://scenes/chest.tscn" id="5_chest"]
 
 [node name="Map" type="Node2D" unique_id=1059486782 groups=["nav_source"]]
 y_sort_enabled = true
@@ -39,6 +40,9 @@ position = Vector2(149, 265)
 
 [node name="Mushroom" parent="." unique_id=1136541713 instance=ExtResource("4_mush")]
 position = Vector2(254, 180)
+
+[node name="Chest" parent="." instance=ExtResource("5_chest")]
+position = Vector2(88, 86)
 
 [node name="Tree" parent="." unique_id=65959604 instance=ExtResource("3_gldc4")]
 position = Vector2(-150, 68)

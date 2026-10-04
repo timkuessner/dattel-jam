@@ -2,6 +2,9 @@ extends Control
 
 var button_type = null
 
+func _ready() -> void:
+	pass
+
 
 func _on_start_pressed() -> void:
 	button_type = "start"
