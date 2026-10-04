@@ -65,6 +65,7 @@ item = 3
 position = Vector2(-113, 263)
 item = 2
 
-[node name="Mushroom2" parent="." unique_id=819573849 instance=ExtResource("4_mush")]
+[node name="CarrotSeeds" parent="." unique_id=819573849 instance=ExtResource("4_mush")]
 position = Vector2(-139, 262)
 item = 4
+amount = 3
