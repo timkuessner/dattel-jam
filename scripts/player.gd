@@ -770,7 +770,7 @@ func _walk_at_night(delta: float) -> void:
 				hud.increase_energy(energy_gain)
 
 			# 2. Danach -2 Essen/Leben, niemals unter 0.
-			var hunger_loss: int = mini(2, hud.get_hunger())
+			var hunger_loss: int = mini(1, hud.get_hunger())
 			if hunger_loss > 0:
 				hud.decrease_hunger(hunger_loss)
 
