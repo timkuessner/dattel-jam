@@ -305,17 +305,17 @@ func _item_hint(item: Item.items) -> String:
 				return "Der Eimer ist voll. Klicke auf ein Beet, um zu gießen."
 			return "Klicke auf Wasser, um den Eimer zu füllen."
 		Item.items.FISHING_ROD:
-			return "Klicke auf das Wasser, um zu angeln."
+			return "Gehe zum Wasser, um zu angeln."
 		Item.items.FLINT_AND_STEEL:
 			return "Damit kannst du etwas anzünden."
 		Item.items.CARROT:
-			return "Eine frische Karotte."
+			return "Eine frische Karotte. (Essen mit F)"
 		Item.items.MUSHROOM:
-			return "Ein gesammelter Pilz."
+			return "Ein gesammelter Pilz. (Essen mit F)"
 		Item.items.WOOD:
 			return "Material zum Sammeln und Bauen."
 		Item.items.FISH_BLUE, Item.items.FISH_ORANGE, Item.items.FISH_GREEN:
-			return "Ein gefangener Fisch."
+			return "Ein gefangener Fisch. (Essen mit F)"
 		Item.items.TRASH:
 			return "Das ist nur Müll."
 		_:
