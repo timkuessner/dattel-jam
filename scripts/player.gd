@@ -651,6 +651,7 @@ func _walk_at_night(delta: float) -> void:
 			$"../PlayerHUD/Inventory".hide()
 			$AnimatedSprite2D.modulate = Color(0.0, 0.0, 0.0, 1.0)
 			$"../PlayerHUD".decrease_psyche(1)
+			$"../PlayerHUD".update_psyche_display()
 			return
 
 		elif night_phase == 1:
