@@ -142,7 +142,7 @@ libraries/ = SubResource("AnimationLibrary_45vxd")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=320036411]
 visible = false
-z_index = 0
+z_index = 1
 texture_filter = 1
 position = Vector2(6, -24)
 rotation = 0.50265485
