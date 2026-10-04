@@ -609,6 +609,7 @@ func start_fishing(direction: Vector2) -> void:
 		facing_direction = Vector2.DOWN if direction.y > 0 else Vector2.UP
 
 	# 3 Frames: Angel auswerfen.
+	$AngelSound.play()
 	_play_direction_animation("fish")
 	await $AnimatedSprite2D.animation_finished
 

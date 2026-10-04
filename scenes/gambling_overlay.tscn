@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://h5irima3vvbv" path="res://assets/sprites/ui/minimap_ring_brown_detail.png" id="1_pnpcm"]
 [ext_resource type="Script" uid="uid://dtmaaph8ln2nj" path="res://scripts/gambling_overlay.gd" id="1_u8j56"]
+[ext_resource type="AudioStream" uid="uid://ddl051gfi27kt" path="res://assets/sounds/glücksrad_einzeln.wav" id="3_2hgvo"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k5pq1"]
 bg_color = Color(1, 0.9529412, 0.8509804, 1)
@@ -80,3 +81,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Audio" type="AudioStreamPlayer" parent="." unique_id=743456465]
+stream = ExtResource("3_2hgvo")
