@@ -1,6 +1,6 @@
 extends Camera2D
 
-@export var speed: float = 10.0
+@export var speed: float = 4.0
 @export var zoom_speed: float = 5.0
 @export var margin: Vector2 = Vector2(40, 40)   # Rand um die Ghosts (in Pixeln)
 @export var min_zoom: float = 0.5
