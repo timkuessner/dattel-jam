@@ -26,6 +26,10 @@ const MONSTER_ID := 5   # index of "Monster Energy" in ITEM_NAMES
 const ITEM_WEIGHTS: Array[float] = [42.0, 7.0, 21.0, 15.0, 15.0, 0.5]
 const MONSTER_NEXT_TO_WINNER_CHANCE := 0.5
 
+var spin_tween: Tween
+var last_tick_index := -1
+var center_px := 0.0
+
 func _pick_weighted(allow_monster: bool = true) -> int:
 	var total_weight := 0.0
 	for i in ITEM_WEIGHTS.size():
@@ -113,12 +117,28 @@ func spin(duration: float = 6.0, travel_items: int = 60) -> void:
 
 	track.position = Vector2(start_x, 0)
 
-	var tween := create_tween()
-	tween.tween_property(track, "position:x", final_x, duration)\
+	# the x position of the middle of the reel, used to detect the item under it
+	center_px = width / 2.0
+	last_tick_index = int(floor((center_px - start_x) / STEP))   # no tick at the very start
+
+	if spin_tween and spin_tween.is_valid():
+		spin_tween.kill()
+
+	spin_tween = create_tween()
+	spin_tween.tween_method(_on_spin_update, start_x, final_x, duration)\
 		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
-	tween.finished.connect(func():
+	spin_tween.finished.connect(func():
 		track.position.x = final_x
 		var winner_id := item_ids[winner_index]
 		var item_name := ITEM_NAMES[winner_id]
 		finished.emit(winner_id, item_name)
 	)
+
+func _on_spin_update(x: float) -> void:
+	track.position.x = x
+
+	# which item is currently under the center of the reel?
+	var idx := int(floor((center_px - x) / STEP))
+	if idx != last_tick_index:
+		last_tick_index = idx
+		$Audio.play()

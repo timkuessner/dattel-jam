@@ -84,3 +84,4 @@ grow_vertical = 2
 
 [node name="Audio" type="AudioStreamPlayer" parent="." unique_id=743456465]
 stream = ExtResource("3_2hgvo")
+volume_db = 10.0
