@@ -21,27 +21,30 @@ var track: Control
 var item_ids: Array[int] = []
 
 const MONSTER_ID := 5   # index of "Monster Energy" in ITEM_NAMES
-# Blue, Green, Orange stay unchanged. The old 30% object chance is split 50/50:
-# 15% Trash and 15% Flint and Steel. Monster stays super rare and cannot win.
+# Normale Fangchancen: 42% Blue, 7% Green, 21% Orange, 15% Trash, 15% Flint.
+# Mit Karottenkoeder faellt Trash drastisch auf 2%; alle guten Fänge werden wahrscheinlicher.
+# Monster Energy bleibt nur ein sehr seltener visueller Fake und kann nie gewinnen.
 const ITEM_WEIGHTS: Array[float] = [42.0, 7.0, 21.0, 15.0, 15.0, 0.5]
+const CARROT_BAIT_WEIGHTS: Array[float] = [48.0, 8.0, 24.0, 2.0, 18.0, 0.5]
 const MONSTER_NEXT_TO_WINNER_CHANCE := 0.5
 
 var spin_tween: Tween
 var last_tick_index := -1
 var center_px := 0.0
 
-func _pick_weighted(allow_monster: bool = true) -> int:
+func _pick_weighted(allow_monster: bool = true, use_carrot_bait: bool = false) -> int:
+	var weights: Array[float] = CARROT_BAIT_WEIGHTS if use_carrot_bait else ITEM_WEIGHTS
 	var total_weight := 0.0
-	for i in ITEM_WEIGHTS.size():
+	for i in weights.size():
 		if i == MONSTER_ID and not allow_monster:
 			continue
-		total_weight += ITEM_WEIGHTS[i]
+		total_weight += weights[i]
 
 	var roll := randf() * total_weight
-	for i in ITEM_WEIGHTS.size():
+	for i in weights.size():
 		if i == MONSTER_ID and not allow_monster:
 			continue
-		roll -= ITEM_WEIGHTS[i]
+		roll -= weights[i]
 		if roll <= 0.0:
 			return i
 	return 0
@@ -60,7 +63,7 @@ func _ready() -> void:
 	reel.clip_contents = true
 	reel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
-func spin(duration: float = 6.0, travel_items: int = 60) -> void:
+func spin(duration: float = 6.0, travel_items: int = 60, use_carrot_bait: bool = false) -> void:
 	if track:
 		track.queue_free()
 	item_ids.clear()
@@ -83,16 +86,16 @@ func spin(duration: float = 6.0, travel_items: int = 60) -> void:
 
 		# --- 1) generate the ids (weighted, monster is rare) ---
 	for i in total:
-		item_ids.append(_pick_weighted(true))
+		item_ids.append(_pick_weighted(true, use_carrot_bait))
 
 	# --- 2) the winner can NEVER be monster energy ---
-	item_ids[winner_index] = _pick_weighted(false)
+	item_ids[winner_index] = _pick_weighted(false, use_carrot_bait)
 
 	# --- 3) 50/50 chance that monster energy is next to the winner ---
 	var left := winner_index - 1
 	var right := winner_index + 1
-	item_ids[left] = _pick_weighted(false)    # clear both neighbors first
-	item_ids[right] = _pick_weighted(false)
+	item_ids[left] = _pick_weighted(false, use_carrot_bait)    # clear both neighbors first
+	item_ids[right] = _pick_weighted(false, use_carrot_bait)
 	if randf() < MONSTER_NEXT_TO_WINNER_CHANCE:
 		var side := left if randi() % 2 == 0 else right
 		item_ids[side] = MONSTER_ID
