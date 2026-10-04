@@ -7,6 +7,12 @@ const FINALE_DAY := 5
 const INTERACT_PROMPT_SWAP_INTERVAL := 0.7
 const INVENTORY_CAPACITY := 9
 
+@onready var walk_left_sound: AudioStreamPlayer = $WalkLeftSound
+@onready var walk_right_sound: AudioStreamPlayer = $WalkRightSound
+
+var walk_sound_left := true
+var last_walk_animation_frame := -1
+
 var recording: Array = []
 var record_timer := 0.0
 var finale := false
@@ -52,6 +58,13 @@ var _show_click_prompt := false
 @onready var interact_click_icon: Sprite2D = $Interact/ClickIcon
 @onready var eat_sound: AudioStreamPlayer = $EatSound
 
+func _play_walk_sound() -> void:
+	if walk_sound_left:
+		walk_left_sound.play()
+	else:
+		walk_right_sound.play()
+
+	walk_sound_left = not walk_sound_left
 
 func add_item(item: Item.items, amount: int = 1) -> void:
 	if amount <= 0:
@@ -415,6 +428,17 @@ func _physics_process(delta: float) -> void:
 		
 	
 	move_and_slide()
+	
+	if velocity != Vector2.ZERO and not is_chopping and not is_fishing:
+		var frame: int = $AnimatedSprite2D.frame
+
+		if frame != last_walk_animation_frame:
+			last_walk_animation_frame = frame
+
+			if frame == 0 or frame == 2:
+				_play_walk_sound()
+	else:
+		last_walk_animation_frame = -1
 	
 	if Input.is_action_just_pressed("e"):
 		_try_context_interaction()
