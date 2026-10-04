@@ -7,6 +7,9 @@
 [ext_resource type="Texture2D" uid="uid://5ch15y2yjtir" path="res://assets/sprites/gallows/gallows4.png" id="5_3xexc"]
 [ext_resource type="Script" uid="uid://bof3gxe20s87f" path="res://scripts/gallows.gd" id="6_ymgdw"]
 [ext_resource type="Texture2D" uid="uid://d4fmt0asngvd8" path="res://assets/sprites/player/player_sprites_centered.png" id="7_dpg1m"]
+[ext_resource type="AudioStream" uid="uid://jr4hqllot7rs" path="res://assets/sounds/galgen_bauen.wav" id="8_ypb71"]
+[ext_resource type="AudioStream" uid="uid://db6u5cpy3elg6" path="res://assets/sounds/baumeln_links.wav" id="9_45vxd"]
+[ext_resource type="AudioStream" uid="uid://bhly5oxkcxgd7" path="res://assets/sounds/baumeln_rechts.wav" id="10_myssn"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_k5pq1"]
 animations = [{
@@ -79,10 +82,58 @@ tracks/0/keys = {
 "update": 0,
 "values": [0.50265485]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("BaumelnRechts:playing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("BaumelnLinks:playing")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("BaumelnRechts:volume_db")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("BaumelnLinks:volume_db")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
 
 [sub_resource type="Animation" id="Animation_3xexc"]
 resource_name = "animation"
-length = 4.0
+length = 6.0
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -90,10 +141,58 @@ tracks/0/path = NodePath("AnimatedSprite2D:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5, 1, 1.5, 2, 2.5, 3),
+"times": PackedFloat32Array(0, 1, 2, 3, 4, 5, 6),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
 "update": 0,
 "values": [0.50265485, -0.4886922, 0.34906584, -0.34906584, 0.17453292, -0.12217305, 0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("BaumelnRechts:playing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 2, 4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [true, true, true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("BaumelnLinks:playing")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(1.1333, 3.1333, 5.1333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [true, true, true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("BaumelnRechts:volume_db")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, -12.0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("BaumelnLinks:volume_db")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, -8.0]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_45vxd"]
@@ -149,6 +248,15 @@ rotation = 0.50265485
 scale = Vector2(0.77500004, 0.792469)
 sprite_frames = SubResource("SpriteFrames_gfxkb")
 offset = Vector2(0, 3.87)
+
+[node name="Build" type="AudioStreamPlayer" parent="." unique_id=1474734637]
+stream = ExtResource("8_ypb71")
+
+[node name="BaumelnRechts" type="AudioStreamPlayer" parent="." unique_id=1487418071]
+stream = ExtResource("9_45vxd")
+
+[node name="BaumelnLinks" type="AudioStreamPlayer" parent="." unique_id=1749468195]
+stream = ExtResource("10_myssn")
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]

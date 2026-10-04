@@ -7,6 +7,8 @@ func updateGallows(_n):
 	if n in [0, 1, 2, 3, 4, 5]:
 		play(str(n))
 		
+		$Build.play()
+		
 		if n != 0:
 			$StaticBody2D.set_collision_layer_value(1, true)
 		else:
