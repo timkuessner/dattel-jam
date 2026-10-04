@@ -22,13 +22,14 @@ const SOIL_TEXTURES := {
 	"wet_v_bottom": preload("res://assets/Tilemap/soil_runtime/wet_v_bottom.png"),
 }
 
-const TOWN_ATLAS_SOURCE_ID := 1
-const WELL_ATLAS := Vector2i(8, 8)
+const WATER_ATLAS_SOURCE_ID := 2
+const WATERSET_LAND_TILES := [Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, 0)]
 
 const TOOL_NONE := "none"
 const TOOL_HOE := "hoe"
 const TOOL_SEEDS := "seeds"
 const TOOL_BUCKET := "bucket"
+const TOOL_FISHING_ROD := "fishing_rod"
 
 @export var bucket_capacity := 2
 
@@ -71,6 +72,10 @@ func select_tool(tool: String, player: Player) -> void:
 			if not player.inventory.has(Item.items.BUCKET):
 				return
 
+		TOOL_FISHING_ROD:
+			if not player.inventory.has(Item.items.FISHING_ROD):
+				return
+
 	selected_tool = tool
 	update_player_target(player)
 
@@ -89,10 +94,18 @@ func interact(player: Player) -> void:
 			_harvest_crop(player, cell, crops[cell])
 
 		"fill_bucket":
+			# Jedes komplette Auffuellen des Eimers kostet 1 Energie.
+			if not _spend_energy(player, 1):
+				return
+
 			water_units = bucket_capacity
 			_refresh_bucket_inventory_icon()
 
 		"hoe":
+			# Jedes neu gehackte Erd-Tile kostet 1 Energie.
+			if not _spend_energy(player, 1):
+				return
+
 			_use_hoe(cell)
 
 		"plant":
@@ -101,7 +114,25 @@ func interact(player: Player) -> void:
 		"water":
 			_use_bucket(cell)
 
+		"fish":
+			var fishing_direction := _get_fishing_direction(player)
+			if fishing_direction != Vector2.ZERO:
+				player.start_fishing(fishing_direction)
+
 	update_player_target(player)
+
+
+func _spend_energy(player: Player, amount: int) -> bool:
+	var hud := player.get_node_or_null("../PlayerHUD")
+
+	if hud == null:
+		return false
+
+	if not hud.decrease_energy(amount):
+		return false
+
+	hud.update()
+	return true
 
 
 # Das unsichtbare Interaktionsfeld ist ein 3x3-Raster um den Player.
@@ -115,6 +146,14 @@ func update_player_target(
 	if target_cell_variant == null:
 		target_outline.visible = false
 
+		# Auffüllen und Angeln am Wasser hängen nur davon ab, wo der Player steht.
+		# Dafür muss die Maus nicht auf einem bestimmten Tile liegen.
+		if _can_fill_bucket_at_water_edge(player) or _can_fish_at_water_edge(player):
+			if player.area == null or player.area == self:
+				player.enterArea(self)
+			_player_using_farm_prompt = player
+			return
+
 		if player.area == self:
 			player.exitArea(self)
 
@@ -125,7 +164,7 @@ func update_player_target(
 	var cell_world := ground.to_global(ground.map_to_local(cell))
 
 	target_outline.global_position = cell_world
-	target_outline.visible = selected_tool != TOOL_NONE
+	target_outline.visible = selected_tool in [TOOL_HOE, TOOL_SEEDS, TOOL_BUCKET]
 
 	var interaction := _get_interaction(player)
 
@@ -140,6 +179,19 @@ func update_player_target(
 
 
 func _get_interaction(player: Player) -> Dictionary:
+	# Der alte Brunnen ist komplett entfernt. Mit ausgewähltem Eimer kann man
+	# ihn jetzt direkt am Ufer auffüllen, sobald der Player auf einem Rand-Tile
+	# steht bzw. direkt an ein Wasser-Tile angrenzt.
+	if _can_fill_bucket_at_water_edge(player):
+		return {
+			"type": "fill_bucket"
+		}
+
+	if _can_fish_at_water_edge(player):
+		return {
+			"type": "fish"
+		}
+
 	var target_cell_variant = _get_mouse_target_cell(player)
 
 	if target_cell_variant == null:
@@ -155,19 +207,6 @@ func _get_interaction(player: Player) -> Dictionary:
 				"type": "harvest",
 				"cell": cell
 			}
-
-	# Eimer am Brunnen auffüllen, wenn der Cursor auf dem Brunnen liegt
-	# und dieser innerhalb des 3x3-Bereichs um den Player ist.
-	if (
-		selected_tool == TOOL_BUCKET
-		and player.inventory.has(Item.items.BUCKET)
-		and water_units < bucket_capacity
-		and _is_well_target(cell)
-	):
-		return {
-			"type": "fill_bucket",
-			"cell": cell
-		}
 
 	match selected_tool:
 		TOOL_HOE:
@@ -400,46 +439,54 @@ func _get_soil_texture(cell: Vector2i, wet: bool) -> Texture2D:
 
 	var horizontal_count := int(left) + int(right)
 	var vertical_count := int(up) + int(down)
-	var prefix := "dry" if wet else "wet"
+
+	# Die horizontalen Runtime-Texturen sind historisch genau andersherum
+	# benannt (dry = dunkel, wet = hell). Deshalb bleibt die bestehende
+	# Zuordnung hier bewusst invertiert.
+	var horizontal_prefix := "dry" if wet else "wet"
+
+	# Bei den vertikalen Texturen stimmen die Dateinamen dagegen mit der
+	# Darstellung überein: wet = dunkel/gewaessert, dry = hell/trocken.
+	var vertical_prefix := "wet" if wet else "dry"
 
 	# Reine horizontale Reihe
 	if horizontal_count > vertical_count:
 		if left and right:
-			return SOIL_TEXTURES["%s_h_middle" % prefix]
+			return SOIL_TEXTURES["%s_h_middle" % horizontal_prefix]
 		if right:
-			return SOIL_TEXTURES["%s_h_left" % prefix]
+			return SOIL_TEXTURES["%s_h_left" % horizontal_prefix]
 		if left:
-			return SOIL_TEXTURES["%s_h_right" % prefix]
-		return SOIL_TEXTURES["%s_h_single" % prefix]
+			return SOIL_TEXTURES["%s_h_right" % horizontal_prefix]
+		return SOIL_TEXTURES["%s_h_single" % horizontal_prefix]
 
 	# Reine vertikale Reihe
 	if vertical_count > horizontal_count:
 		if up and down:
-			return SOIL_TEXTURES["%s_v_middle" % prefix]
+			return SOIL_TEXTURES["%s_v_middle" % vertical_prefix]
 		if down:
-			return SOIL_TEXTURES["%s_v_top" % prefix]
+			return SOIL_TEXTURES["%s_v_top" % vertical_prefix]
 		if up:
-			return SOIL_TEXTURES["%s_v_bottom" % prefix]
-		return SOIL_TEXTURES["%s_v_single" % prefix]
+			return SOIL_TEXTURES["%s_v_bottom" % vertical_prefix]
+		return SOIL_TEXTURES["%s_v_single" % vertical_prefix]
 
 	# Einzelnes Feld oder Mischform: lieber das sichere einzelne Feld,
 	# damit nie wieder ein falscher Ausschnitt aus dem Atlas erscheint.
 	if horizontal_count == 0 and vertical_count == 0:
-		return SOIL_TEXTURES["%s_h_single" % prefix]
+		return SOIL_TEXTURES["%s_h_single" % horizontal_prefix]
 
 	# Bei Ecken/T-Kreuzungen/Kreuzen ist das horizontale Feld optisch am stimmigsten.
 	if left and right:
-		return SOIL_TEXTURES["%s_h_middle" % prefix]
+		return SOIL_TEXTURES["%s_h_middle" % horizontal_prefix]
 	if right:
-		return SOIL_TEXTURES["%s_h_left" % prefix]
+		return SOIL_TEXTURES["%s_h_left" % horizontal_prefix]
 	if left:
-		return SOIL_TEXTURES["%s_h_right" % prefix]
+		return SOIL_TEXTURES["%s_h_right" % horizontal_prefix]
 	if down:
-		return SOIL_TEXTURES["%s_v_top" % prefix]
+		return SOIL_TEXTURES["%s_v_top" % vertical_prefix]
 	if up:
-		return SOIL_TEXTURES["%s_v_bottom" % prefix]
+		return SOIL_TEXTURES["%s_v_bottom" % vertical_prefix]
 
-	return SOIL_TEXTURES["%s_h_single" % prefix]
+	return SOIL_TEXTURES["%s_h_single" % horizontal_prefix]
 
 
 func _refresh_soil_connections(changed_cell: Vector2i) -> void:
@@ -456,17 +503,79 @@ func _refresh_soil_connections(changed_cell: Vector2i) -> void:
 			_set_soil_visual(cell)
 
 
-func _is_well_target(cell: Vector2i) -> bool:
-	if (
-		objects.get_cell_source_id(cell) == TOWN_ATLAS_SOURCE_ID
-		and objects.get_cell_atlas_coords(cell) == WELL_ATLAS
-	):
+func _can_fill_bucket_at_water_edge(player: Player) -> bool:
+	if selected_tool != TOOL_BUCKET:
+		return false
+
+	if not player.inventory.has(Item.items.BUCKET):
+		return false
+
+	# Der Eimer kann erst wieder aufgefüllt werden, wenn beide Wasser-Einheiten
+	# verbraucht sind. Eine Füllung reicht dadurch exakt für 2 Felder.
+	if water_units > 0:
+		return false
+
+	return _player_is_at_water_edge(player)
+
+
+func _can_fish_at_water_edge(player: Player) -> bool:
+	if selected_tool != TOOL_FISHING_ROD:
+		return false
+
+	if not player.inventory.has(Item.items.FISHING_ROD):
+		return false
+
+	if player.is_fishing:
+		return false
+
+	return _player_is_at_water_edge(player)
+
+
+func _get_fishing_direction(player: Player) -> Vector2:
+	# Wenn der Player bereits in Richtung Wasser schaut, wird genau diese Animation benutzt.
+	# Sonst wird automatisch eine angrenzende Wasserrichtung gewählt.
+	var player_cell := ground.local_to_map(ground.to_local(player.global_position)) + Vector2i.UP
+	var facing_cell := Vector2i(
+		int(round(player.facing_direction.x)),
+		int(round(player.facing_direction.y))
+	)
+
+	if facing_cell != Vector2i.ZERO and _tile_contains_water(player_cell + facing_cell):
+		return Vector2(facing_cell.x, facing_cell.y)
+
+	for direction in [Vector2i.UP, Vector2i.RIGHT, Vector2i.DOWN, Vector2i.LEFT]:
+		if _tile_contains_water(player_cell + direction):
+			return Vector2(direction.x, direction.y)
+
+	# Manche Ufer-Tiles enthalten selbst Wasser. In diesem Fall bleibt die Blickrichtung erhalten.
+	if _tile_contains_water(player_cell):
+		return player.facing_direction
+
+	return Vector2.ZERO
+
+
+func _player_is_at_water_edge(player: Node2D) -> bool:
+	# Gleicher optischer Zell-Offset wie beim 3x3-Interaktionsraster.
+	var player_cell := ground.local_to_map(ground.to_local(player.global_position)) + Vector2i.UP
+
+	# Einige Ufer-Tiles enthalten gleichzeitig Gras und Wasser. Wenn der Player
+	# auf dem begehbaren Rand dieser Zelle steht, soll Auffüllen ebenfalls gehen.
+	if _tile_contains_water(player_cell):
 		return true
 
-	var well := get_tree().get_first_node_in_group("water_well") as Node2D
-
-	if well != null:
-		var cell_world := ground.to_global(ground.map_to_local(cell))
-		return cell_world.distance_to(well.global_position) <= 14.0
+	for direction in [Vector2i.UP, Vector2i.RIGHT, Vector2i.DOWN, Vector2i.LEFT]:
+		if _tile_contains_water(player_cell + direction):
+			return true
 
 	return false
+
+
+func _tile_contains_water(cell: Vector2i) -> bool:
+	if ground.get_cell_source_id(cell) != WATER_ATLAS_SOURCE_ID:
+		return false
+
+	var atlas_coords := ground.get_cell_atlas_coords(cell)
+
+	# Die ersten drei Tiles der Wasser-Atlas-Zeile sind reine Grasvarianten.
+	# Alle anderen im verwendeten Wasser-Tileset enthalten Wasser/Ufer.
+	return atlas_coords not in WATERSET_LAND_TILES

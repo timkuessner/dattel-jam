@@ -5,11 +5,16 @@ const RECORD_INTERVAL := 0.1
 const GHOST_SCENE := preload("res://scenes/ghost.tscn")
 const FINALE_DAY := 5
 const INTERACT_PROMPT_SWAP_INTERVAL := 0.7
+const INVENTORY_CAPACITY := 9
 
 var recording: Array = []
 var record_timer := 0.0
 var finale := false
 var is_chopping := false
+var is_fishing := false
+var is_eating := false
+var eating_item: Item.items = Item.items.EMPTY
+var pending_inventory_items: Array = []
 
 const SPEED = 80.0
 const BED_POSITION := Vector2(50, 50)
@@ -38,26 +43,177 @@ var _show_click_prompt := false
 @onready var interact_label: Label = $Interact/Label
 @onready var interact_items: AnimatedSprite2D = $Interact/Items
 @onready var interact_click_icon: Sprite2D = $Interact/ClickIcon
+@onready var eat_sound: AudioStreamPlayer = $EatSound
 
 
-func add_item(item, amount: int = 1):
+func add_item(item: Item.items, amount: int = 1) -> void:
 	if amount <= 0:
 		return
 
-	inventory[item] = inventory.get(item, 0) + amount
-	$"../PlayerHUD/Inventory".update_slots(inventory)
+	for _i in range(amount):
+		# Wenn bereits ein Item auf eine Entscheidung wartet, kommen weitere
+		# neue Items ebenfalls in die Warteschlange. So geht nichts verloren.
+		if not pending_inventory_items.is_empty() or _inventory_item_count() >= INVENTORY_CAPACITY:
+			pending_inventory_items.append(item)
+		else:
+			_add_item_direct(item)
+
+	_refresh_inventory_ui()
+	_start_inventory_overflow_choice_if_needed()
 
 
-func remove_item(item):
+func remove_item(item: Item.items) -> void:
+	if not inventory.has(item):
+		return
+
+	_remove_item_direct(item)
+	_refresh_inventory_ui()
+
+
+func _add_item_direct(item: Item.items) -> void:
+	inventory[item] = inventory.get(item, 0) + 1
+
+
+func _remove_item_direct(item: Item.items) -> void:
 	if not inventory.has(item):
 		return
 
 	inventory[item] -= 1
-
 	if inventory[item] <= 0:
 		inventory.erase(item)
 
-	$"../PlayerHUD/Inventory".update_slots(inventory)
+
+func _inventory_item_count() -> int:
+	var count := 0
+	for amount in inventory.values():
+		count += int(amount)
+	return count
+
+
+func _refresh_inventory_ui() -> void:
+	var inventory_ui := get_node_or_null("../PlayerHUD/Inventory")
+	if inventory_ui != null:
+		inventory_ui.update_slots(inventory)
+
+
+func _start_inventory_overflow_choice_if_needed() -> void:
+	if pending_inventory_items.is_empty():
+		return
+
+	var inventory_ui := get_node_or_null("../PlayerHUD/Inventory")
+	if inventory_ui != null and inventory_ui.has_method("begin_overflow_choice"):
+		inventory_ui.begin_overflow_choice(pending_inventory_items[0])
+
+
+func has_pending_inventory_choice() -> bool:
+	return not pending_inventory_items.is_empty()
+
+
+func resolve_inventory_overflow(slot_index: int) -> void:
+	if pending_inventory_items.is_empty():
+		return
+
+	var inventory_ui := get_node_or_null("../PlayerHUD/Inventory")
+	if inventory_ui == null or not inventory_ui.has_method("get_item_at_slot"):
+		return
+
+	var dropped_item: Item.items = inventory_ui.get_item_at_slot(slot_index)
+	if dropped_item == Item.items.EMPTY:
+		return
+
+	# Genau das vom Spieler gewählte Slot-Item wird aus dem Inventar genommen
+	# und als echtes Pickup direkt beim Spieler auf den Boden gelegt.
+	_remove_item_direct(dropped_item)
+	_drop_item_to_ground(dropped_item)
+
+	# Das wartende neue Item nimmt EXAKT den gewählten Slot ein.
+	# Wir bauen hier absichtlich NICHT das komplette Inventar neu auf,
+	# weil sonst alle Items davor aufrutschen würden.
+	var incoming_item: Item.items = pending_inventory_items.pop_front()
+	_add_item_direct(incoming_item)
+	if inventory_ui.has_method("replace_item_at_slot"):
+		inventory_ui.replace_item_at_slot(slot_index, incoming_item)
+	else:
+		_refresh_inventory_ui()
+
+	if pending_inventory_items.is_empty():
+		if inventory_ui.has_method("end_overflow_choice"):
+			inventory_ui.end_overflow_choice()
+	else:
+		inventory_ui.begin_overflow_choice(pending_inventory_items[0])
+
+
+func cancel_inventory_overflow() -> void:
+	if pending_inventory_items.is_empty():
+		return
+
+	var inventory_ui := get_node_or_null("../PlayerHUD/Inventory")
+
+	# ESC verwirft nicht das Item: Der aktuelle Neuzugang wird stattdessen
+	# direkt beim Spieler auf den Boden gelegt. Das bestehende Inventar bleibt unverändert.
+	var incoming_item: Item.items = pending_inventory_items.pop_front()
+	_drop_item_to_ground(incoming_item)
+
+	if inventory_ui == null:
+		return
+
+	if pending_inventory_items.is_empty():
+		if inventory_ui.has_method("end_overflow_choice"):
+			inventory_ui.end_overflow_choice()
+	else:
+		if inventory_ui.has_method("begin_overflow_choice"):
+			inventory_ui.begin_overflow_choice(pending_inventory_items[0])
+
+
+func _drop_item_to_ground(item: Item.items) -> void:
+	var scene: PackedScene = _get_world_item_scene(item)
+	if scene == null:
+		return
+
+	var dropped := scene.instantiate()
+	get_tree().current_scene.add_child(dropped)
+
+	# Jeder Inventarslot entspricht exakt EINEM Item. Das ist besonders bei
+	# Karottensamen wichtig, deren normales Pickup sonst mehrere Samen gäbe.
+	if dropped is Item:
+		dropped.amount = 1
+
+	# Direkt neben/unter dem Spieler ablegen, damit es sofort wieder sichtbar
+	# und wie Holz/Pilz mit E aufhebbar ist.
+	var offset := Vector2(0, 14)
+	if facing_direction != Vector2.ZERO:
+		# Hinter dem Player ablegen. Beim Angeln schaut er zum Wasser, dadurch
+		# landet das abgelegte Item auf der Landseite statt im Wasser.
+		offset = -facing_direction.normalized() * 14.0
+	dropped.global_position = global_position + offset
+
+
+func _get_world_item_scene(item: Item.items) -> PackedScene:
+	match item:
+		Item.items.MUSHROOM:
+			return preload("res://scenes/items/mushroom.tscn")
+		Item.items.WOOD:
+			return preload("res://scenes/items/wood.tscn")
+		Item.items.HOE:
+			return preload("res://scenes/items/hoe.tscn")
+		Item.items.BUCKET:
+			return preload("res://scenes/items/bucket.tscn")
+		Item.items.CARROT_SEEDS:
+			return preload("res://scenes/items/carrot_seeds.tscn")
+		Item.items.CARROT:
+			return preload("res://scenes/items/carrot.tscn")
+		Item.items.FISHING_ROD:
+			return preload("res://scenes/items/fishing_rod.tscn")
+		Item.items.FISH_BLUE:
+			return preload("res://scenes/items/fish_blue.tscn")
+		Item.items.FISH_ORANGE:
+			return preload("res://scenes/items/fish_orange.tscn")
+		Item.items.FISH_GREEN:
+			return preload("res://scenes/items/fish_green.tscn")
+		Item.items.TRASH:
+			return preload("res://scenes/items/trash.tscn")
+		_:
+			return null
 
 
 func _ready() -> void:
@@ -67,6 +223,9 @@ func _ready() -> void:
 	nav_agent.target_desired_distance = 4.0
 	
 	$"../Gallows".updateGallows(n)
+
+	# Das Essen wird erst am Ende des ca. 2 Sekunden langen Sounds verbraucht.
+	eat_sound.finished.connect(_on_eat_sound_finished)
 
 
 func showLabel(text):
@@ -194,6 +353,13 @@ func _physics_process(delta: float) -> void:
 	if !isDay:
 		_walk_at_night(delta)
 		return
+
+	# Wenn das Inventar voll war, muss zuerst ein Slot zum Ablegen gewählt werden.
+	# Solange bleibt der Player stehen, damit die Entscheidung nicht umgangen wird.
+	if has_pending_inventory_choice():
+		velocity = Vector2.ZERO
+		move_and_slide()
+		return
 	
 	# Pfeiltasten bleiben erhalten; WASD ist zusätzlich möglich.
 	var direction := Input.get_vector(
@@ -217,7 +383,7 @@ func _physics_process(delta: float) -> void:
 		$"../PlayerHUD".decrease_energy(1)
 		$"../PlayerHUD".update()
 	
-	if not is_chopping:
+	if not is_chopping and not is_fishing:
 		if direction:
 			_update_facing_direction(direction)
 			velocity = direction * SPEED
@@ -233,6 +399,9 @@ func _physics_process(delta: float) -> void:
 	
 	if Input.is_action_just_pressed("e"):
 		_try_context_interaction()
+
+	if Input.is_action_just_pressed("eat"):
+		_try_eat_selected_item()
 	
 	if Input.is_action_just_pressed("ui_home"):
 		$"../Fire".buildFire()
@@ -274,7 +443,7 @@ func _input(event: InputEvent) -> void:
 
 
 func _try_context_interaction() -> void:
-	if not isDay or is_chopping:
+	if not isDay or is_chopping or is_fishing or has_pending_inventory_choice():
 		return
 
 	# Vor einem Klick das aktuelle Maus-Tile noch einmal sofort prüfen.
@@ -297,6 +466,125 @@ func _try_context_interaction() -> void:
 
 	if area.has_method("interact"):
 		area.interact(self)
+
+
+func _try_eat_selected_item() -> void:
+	# Essbare Items koennen mit F gegessen werden.
+	if not isDay or is_chopping or is_fishing or is_eating or has_pending_inventory_choice():
+		return
+
+	var inventory_ui := get_node_or_null("../PlayerHUD/Inventory")
+	if inventory_ui == null:
+		return
+
+	var selected_food: Item.items = inventory_ui.selected_item
+	var edible_items := [
+		Item.items.CARROT,
+		Item.items.MUSHROOM,
+		Item.items.FISH_BLUE,
+		Item.items.FISH_ORANGE,
+		Item.items.FISH_GREEN,
+	]
+	if selected_food not in edible_items:
+		return
+
+	if inventory.get(selected_food, 0) <= 0:
+		return
+
+	is_eating = true
+	eating_item = selected_food
+	eat_sound.stop()
+	eat_sound.play()
+
+
+func _on_eat_sound_finished() -> void:
+	if not is_eating:
+		return
+
+	var eaten_item := eating_item
+	is_eating = false
+	eating_item = Item.items.EMPTY
+
+	# Falls das Item waehrend des Sounds irgendwie aus dem Inventar verschwunden ist,
+	# wird kein Effekt angewendet.
+	if inventory.get(eaten_item, 0) <= 0:
+		return
+
+	remove_item(eaten_item)
+
+	var hud := get_node_or_null("../PlayerHUD")
+	if hud == null:
+		return
+
+	match eaten_item:
+		Item.items.CARROT:
+			hud.increase_energy(1)
+
+		Item.items.MUSHROOM:
+			# Pilz: immer +1 Energie und dazu exakt 50/50.
+			hud.increase_energy(1)
+			if randi() % 2 == 0:
+				hud.increase_psyche(1)
+			else:
+				var hunger_loss: int = mini(2, hud.get_hunger())
+				hud.decrease_hunger(hunger_loss)
+
+		Item.items.FISH_BLUE:
+			hud.increase_hunger(1)
+
+		Item.items.FISH_ORANGE:
+			hud.increase_energy(2)
+			hud.increase_hunger(1)
+
+		Item.items.FISH_GREEN:
+			hud.increase_psyche(2)
+
+	hud.update()
+
+func start_fishing(direction: Vector2) -> void:
+	if not isDay or is_chopping or is_fishing or is_eating:
+		return
+
+	if direction == Vector2.ZERO:
+		return
+
+	is_fishing = true
+	velocity = Vector2.ZERO
+	hideInteract()
+
+	# Die Animation richtet sich automatisch zum Wasser aus.
+	if abs(direction.x) > abs(direction.y):
+		facing_direction = Vector2.RIGHT if direction.x > 0 else Vector2.LEFT
+	else:
+		facing_direction = Vector2.DOWN if direction.y > 0 else Vector2.UP
+
+	# 3 Frames: Angel auswerfen.
+	_play_direction_animation("fish")
+	await $AnimatedSprite2D.animation_finished
+
+	# Der letzte Frame bleibt mit ausgeworfener Angel zufällig 3-6 Sekunden stehen.
+	await get_tree().create_timer(randf_range(3.0, 6.0)).timeout
+
+	# Danach dieselben Frames rückwärts abspielen.
+	_play_direction_animation("fish_reverse")
+	await $AnimatedSprite2D.animation_finished
+
+	var catch_roll := randf()
+	if catch_roll < 0.30:
+		# Kein Fisch: Statt leer auszugehen wird Muell aus dem Wasser gezogen.
+		add_item(Item.items.TRASH)
+	else:
+		var fish_roll := randf()
+		if fish_roll < 0.60:
+			add_item(Item.items.FISH_BLUE)
+		elif fish_roll < 0.90:
+			add_item(Item.items.FISH_ORANGE)
+		else:
+			add_item(Item.items.FISH_GREEN)
+
+	is_fishing = false
+	_play_direction_animation("idle")
+
 
 func play_tree_animation() -> void:
 	is_chopping = true
@@ -323,11 +611,19 @@ func _update_facing_direction(direction: Vector2) -> void:
 
 
 func _play_direction_animation(animation_type: String) -> void:
+	# Die Angel-Frames fuer links/rechts liegen im Spritesheet vertauscht.
+	# Deshalb werden nur fuer fish/fish_reverse links und rechts absichtlich gespiegelt aufgerufen.
+	var effective_right := "_right"
+	var effective_left := "_left"
+	if animation_type == "fish" or animation_type == "fish_reverse":
+		effective_right = "_left"
+		effective_left = "_right"
+
 	if facing_direction == Vector2.RIGHT:
-		$AnimatedSprite2D.play(animation_type + "_right")
+		$AnimatedSprite2D.play(animation_type + effective_right)
 
 	elif facing_direction == Vector2.LEFT:
-		$AnimatedSprite2D.play(animation_type + "_left")
+		$AnimatedSprite2D.play(animation_type + effective_left)
 
 	elif facing_direction == Vector2.UP:
 		$AnimatedSprite2D.play(animation_type + "_up")
