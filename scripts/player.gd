@@ -596,7 +596,9 @@ func _on_eat_sound_finished() -> void:
 
 	match eaten_item:
 		Item.items.CARROT:
-			hud.increase_energy(1)
+	
+			hud.increase_energy(2)
+			hud.increase_hunger(1)
 
 		Item.items.MUSHROOM:
 			# Pilz: immer +1 Energie und dazu exakt 50/50.
