@@ -23,7 +23,7 @@ var item_ids: Array[int] = []
 const MONSTER_ID := 4   # index of "Monster Energy" in ITEM_NAMES
 # Blue, Green, Orange, Trash, Monster -> Monster is super rare
 const ITEM_WEIGHTS: Array[float] = [42.0, 7.0, 21.0, 30.0, 0.5]
-const MONSTER_NEXT_TO_WINNER_CHANCE := 0.75
+const MONSTER_NEXT_TO_WINNER_CHANCE := 0.5
 
 func _pick_weighted(allow_monster: bool = true) -> int:
 	var total_weight := 0.0
